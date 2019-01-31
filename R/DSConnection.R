@@ -16,14 +16,14 @@ NULL
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dsConnect(DSOpal::Opal(), "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
 #' con
 #' dsDisconnect(con)
 #' }
 #' @import methods
 #' @export
 #' @include DSObject.R
-setClass("DSConnection", contains = c("DSObject", "VIRTUAL"))
+setClass("DSConnection", representation(name = "character"), contains = c("DSObject", "VIRTUAL"))
 
 #' List remote tables
 #'
@@ -33,12 +33,12 @@ setClass("DSConnection", contains = c("DSObject", "VIRTUAL"))
 #' @template methods
 #' @templateVar method_name dsListTables
 #'
-#' @param conn an object that inherits from \code{\link{DSConnection-class}}.
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #'
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "username", "password", "https://opal.example.org")
+#' con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
 #' dsListTables(con)
 #' dsDisconnect(con)
 #' }
@@ -56,13 +56,13 @@ setGeneric("dsListTables",
 #' @template methods
 #' @templateVar method_name dsHasTable
 #'
-#' @param conn an object that inherits from \code{\link{DSConnection-class}}.
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param table the table fully qualified name
 #'
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "username", "password", "https://opal.example.org")
+#' con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
 #' dsHasTable(con, "test.CNSIM")
 #' dsDisconnect(con)
 #' }
@@ -80,7 +80,7 @@ setGeneric("dsHasTable",
 #' @template methods
 #' @templateVar method_name dsAssignTable
 #'
-#' @param conn an object that inherits from \code{\link{DSConnection-class}}.
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param symbol Name of the R symbol.
 #' @param table Fully qualified name of a table in the data repository.
 #' @param variables List of variable names or Javascript expression that selects the variables of a table (ignored if value does not refere to a table). See javascript documentation: http://wiki.obiba.org/display/OPALDOC/Variable+Methods
@@ -90,7 +90,7 @@ setGeneric("dsHasTable",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "username", "password", "https://opal.example.org")
+#' con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
 #' dsAssignTable(con, "D", "test.CNSIM")
 #' dsDisconnect(con)
 #' }
@@ -108,14 +108,14 @@ setGeneric("dsAssignTable",
 #' @template methods
 #' @templateVar method_name dsAssignExpr
 #'
-#' @param conn an object that inherits from \code{\link{DSConnection-class}}.
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param symbol Name of the R symbol.
 #' @param expr A R expression with allowed assign functions calls.
 #'
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "username", "password", "https://opal.example.org")
+#' con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
 #' dsAssignExpr(con, "C", as.symbol("c(1, 2, 3)"))
 #' dsDisconnect(con)
 #' }
@@ -139,7 +139,7 @@ setGeneric("dsAssignExpr",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "username", "password", "https://opal.example.org")
+#' con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
 #' dsAssignTable(con, "D", "test.CNSIM")
 #' dsAggregate(con, as.symbol("meanDS(D$WEIGHT)"))
 #' dsDisconnect(con)
@@ -157,12 +157,12 @@ setGeneric("dsAggregate",
 #' @template methods
 #' @templateVar method_name dsListSymbols
 #'
-#' @param conn an object that inherits from \code{\link{DSConnection-class}}.
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #'
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "username", "password", "https://opal.example.org")
+#' con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
 #' dsAssignTable(con, "D", "test.CNSIM")
 #' dsListSymbols(con)
 #' dsDisconnect(con)
@@ -180,13 +180,13 @@ setGeneric("dsListSymbols",
 #' @template methods
 #' @templateVar method_name dsRmSymbol
 #'
-#' @param conn an object that inherits from \code{\link{DSConnection-class}}.
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param symbol Name of the R symbol.
 #'
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "username", "password", "https://opal.example.org")
+#' con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
 #' dsAssignTable(con, "D", "test.CNSIM")
 #' dsRmSymbol(con, "D")
 #' dsDisconnect(con)
@@ -195,6 +195,129 @@ setGeneric("dsListSymbols",
 #' @export
 setGeneric("dsRmSymbol",
            def = function(conn, symbol) standardGeneric("dsRmSymbol"))
+
+#' Get the DataSHIELD methods
+#'
+#' Get the list of DataSHIELD methods that have been configured on the remote data repository.
+#'
+#' @template methods
+#' @templateVar method_name dsListMethods
+#'
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
+#' @param type Type of the method: "aggregate" (default) or "assign".
+#'
+#' @return A data.frame with columns: name, type ('aggregate' or 'assign'), class ('function' or 'script'), value, package, version.
+#'
+#' @family DSConnection generics
+#' @examples
+#' \dontrun{
+#' con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
+#' dsListMethods(con)
+#' dsDisconnect(con)
+#' }
+#' @import methods
+#' @export
+setGeneric("dsListMethods",
+           def = function(conn, type = "aggregate") standardGeneric("dsListMethods"),
+           valueClass = "data.frame")
+
+#' Get the DataSHIELD packages
+#'
+#' Get the list of DataSHIELD packages with their version, that have been configured on the remote data repository.
+#'
+#' @template methods
+#' @templateVar method_name dsListPackages
+#'
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
+#'
+#' @return A data.frame with columns: name, version.
+#'
+#' @family DSConnection generics
+#' @examples
+#' \dontrun{
+#' con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
+#' dsListPackages(con)
+#' dsDisconnect(con)
+#' }
+#' @import methods
+#' @export
+setGeneric("dsListPackages",
+           def = function(conn) standardGeneric("dsListPackages"),
+           valueClass = "data.frame")
+
+
+#' Get the DataSHIELD workspaces
+#'
+#' Get the list of DataSHIELD workspaces, that have been saved on the remote data repository.
+#'
+#' @template methods
+#' @templateVar method_name dsListWorkspaces
+#'
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
+#'
+#' @return A data.frame with columns: name, lastAccessDate, size.
+#'
+#' @family DSConnection generics
+#' @examples
+#' \dontrun{
+#' con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
+#' dsListWorkspaces(con)
+#' dsDisconnect(con)
+#' }
+#' @import methods
+#' @export
+setGeneric("dsListWorkspaces",
+           def = function(conn) standardGeneric("dsListWorkspaces"),
+           valueClass = "data.frame")
+
+#' Save the DataSHIELD R session in a workspace
+#'
+#' Save the DataSHIELD R session in a workspace on the remote data repository.
+#'
+#' @template methods
+#' @templateVar method_name dsSaveWorkspace
+#'
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
+#' @param name Name of the workspace
+#'
+#' @family DSConnection generics
+#' @examples
+#' \dontrun{
+#' con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
+#' dsSaveWorkspace(con, "foo")
+#' dsListWorkspaces(con)
+#' dsDisconnect(con)
+#' }
+#' @import methods
+#' @export
+setGeneric("dsSaveWorkspace",
+           def = function(conn, name) standardGeneric("dsSaveWorkspace"))
+
+#' Remove a DataSHIELD workspace
+#'
+#' Remove a DataSHIELD workspace from the remote data repository. Ignore if no
+#' such workspace exists.
+#'
+#' @template methods
+#' @templateVar method_name dsRmWorkspace
+#'
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
+#' @param name Name of the workspace
+#'
+#' @family DSConnection generics
+#' @examples
+#' \dontrun{
+#' con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
+#' dsSaveWorkspace(con, "foo")
+#' dsListWorkspaces(con)
+#' dsRmWorkspace(con, "foo")
+#' dsListWorkspaces(con)
+#' dsDisconnect(con)
+#' }
+#' @import methods
+#' @export
+setGeneric("dsRmWorkspace",
+           def = function(conn, name) standardGeneric("dsRmWorkspace"))
 
 #' Asynchronous result support
 #'
@@ -207,12 +330,12 @@ setGeneric("dsRmSymbol",
 #' @template methods
 #' @templateVar method_name dsIsAsync
 #'
-#' @param conn an object that inherits from \code{\link{DSConnection-class}}.
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #'
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "username", "password", "https://opal.example.org")
+#' con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
 #' dsIsAsync(con)
 #' dsDisconnect(con)
 #' }
@@ -236,7 +359,7 @@ setGeneric("dsIsAsync",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "username", "password", "https://opal.example.org")
+#' con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
 #' dsDisconnect(con)
 #' }
 #' @import methods

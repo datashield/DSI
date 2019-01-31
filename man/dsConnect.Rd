@@ -4,10 +4,12 @@
 \alias{dsConnect}
 \title{Create a connection to a DataSHIELD-aware data repository}
 \usage{
-dsConnect(drv, ...)
+dsConnect(drv, name, ...)
 }
 \arguments{
 \item{drv}{an object that inherits from \code{\link{DSDriver-class}}.}
+
+\item{name}{Name of the connection, which must be unique among all the DataSHIELD connections.}
 
 \item{...}{authentication arguments needed by the data repository instance; these
 typically include `user`, `password`, `host`, `port`, `dbname`, etc.
@@ -25,7 +27,7 @@ documentation of individual drivers for details.
 }
 \examples{
 \dontrun{
-con <- dsConnect(DSOpal::Opal(), "username", "password", "https://opal.example.org")
+con <- dsConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
 con
 dsListTables(con)
 dsDisconnect(con)

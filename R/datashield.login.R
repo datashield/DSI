@@ -124,7 +124,7 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
         cert <- userids[i]
         private <- pwds[i]
         conn.opts <- append(conn.opts, list(sslcert=cert, sslkey=private))
-        connections[[i]] <- dsConnect(drv, url=urls[i], opts=conn.opts, restore=restoreId)
+        connections[[i]] <- dsConnect(drv, name=stdnames[i], url=urls[i], opts=conn.opts, restore=restoreId)
       } else {
         u <- userids[i];
         if(is.null(u) || is.na(u)) {
@@ -134,7 +134,7 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
         if(is.null(p) || is.na(p)) {
           p <- password;
         }
-        connections[[i]] <- dsConnect(drv, username=u, password=p, url=urls[i], opts=conn.opts, restore=restoreId)
+        connections[[i]] <- dsConnect(drv, name=stdnames[i], username=u, password=p, url=urls[i], opts=conn.opts, restore=restoreId)
       }
     } else {
       u <- userids[i];
@@ -145,7 +145,7 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
       if(is.null(p) || is.na(p)) {
         p <- password;
       }
-      connections[[i]] <- dsConnect(drv, username=u, password=p, url=urls[i], opts=conn.opts, restore=restoreId)
+      connections[[i]] <- dsConnect(drv, name=stdnames[i], username=u, password=p, url=urls[i], opts=conn.opts, restore=restoreId)
     }
     # set the study name to corresponding opal object
     #connections[[i]]@name <- stdnames[i]

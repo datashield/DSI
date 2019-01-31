@@ -7,7 +7,7 @@
 dsRmSymbol(conn, symbol)
 }
 \arguments{
-\item{conn}{an object that inherits from \code{\link{DSConnection-class}}.}
+\item{conn}{An object that inherits from \code{\link{DSConnection-class}}.}
 
 \item{symbol}{Name of the R symbol.}
 }
@@ -18,7 +18,7 @@ After removal, the data identified by the symbol will not be accessible in the D
 }
 \examples{
 \dontrun{
-con <- dbConnect(DSOpal::Opal(), "username", "password", "https://opal.example.org")
+con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
 dsAssignTable(con, "D", "test.CNSIM")
 dsRmSymbol(con, "D")
 dsDisconnect(con)
@@ -29,7 +29,11 @@ Other DSConnection generics: \code{\link{DSConnection-class}},
   \code{\link{dsAggregate}}, \code{\link{dsAssignExpr}},
   \code{\link{dsAssignTable}}, \code{\link{dsDisconnect}},
   \code{\link{dsGetInfo}}, \code{\link{dsHasTable}},
-  \code{\link{dsIsAsync}}, \code{\link{dsListSymbols}},
-  \code{\link{dsListTables}}
+  \code{\link{dsIsAsync}}, \code{\link{dsListMethods}},
+  \code{\link{dsListPackages}},
+  \code{\link{dsListSymbols}}, \code{\link{dsListTables}},
+  \code{\link{dsListWorkspaces}},
+  \code{\link{dsRmWorkspace}},
+  \code{\link{dsSaveWorkspace}}
 }
 \concept{DSConnection generics}

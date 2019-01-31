@@ -7,8 +7,12 @@
 #' @export
 datashield.logout <- function(conns, save=NULL) {
   if (is.list(conns)) {
-    ignore <- lapply(conns, function(c){datashield.logout(c, save=save)})
+    ignore <- lapply(conns, function(c) { datashield.logout(c, save) })
   } else if (!is.null(conns)) {
-    dsDisconnect(conns, save)
+    saveId <- save
+    if (!is.null(save)) {
+      saveId <- paste0(conns@name, ":", save)
+    }
+    dsDisconnect(conns, saveId)
   }
 }

@@ -26,6 +26,7 @@ setClass("DSDriver", contains = c("DSObject", "VIRTUAL"))
 #' @templateVar method_name dsConnect
 #'
 #' @param drv an object that inherits from \code{\link{DSDriver-class}}.
+#' @param name Name of the connection, which must be unique among all the DataSHIELD connections.
 #' @param ... authentication arguments needed by the data repository instance; these
 #'   typically include `user`, `password`, `host`, `port`, `dbname`, etc.
 #'   For details see the appropriate `DSDriver`.
@@ -33,7 +34,7 @@ setClass("DSDriver", contains = c("DSObject", "VIRTUAL"))
 #' @family DSDriver generics
 #' @examples
 #' \dontrun{
-#' con <- dsConnect(DSOpal::Opal(), "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
 #' con
 #' dsListTables(con)
 #' dsDisconnect(con)
@@ -41,5 +42,5 @@ setClass("DSDriver", contains = c("DSObject", "VIRTUAL"))
 #' @import methods
 #' @export
 setGeneric("dsConnect",
-           def = function(drv, ...) standardGeneric("dsConnect"),
+           def = function(drv, name, ...) standardGeneric("dsConnect"),
            valueClass = "DSConnection")

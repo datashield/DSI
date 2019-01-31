@@ -7,7 +7,7 @@
 dsIsAsync(conn)
 }
 \arguments{
-\item{conn}{an object that inherits from \code{\link{DSConnection-class}}.}
+\item{conn}{An object that inherits from \code{\link{DSConnection-class}}.}
 }
 \description{
 When a \code{\link{DSResult-class}} object is returned on aggregation or assignment operation,
@@ -20,7 +20,7 @@ expression assignment operation ('assignExpr').
 }
 \examples{
 \dontrun{
-con <- dbConnect(DSOpal::Opal(), "username", "password", "https://opal.example.org")
+con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
 dsIsAsync(con)
 dsDisconnect(con)
 }
@@ -30,7 +30,11 @@ Other DSConnection generics: \code{\link{DSConnection-class}},
   \code{\link{dsAggregate}}, \code{\link{dsAssignExpr}},
   \code{\link{dsAssignTable}}, \code{\link{dsDisconnect}},
   \code{\link{dsGetInfo}}, \code{\link{dsHasTable}},
+  \code{\link{dsListMethods}},
+  \code{\link{dsListPackages}},
   \code{\link{dsListSymbols}}, \code{\link{dsListTables}},
-  \code{\link{dsRmSymbol}}
+  \code{\link{dsListWorkspaces}}, \code{\link{dsRmSymbol}},
+  \code{\link{dsRmWorkspace}},
+  \code{\link{dsSaveWorkspace}}
 }
 \concept{DSConnection generics}

@@ -37,5 +37,7 @@ Collate:
     'datashield.assign.R'
     'datashield.login.R'
     'datashield.logout.R'
+    'datashield.status.R'
     'datashield.symbol.R'
+    'datashield.workspace.R'
     'rd.R'

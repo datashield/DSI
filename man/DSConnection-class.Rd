@@ -16,7 +16,7 @@ connections.
 
 \examples{
 \dontrun{
-con <- dsConnect(DSOpal::Opal(), "username", "password", "https://opal.example.org")
+con <- dsConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
 con
 dsDisconnect(con)
 }
@@ -30,8 +30,12 @@ Other DSConnection generics: \code{\link{dsAggregate}},
   \code{\link{dsAssignExpr}}, \code{\link{dsAssignTable}},
   \code{\link{dsDisconnect}}, \code{\link{dsGetInfo}},
   \code{\link{dsHasTable}}, \code{\link{dsIsAsync}},
+  \code{\link{dsListMethods}},
+  \code{\link{dsListPackages}},
   \code{\link{dsListSymbols}}, \code{\link{dsListTables}},
-  \code{\link{dsRmSymbol}}
+  \code{\link{dsListWorkspaces}}, \code{\link{dsRmSymbol}},
+  \code{\link{dsRmWorkspace}},
+  \code{\link{dsSaveWorkspace}}
 }
 \concept{DS classes}
 \concept{DSConnection generics}

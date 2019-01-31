@@ -8,7 +8,7 @@ dsAssignTable(conn, symbol, table, variables = NULL, missings = FALSE,
   identifiers = NULL)
 }
 \arguments{
-\item{conn}{an object that inherits from \code{\link{DSConnection-class}}.}
+\item{conn}{An object that inherits from \code{\link{DSConnection-class}}.}
 
 \item{symbol}{Name of the R symbol.}
 
@@ -28,7 +28,7 @@ The table to be assigned must exist for the DataSHIELD user.
 }
 \examples{
 \dontrun{
-con <- dbConnect(DSOpal::Opal(), "username", "password", "https://opal.example.org")
+con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
 dsAssignTable(con, "D", "test.CNSIM")
 dsDisconnect(con)
 }
@@ -38,7 +38,11 @@ Other DSConnection generics: \code{\link{DSConnection-class}},
   \code{\link{dsAggregate}}, \code{\link{dsAssignExpr}},
   \code{\link{dsDisconnect}}, \code{\link{dsGetInfo}},
   \code{\link{dsHasTable}}, \code{\link{dsIsAsync}},
+  \code{\link{dsListMethods}},
+  \code{\link{dsListPackages}},
   \code{\link{dsListSymbols}}, \code{\link{dsListTables}},
-  \code{\link{dsRmSymbol}}
+  \code{\link{dsListWorkspaces}}, \code{\link{dsRmSymbol}},
+  \code{\link{dsRmWorkspace}},
+  \code{\link{dsSaveWorkspace}}
 }
 \concept{DSConnection generics}

@@ -7,7 +7,7 @@
 dsListTables(conn)
 }
 \arguments{
-\item{conn}{an object that inherits from \code{\link{DSConnection-class}}.}
+\item{conn}{An object that inherits from \code{\link{DSConnection-class}}.}
 }
 \description{
 List remote tables from the data repository. Returns the unquoted names of remote tables
@@ -17,7 +17,7 @@ accessible through this connection.
 }
 \examples{
 \dontrun{
-con <- dbConnect(DSOpal::Opal(), "username", "password", "https://opal.example.org")
+con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
 dsListTables(con)
 dsDisconnect(con)
 }
@@ -27,7 +27,11 @@ Other DSConnection generics: \code{\link{DSConnection-class}},
   \code{\link{dsAggregate}}, \code{\link{dsAssignExpr}},
   \code{\link{dsAssignTable}}, \code{\link{dsDisconnect}},
   \code{\link{dsGetInfo}}, \code{\link{dsHasTable}},
-  \code{\link{dsIsAsync}}, \code{\link{dsListSymbols}},
-  \code{\link{dsRmSymbol}}
+  \code{\link{dsIsAsync}}, \code{\link{dsListMethods}},
+  \code{\link{dsListPackages}},
+  \code{\link{dsListSymbols}},
+  \code{\link{dsListWorkspaces}}, \code{\link{dsRmSymbol}},
+  \code{\link{dsRmWorkspace}},
+  \code{\link{dsSaveWorkspace}}
 }
 \concept{DSConnection generics}
