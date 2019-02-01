@@ -4,12 +4,14 @@
 \alias{dsConnect}
 \title{Create a connection to a DataSHIELD-aware data repository}
 \usage{
-dsConnect(drv, name, ...)
+dsConnect(drv, name, restore = NULL, ...)
 }
 \arguments{
 \item{drv}{an object that inherits from \code{\link{DSDriver-class}}.}
 
 \item{name}{Name of the connection, which must be unique among all the DataSHIELD connections.}
+
+\item{restore}{Workspace name to be restored in the newly created DataSHIELD R session.}
 
 \item{...}{authentication arguments needed by the data repository instance; these
 typically include `user`, `password`, `host`, `port`, `dbname`, etc.

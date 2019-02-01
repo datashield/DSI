@@ -27,6 +27,7 @@ setClass("DSDriver", contains = c("DSObject", "VIRTUAL"))
 #'
 #' @param drv an object that inherits from \code{\link{DSDriver-class}}.
 #' @param name Name of the connection, which must be unique among all the DataSHIELD connections.
+#' @param restore Workspace name to be restored in the newly created DataSHIELD R session.
 #' @param ... authentication arguments needed by the data repository instance; these
 #'   typically include `user`, `password`, `host`, `port`, `dbname`, etc.
 #'   For details see the appropriate `DSDriver`.
@@ -42,5 +43,5 @@ setClass("DSDriver", contains = c("DSObject", "VIRTUAL"))
 #' @import methods
 #' @export
 setGeneric("dsConnect",
-           def = function(drv, name, ...) standardGeneric("dsConnect"),
+           def = function(drv, name, restore = NULL, ...) standardGeneric("dsConnect"),
            valueClass = "DSConnection")
