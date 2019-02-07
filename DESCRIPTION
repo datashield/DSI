@@ -1,5 +1,4 @@
 Package: DSI
-Type: Package
 Title: DataSHIELD Interface
 Version: 0.1.0
 Authors@R:
@@ -12,22 +11,22 @@ Authors@R:
              family = "Gaye",
              role = "ctb",
              comment = c(ORCID = "0000-0002-1180-2792")))
-Description: DataSHIELD is an infrastructure and series of R packages that enables the remote
-  and non-disclosive analysis of sensitive research data. This package defines the API that is
-  to be implemented by DataSHIELD-aware data repositories.
+Description: DataSHIELD is an infrastructure and series of R packages that 
+    enables the remote and non-disclosive analysis of sensitive research data. 
+    This package defines the API that is to be implemented by DataSHIELD-aware 
+    data repositories.
 Depends:
     R (>= 3.1),
     methods
 Suggests: knitr
 License: GPL-3
-OpalVersion: >= 2.6.0
 URL: http://datashield.ac.uk
 BugReports: https://github.com/datashield/DSI
 RoxygenNote: 6.1.1
 VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
-Collate:
+Collate: 
     'DSObject.R'
     'hidden.R'
     'DSConnection.R'

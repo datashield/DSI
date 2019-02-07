@@ -19,7 +19,8 @@ resources (e.g., memory, sockets).
 }
 \examples{
 \dontrun{
-con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
+con <- dbConnect(DSOpal::Opal(), "server1",
+  "username", "password", "https://opal.example.org")
 dsDisconnect(con)
 }
 }

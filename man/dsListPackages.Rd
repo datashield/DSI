@@ -19,7 +19,8 @@ Get the list of DataSHIELD packages with their version, that have been configure
 }
 \examples{
 \dontrun{
-con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
+con <- dbConnect(DSOpal::Opal(), "server1",
+  "username", "password", "https://opal.example.org")
 dsListPackages(con)
 dsDisconnect(con)
 }

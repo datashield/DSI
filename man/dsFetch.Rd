@@ -17,7 +17,8 @@ run asynchronously.
 }
 \examples{
 \dontrun{
-con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
+con <- dbConnect(DSOpal::Opal(), "server1",
+  "username", "password", "https://opal.example.org")
 dsAssignExpr(con, "C", as.symbol("c(1, 2, 3)"))
 res <- dsAggregate(con, as.symbol("length(C)"))
 length <- dsFetch(res)

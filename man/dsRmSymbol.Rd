@@ -18,7 +18,8 @@ After removal, the data identified by the symbol will not be accessible in the D
 }
 \examples{
 \dontrun{
-con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
+con <- dbConnect(DSOpal::Opal(), "server1",
+  "username", "password", "https://opal.example.org")
 dsAssignTable(con, "D", "test.CNSIM")
 dsRmSymbol(con, "D")
 dsDisconnect(con)

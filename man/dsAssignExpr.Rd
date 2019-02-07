@@ -21,7 +21,8 @@ The assignment expression must satisfy the data repository's DataSHIELD configur
 }
 \examples{
 \dontrun{
-con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
+con <- dbConnect(DSOpal::Opal(), "server1",
+  "username", "password", "https://opal.example.org")
 dsAssignExpr(con, "C", as.symbol("c(1, 2, 3)"))
 dsDisconnect(con)
 }

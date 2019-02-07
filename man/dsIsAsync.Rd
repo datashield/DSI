@@ -20,7 +20,8 @@ expression assignment operation ('assignExpr').
 }
 \examples{
 \dontrun{
-con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
+con <- dbConnect(DSOpal::Opal(), "server1",
+  "username", "password", "https://opal.example.org")
 dsIsAsync(con)
 dsDisconnect(con)
 }

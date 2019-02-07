@@ -14,11 +14,14 @@ dsAssignTable(conn, symbol, table, variables = NULL, missings = FALSE,
 
 \item{table}{Fully qualified name of a table in the data repository.}
 
-\item{variables}{List of variable names or Javascript expression that selects the variables of a table (ignored if value does not refere to a table). See javascript documentation: http://wiki.obiba.org/display/OPALDOC/Variable+Methods}
+\item{variables}{List of variable names or Javascript expression that selects the variables of
+a table. See javascript documentation:
+\url{http://opaldoc.obiba.org/en/latest/magma-user-guide/variable/}}
 
-\item{missings}{If TRUE, missing values will be pushed from Opal to R, default is FALSE. Ignored if value is an R expression.}
+\item{missings}{If TRUE, missing values will be pushed from data repository to R, default is FALSE.}
 
-\item{identifiers}{Name of the identifiers mapping to use when assigning entities to R.}
+\item{identifiers}{Name of the identifiers mapping to use when assigning entities to R (if supported
+by the data repository).}
 }
 \description{
 Assign a remote table from the data repository to a symbol in the DataSHIELD R session.
@@ -28,7 +31,8 @@ The table to be assigned must exist for the DataSHIELD user.
 }
 \examples{
 \dontrun{
-con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
+con <- dbConnect(DSOpal::Opal(), "server1",
+  "username", "password", "https://opal.example.org")
 dsAssignTable(con, "D", "test.CNSIM")
 dsDisconnect(con)
 }

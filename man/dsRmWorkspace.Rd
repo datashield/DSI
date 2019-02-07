@@ -19,7 +19,8 @@ such workspace exists.
 }
 \examples{
 \dontrun{
-con <- dbConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
+con <- dbConnect(DSOpal::Opal(), "server1",
+  "username", "password", "https://opal.example.org")
 dsSaveWorkspace(con, "foo")
 dsListWorkspaces(con)
 dsRmWorkspace(con, "foo")

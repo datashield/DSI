@@ -1,31 +1,31 @@
-#'@title Logs in a DataSHIELD R sessions and optionaly assigns variables to R
+#' Logs in a DataSHIELD R sessions and optionaly assigns variables to R
 #'
-#'@description This function allows for clients to login to opal servers
-#'and (optionaly) assign all the data or specific variables from Opal
-#'tables to R dataframes. The assigned dataframes (one for each opal server)
-#'are named 'D' (by default).
+#' This function allows for clients to login to data repository servers and (optionaly)
+#' assign all the data or specific variables from the data repositories tables to R data
+#' frames. The assigned dataframes (one for each data repository) are named 'D' (by default).
 #'
-#'@param logins A dataframe table that holds login details. This table holds five elements
-#'required to login to the servers where the data to analyse is stored. The expected column names are 'server' (the server name),
-#''url' (the opal url), 'user' (the user name or the certificate file path), 'password' (the user password or the private key file path),
-#''table' (the fully qualified name of the table in opal), 'options' (the SSL options). An additional column 'identifiers' can be specified for identifiers
-#'mapping (from Opal 2.0).
-#'See also the documentation of the examplar input table \code{logindata} for details of the login
-#'elements.
-#'@param assign A boolean which tells whether or not data should be assigned from the opal
-#'table to R after login into the server(s).
-#'@param variables Specific variables to assign. If \code{assign} is set to FALSE
-#'this argument is ignored otherwise the specified variables are assigned to R.
-#'If no variables are specified (default) the whole opal's table is assigned.
-#'@param symbol A character, the name of the dataframe to which the opal's table will be assigned after login
-#'into the server(s).
-#'@param username Default user name to be used in case it is not specified in the logins structure.
-#'@param password Default user password to be used in case it is not specified in the logins structure.
-#'@param opts Default SSL options to be used in case it is not specified in the logins structure.
-#'@param restore The workspace name to restore (optional).
-#'@return object(s) of class DSConnection
-#'@export
-#'@examples
+#' @param logins A dataframe table that holds login details. This table holds five elements required
+#'   to login to the servers where the data to analyse is stored. The expected column names are
+#'   'driver' (the \code{\link{DSDriver-class}} name, default is "OpalDriver"),
+#'   'server' (the server name), url' (the server url), 'user' (the user name or the certificate file path),
+#'   'password' (the user password or the private key file path), table' (the fully qualified name of
+#'   the table in the data repository), 'options' (the SSL options). An additional column 'identifiers'
+#'   can be specified for identifiers mapping (if supported by data repository). See also the documentation
+#'   of the examplar input table \code{logindata} for details of the login elements.
+#' @param assign A boolean which tells whether or not data should be assigned from the data repository
+#'   table to R after login into the server(s).
+#' @param variables Specific variables to assign. If \code{assign} is set to FALSE this argument is ignored
+#'   otherwise the specified variables are assigned to R. If no variables are specified (default) the whole
+#'   data repository's table is assigned.
+#' @param symbol A character, the name of the data frame to which the data repository's table will be
+#'   assigned after login into the server(s).
+#' @param username Default user name to be used in case it is not specified in the logins structure.
+#' @param password Default user password to be used in case it is not specified in the logins structure.
+#' @param opts Default SSL options to be used in case it is not specified in the logins structure.
+#' @param restore The workspace name to restore (optional).
+#' @return object(s) of class DSConnection
+#' @export
+#' @examples
 #'\dontrun{
 #'
 #'#### The below examples illustrate an analysises that use test/simulated data ####
@@ -147,8 +147,6 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
       }
       connections[[i]] <- dsConnect(drv, name=stdnames[i], username=u, password=p, url=urls[i], opts=conn.opts, restore=restoreId)
     }
-    # set the study name to corresponding opal object
-    #connections[[i]]@name <- stdnames[i]
   }
 
   # sanity check: server availability and table path is valid

@@ -12,23 +12,30 @@ datashield.assign.table(conns, symbol, table, variables = NULL,
 
 \item{symbol}{Name of the R symbol.}
 
-\item{table}{Fully qualified name of a table in the data repository (must be the same in each Opal).}
+\item{table}{Fully qualified name of a table in the data repository
+(must be the same in each data repository).}
 
-\item{variables}{List of variable names or Javascript expression that selects the variables of a table (ignored if value does not refere to a table). See javascript documentation: http://wiki.obiba.org/display/OPALDOC/Variable+Methods}
+\item{variables}{List of variable names or Javascript expression that selects the variables of
+a table. See javascript documentation:
+\url{http://opaldoc.obiba.org/en/latest/magma-user-guide/variable/}}
 
-\item{missings}{If TRUE, missing values will be pushed from Opal to R, default is FALSE. Ignored if value is an R expression.}
+\item{missings}{If TRUE, missing values will be pushed from data repository to R, default is FALSE.
+Ignored if value is an R expression.}
 
-\item{identifiers}{Name of the identifiers mapping to use when assigning entities to R (from Opal 2.0).}
+\item{identifiers}{Name of the identifiers mapping to use when assigning entities to R (if supported
+by the data repository).}
 }
 \description{
 Assign a table to a R symbol in the Datashield R session.
 }
 \examples{
 \dontrun{
-# assign a list of variables from table HOP of opal object o
-datashield.assign.table(o, symbol="D", table="demo.HOP", variables=list("GENDER","LAB_GLUC"))
+# assign a list of variables from table HOP
+datashield.assign.table(conn, symbol="D", table="demo.HOP",
+  variables=list("GENDER","LAB_GLUC"))
 
-# assign all the variables matching 'LAB' from table HOP of opal object o
-datashield.assign.table(o, symbol="D", table="demo.HOP", variables="name().matches('LAB_')")
+# assign all the variables matching 'LAB' from table HOP
+datashield.assign.table(conn, symbol="D", table="demo.HOP",
+  variables="name().matches('LAB_')")
 }
 }

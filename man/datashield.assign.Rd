@@ -12,23 +12,30 @@ datashield.assign(conns, symbol, value, variables = NULL,
 
 \item{symbol}{Name of the R symbol.}
 
-\item{value}{Fully qualified name of a variable or a table in Opal (must be the same in each Opal) or a R expression with allowed assign functions calls.}
+\item{value}{Fully qualified name of a variable or a table reference in data repositories
+(must be the same in each data repository) or a R expression with allowed assign functions calls.}
 
-\item{variables}{List of variable names or Javascript expression that selects the variables of a table (ignored if value does not refere to a table). See javascript documentation: http://wiki.obiba.org/display/OPALDOC/Variable+Methods}
+\item{variables}{List of variable names or Javascript expression that selects the variables of a table
+(ignored if value does not refere to a table). See javascript documentation:
+\url{http://opaldoc.obiba.org/en/latest/magma-user-guide/variable/}}
 
-\item{missings}{If TRUE, missing values will be pushed from Opal to R, default is FALSE. Ignored if value is an R expression.}
+\item{missings}{If TRUE, missing values will be pushed from data repository to R, default is FALSE.
+Ignored if value is an R expression.}
 
-\item{identifiers}{Name of the identifiers mapping to use when assigning entities to R (from Opal 2.0).}
+\item{identifiers}{Name of the identifiers mapping to use when assigning entities to R (if supported
+by data repository).}
 }
 \description{
 Assign a table or an expression result to a R symbol in the Datashield R session.
 }
 \examples{
 \dontrun{
-# assign a list of variables from table HOP of opal object o
-datashield.assign(o, symbol="D", value="demo.HOP", variables=list("GENDER","LAB_GLUC"))
+# assign a list of variables from table HOP
+datashield.assign(conn, symbol="D", value="demo.HOP",
+  variables=list("GENDER","LAB_GLUC"))
 
-# assign all the variables matching 'LAB' from table HOP of opal object o
-datashield.assign(o, symbol="D", value="demo.HOP", variables="name().matches('LAB_')")
+# assign all the variables matching 'LAB' from table HOP
+datashield.assign(conn, symbol="D", value="demo.HOP",
+  variables="name().matches('LAB_')")
 }
 }
