@@ -96,6 +96,7 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
   if (is.null(drivers)) {
     drivers <- rep(defaultDriver, length(stdnames))
   }
+  drivers <- as.character(drivers)
 
   # name of the assigned dataframe - check the user gave a character string as name
   if(!(is.character(symbol))){
