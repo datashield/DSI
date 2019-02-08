@@ -4,7 +4,7 @@
 \alias{dsAssignExpr}
 \title{Assign an expression result}
 \usage{
-dsAssignExpr(conn, symbol, expr)
+dsAssignExpr(conn, symbol, expr, async = TRUE)
 }
 \arguments{
 \item{conn}{An object that inherits from \code{\link{DSConnection-class}}.}
@@ -12,6 +12,9 @@ dsAssignExpr(conn, symbol, expr)
 \item{symbol}{Name of the R symbol.}
 
 \item{expr}{A R expression with allowed assign functions calls.}
+
+\item{async}{Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
+the connections, when the connection supports that feature, with an extra overhead of requests.}
 }
 \description{
 Assign the result of the evaluation of an expression to a symbol the DataSHIELD R session

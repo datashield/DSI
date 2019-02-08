@@ -13,6 +13,8 @@
 #'   Ignored if value is an R expression.
 #' @param identifiers Name of the identifiers mapping to use when assigning entities to R (if supported
 #'   by data repository).
+#' @param async Whether the result of the call should be retrieved asynchronously (TRUE means that calls are parallelized over
+#'   the connections, when the connection supports that feature, with an extra overhead of requests).
 #'
 #' @examples
 #' \dontrun{
@@ -25,11 +27,11 @@
 #'   variables="name().matches('LAB_')")
 #' }
 #' @export
-datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FALSE, identifiers=NULL) {
+datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FALSE, identifiers=NULL, async=TRUE) {
   if(is.language(value) || is.function(value)) {
-    datashield.assign.expr(conns, symbol, value)
+    datashield.assign.expr(conns, symbol, value, async)
   } else {
-    datashield.assign.table(conns, symbol, value, variables, missings, identifiers)
+    datashield.assign.table(conns, symbol, value, variables, missings, identifiers, async)
   }
 }
 
@@ -48,6 +50,8 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #'   Ignored if value is an R expression.
 #' @param identifiers Name of the identifiers mapping to use when assigning entities to R (if supported
 #'   by the data repository).
+#' @param async Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
+#'   the connections, when the connection supports that feature, with an extra overhead of requests.
 #'
 #' @examples
 #' \dontrun{
@@ -60,10 +64,23 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #'   variables="name().matches('LAB_')")
 #' }
 #' @export
-datashield.assign.table <- function(conns, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL) {
+datashield.assign.table <- function(conns, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, async=TRUE) {
   if (is.list(conns)) {
-    ress <- lapply(conns, FUN=dsAssignTable, symbol, table, variables, missings, identifiers)
-    ignore <- lapply(ress, function(r) {
+    results <- list()
+    asyncs <- lapply(conns, function(conn) { ifelse(async, dsIsAsync(conn)$assignTable, FALSE) })
+    # async first
+    for (n in names(conns)) {
+      if(asyncs[[n]]) {
+        results[[n]] <- dsAssignTable(conns[[n]], symbol, table, variables, missings, identifiers, async=TRUE)
+      }
+    }
+    # not async (blocking calls)
+    for (n in names(conns)) {
+      if(!asyncs[[n]]) {
+        results[[n]] <- dsAssignTable(conns[[n]], symbol, table, variables, missings, identifiers, async=FALSE)
+      }
+    }
+    ignore <- lapply(results, function(r) {
       dsGetInfo(r)
     })
   } else {
@@ -79,6 +96,8 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
 #' @param conns \code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.
 #' @param symbol Name of the R symbol.
 #' @param expr R expression with allowed assign functions calls.
+#' @param async Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
+#'   the connections, when the connection supports that feature, with an extra overhead of requests.
 #'
 #' @examples
 #' \dontrun{
@@ -86,10 +105,23 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
 #' datashield.assign.expr(o, symbol="G", expr=quote(as.numeric(D$GENDER)))
 #' }
 #' @export
-datashield.assign.expr <- function(conns, symbol, expr) {
+datashield.assign.expr <- function(conns, symbol, expr, async=TRUE) {
   if (is.list(conns)) {
-    ress <- lapply(conns, FUN=dsAssignExpr, symbol, expr)
-    ignore <- lapply(ress, function(r) {
+    results <- list()
+    async <- lapply(conns, function(conn) { ifelse(async, dsIsAsync(conn)$assignExpr, FALSE) })
+    # async first
+    for (n in names(conns)) {
+      if(async[[n]]) {
+        results[[n]] <- dsAssignExpr(conns[[n]], expr, async=TRUE)
+      }
+    }
+    # not async (blocking calls)
+    for (n in names(conns)) {
+      if(!async[[n]]) {
+        results[[n]] <- dsAssignExpr(conns[[n]], expr, async=FALSE)
+      }
+    }
+    ignore <- lapply(results, function(r) {
       dsGetInfo(r)
     })
   } else {

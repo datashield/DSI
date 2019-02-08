@@ -91,6 +91,8 @@ setGeneric("dsHasTable",
 #' @param missings If TRUE, missing values will be pushed from data repository to R, default is FALSE.
 #' @param identifiers Name of the identifiers mapping to use when assigning entities to R (if supported
 #'   by the data repository).
+#' @param async Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
+#'   the connections, when the connection supports that feature, with an extra overhead of requests.
 #'
 #' @family DSConnection generics
 #' @examples
@@ -103,7 +105,7 @@ setGeneric("dsHasTable",
 #' @import methods
 #' @export
 setGeneric("dsAssignTable",
-           def = function(conn, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL) standardGeneric("dsAssignTable"),
+           def = function(conn, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, async=TRUE) standardGeneric("dsAssignTable"),
            valueClass = "DSResult")
 
 #' Assign an expression result
@@ -117,6 +119,8 @@ setGeneric("dsAssignTable",
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param symbol Name of the R symbol.
 #' @param expr A R expression with allowed assign functions calls.
+#' @param async Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
+#'   the connections, when the connection supports that feature, with an extra overhead of requests.
 #'
 #' @family DSConnection generics
 #' @examples
@@ -129,7 +133,7 @@ setGeneric("dsAssignTable",
 #' @import methods
 #' @export
 setGeneric("dsAssignExpr",
-           def = function(conn, symbol, expr) standardGeneric("dsAssignExpr"),
+           def = function(conn, symbol, expr, async=TRUE) standardGeneric("dsAssignExpr"),
            valueClass = "DSResult")
 
 #' Aggregate data
@@ -142,6 +146,8 @@ setGeneric("dsAssignExpr",
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param expr Expression to evaluate.
+#' @param async Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
+#'   the connections, when the connection supports that feature, with an extra overhead of requests.
 #'
 #' @family DSConnection generics
 #' @examples
@@ -155,7 +161,7 @@ setGeneric("dsAssignExpr",
 #' @import methods
 #' @export
 setGeneric("dsAggregate",
-           def = function(conn, expr) standardGeneric("dsAggregate"),
+           def = function(conn, expr, async=TRUE) standardGeneric("dsAggregate"),
            valueClass = "DSResult")
 
 #' List symbols

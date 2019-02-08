@@ -25,7 +25,8 @@ setClass("DSResult", contains = c("DSObject", "VIRTUAL"))
 #' Get the raw result
 #'
 #' Wait for the result to be available and fetch the result from a previous assignment or aggregation operation that may have been
-#' run asynchronously.
+#' run asynchronously, in which case it is a one-shot call. When the assignment or aggregation operation was not asynchronous,
+#' the result is wrapped in the object and can be fetched mutliple times.
 #'
 #' @template methods
 #' @templateVar method_name dsFetch

@@ -5,7 +5,7 @@
 \title{Assign a remote table}
 \usage{
 dsAssignTable(conn, symbol, table, variables = NULL, missings = FALSE,
-  identifiers = NULL)
+  identifiers = NULL, async = TRUE)
 }
 \arguments{
 \item{conn}{An object that inherits from \code{\link{DSConnection-class}}.}
@@ -22,6 +22,9 @@ a table. See javascript documentation:
 
 \item{identifiers}{Name of the identifiers mapping to use when assigning entities to R (if supported
 by the data repository).}
+
+\item{async}{Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
+the connections, when the connection supports that feature, with an extra overhead of requests.}
 }
 \description{
 Assign a remote table from the data repository to a symbol in the DataSHIELD R session.

@@ -212,7 +212,7 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
 
     lapply(1:length(stdnames), function(i) {
       if (!excluded[i]) {
-        varnames <- dsFetch(dsAggregate(connections[[i]], paste0('colnames(',symbol,')')))
+        varnames <- dsFetch(dsAggregate(connections[[i]], paste0('colnames(',symbol,')'), async = FALSE))
         if(length(varnames[[1]]) > 0) {
           message(stdnames[i],"--",paste(unlist(varnames), collapse=", "))
         } else {

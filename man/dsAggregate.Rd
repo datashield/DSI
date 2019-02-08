@@ -4,12 +4,15 @@
 \alias{dsAggregate}
 \title{Aggregate data}
 \usage{
-dsAggregate(conn, expr)
+dsAggregate(conn, expr, async = TRUE)
 }
 \arguments{
 \item{conn}{An object that inherits from \code{\link{DSConnection-class}}.}
 
 \item{expr}{Expression to evaluate.}
+
+\item{async}{Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
+the connections, when the connection supports that feature, with an extra overhead of requests.}
 }
 \description{
 Aggregate some data from the DataSHIELD R session using a valid R expression. The aggregation expression

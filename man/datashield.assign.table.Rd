@@ -5,7 +5,7 @@
 \title{Table assignment}
 \usage{
 datashield.assign.table(conns, symbol, table, variables = NULL,
-  missings = FALSE, identifiers = NULL)
+  missings = FALSE, identifiers = NULL, async = TRUE)
 }
 \arguments{
 \item{conns}{\code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.}
@@ -24,6 +24,9 @@ Ignored if value is an R expression.}
 
 \item{identifiers}{Name of the identifiers mapping to use when assigning entities to R (if supported
 by the data repository).}
+
+\item{async}{Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
+the connections, when the connection supports that feature, with an extra overhead of requests.}
 }
 \description{
 Assign a table to a R symbol in the Datashield R session.
