@@ -4,7 +4,10 @@
 \alias{.getDSConnections}
 \title{Gets the opal objects}
 \usage{
-.getDSConnections()
+.getDSConnections(env)
+}
+\arguments{
+\item{env}{The environment where to search for the connection symbols.}
 }
 \value{
 a list of opal object obtained after login into the servers

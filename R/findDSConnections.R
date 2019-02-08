@@ -5,11 +5,12 @@
 #' login object is found a prompt asks the user to choose one and if none is found
 #' the process stops.
 #'
+#' @param env The environment where to search for the connection symbols.
 #' @return returns a list of \code{\link{DSConnection-class}} objects or stops the process
 #' @export
-#'
-findDSConnections <- function() {
-  found <- .getDSConnections()
+#' @import rlang
+findDSConnections <- function(env=rlang::global_env()) {
+  found <- .getDSConnections(env)
   if (found$flag == 1) {
     return (found$conns)
   } else if (found$flag == 0) {
@@ -32,12 +33,12 @@ findDSConnections <- function() {
 #' in the current environment; if more than one list is found it return the lastest.
 #' This way no matter what the user calls his opal login object it will be captured.
 #'
+#' @param env The environment where to search for the connection symbols.
 #' @return a list of opal object obtained after login into the servers
-#' @import rlang
 #' @keywords internal
-.getDSConnections <- function() {
+.getDSConnections <- function(env) {
   # get the names of all the objects in the current work environment
-  symbols <- ls(name=rlang::global_env())
+  symbols <- ls(name=env)
 
   # check which of the object is a list (the opal objects are kept in a list)
   if (length(symbols) > 0) {
