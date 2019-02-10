@@ -24,7 +24,7 @@ All classes are *virtual*: they cannot be instantiated directly and instead must
 
 ## Higher Level Functions
 
-In addition to these S4 classes, DSI provides functions to handle a list of remote data repostory servers:
+In addition to these S4 classes, DSI provides functions to handle a list of remote data repository servers:
 
 * `datashield.login` and `datashield.logout` will make use of the `DSDriver` paradigm to create `DSConnection`s
 to the data repositories,
