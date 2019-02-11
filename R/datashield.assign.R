@@ -112,13 +112,13 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE) {
     # async first
     for (n in names(conns)) {
       if(async[[n]]) {
-        results[[n]] <- dsAssignExpr(conns[[n]], expr, async=TRUE)
+        results[[n]] <- dsAssignExpr(conns[[n]], symbol, expr, async=TRUE)
       }
     }
     # not async (blocking calls)
     for (n in names(conns)) {
       if(!async[[n]]) {
-        results[[n]] <- dsAssignExpr(conns[[n]], expr, async=FALSE)
+        results[[n]] <- dsAssignExpr(conns[[n]], symbol, expr, async=FALSE)
       }
     }
     ignore <- lapply(results, function(r) {
