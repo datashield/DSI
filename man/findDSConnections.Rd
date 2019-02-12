@@ -4,10 +4,11 @@
 \alias{findDSConnections}
 \title{Searches for \code{\link{DSConnection-class}} objects in the environment}
 \usage{
-findDSConnections(env = rlang::global_env())
+findDSConnections(env = getOption("ds.env", globalenv()))
 }
 \arguments{
-\item{env}{The environment where to search for the connection symbols.}
+\item{env}{The environment where to search for the connection symbols. Try to get it from the
+'ds.env' option, with default to the Global Environment.}
 }
 \value{
 returns a list of \code{\link{DSConnection-class}} objects or stops the process
