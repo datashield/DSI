@@ -7,7 +7,7 @@
 datashield.pkg_status(conns)
 }
 \arguments{
-\item{conns}{A list of \code{\link{DSConnection-class}}s.}
+\item{conns}{\code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.}
 }
 \value{
 Packages status for each server.

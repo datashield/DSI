@@ -4,8 +4,9 @@
 #'
 #' @param conns \code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.
 #' @param symbol Name of the R symbol.
-#' @param value Fully qualified name of a variable or a table reference in data repositories
-#'   (must be the same in each data repository) or a R expression with allowed assign functions calls.
+#' @param value Fully qualified name of a table reference in data repositories (see
+#'   \code{\link{datashield.assign.table}} for more details) or a R expression with allowed assign
+#'  functions calls.
 #' @param variables List of variable names or Javascript expression that selects the variables of a table
 #'   (ignored if value does not refere to a table). See javascript documentation:
 #'   \url{http://opaldoc.obiba.org/en/latest/magma-user-guide/variable/}
@@ -41,8 +42,10 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #'
 #' @param conns \code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.
 #' @param symbol Name of the R symbol.
-#' @param table Fully qualified name of a table in the data repository
-#'   (must be the same in each data repository).
+#' @param table Fully qualified name of a table in the data repository (can be a vector or must be
+#'   the same in each data repository); or a named list of fully qualified table names (one per server
+#'   name); or a data frame with 'server' and 'table' columns (such as the one that is used in
+#'   \code{\link{datashield.login}})
 #' @param variables List of variable names or Javascript expression that selects the variables of
 #'   a table. See javascript documentation:
 #'   \url{http://opaldoc.obiba.org/en/latest/magma-user-guide/variable/}
@@ -62,29 +65,41 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #' # assign all the variables matching 'LAB' from table HOP
 #' datashield.assign.table(conn, symbol="D", table="demo.HOP",
 #'   variables="name().matches('LAB_')")
+#'
+#' # assign the tables that are defined in the logindata ('server' and 'table' columns are
+#' # expected) data frame that is used in datashield.login() function. Connections names
+#' # and server names must match.
+#' datashield.assign.table(conns, "D", logindata)
+#'
+#' # assign the tables that are defined in the provided named list. Connections names
+#' # and server names must match.
+#' datashield.assign.table(conns, "D", list(server1="datashield.CNSIM1", server2="datashield.CNSIM2"))
 #' }
 #' @export
 datashield.assign.table <- function(conns, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, async=TRUE) {
-  if (is.list(conns)) {
+    # prepare tables as a named list
+    tables <- .asNamedListOfTables(conns, table)
+
+    if (is.list(conns)) {
     results <- list()
     asyncs <- lapply(conns, function(conn) { ifelse(async, dsIsAsync(conn)$assignTable, FALSE) })
     # async first
     for (n in names(conns)) {
       if(asyncs[[n]]) {
-        results[[n]] <- dsAssignTable(conns[[n]], symbol, table, variables, missings, identifiers, async=TRUE)
+        results[[n]] <- dsAssignTable(conns[[n]], symbol, tables[[n]], variables, missings, identifiers, async=TRUE)
       }
     }
     # not async (blocking calls)
     for (n in names(conns)) {
       if(!asyncs[[n]]) {
-        results[[n]] <- dsAssignTable(conns[[n]], symbol, table, variables, missings, identifiers, async=FALSE)
+        results[[n]] <- dsAssignTable(conns[[n]], symbol, tables[[n]], variables, missings, identifiers, async=FALSE)
       }
     }
     ignore <- lapply(results, function(r) {
       dsGetInfo(r)
     })
   } else {
-    res <- dsAssignTable(conns, symbol, table, variables, missings, identifiers)
+    res <- dsAssignTable(conns, symbol, tables[[conns@name]], variables, missings, identifiers)
     ignore <- dsGetInfo(res)
   }
 }

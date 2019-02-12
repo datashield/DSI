@@ -4,12 +4,15 @@
 \alias{datashield.table_status}
 \title{Status of some tables}
 \usage{
-datashield.table_status(conns, tables)
+datashield.table_status(conns, table)
 }
 \arguments{
-\item{conns}{A list of \code{\link{DSConnection-class}}s.}
+\item{conns}{\code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.}
 
-\item{tables}{A named list of fully qualified table names, per servername.}
+\item{table}{Fully qualified name of a table in the data repository (can be a vector or must be
+the same in each data repository); or a named list of fully qualified table names (one per server
+name); or a data frame with 'server' and 'table' columns (such as the one that is used in
+\code{\link{datashield.login}})}
 }
 \value{
 Table status for each server.

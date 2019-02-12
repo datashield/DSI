@@ -41,3 +41,4 @@ Collate:
     'datashield.workspace.R'
     'findDSConnections.R'
     'rd.R'
+    'utils.R'

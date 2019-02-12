@@ -12,8 +12,10 @@ datashield.assign.table(conns, symbol, table, variables = NULL,
 
 \item{symbol}{Name of the R symbol.}
 
-\item{table}{Fully qualified name of a table in the data repository
-(must be the same in each data repository).}
+\item{table}{Fully qualified name of a table in the data repository (can be a vector or must be
+the same in each data repository); or a named list of fully qualified table names (one per server
+name); or a data frame with 'server' and 'table' columns (such as the one that is used in
+\code{\link{datashield.login}})}
 
 \item{variables}{List of variable names or Javascript expression that selects the variables of
 a table. See javascript documentation:
@@ -40,5 +42,14 @@ datashield.assign.table(conn, symbol="D", table="demo.HOP",
 # assign all the variables matching 'LAB' from table HOP
 datashield.assign.table(conn, symbol="D", table="demo.HOP",
   variables="name().matches('LAB_')")
+
+# assign the tables that are defined in the logindata ('server' and 'table' columns are
+# expected) data frame that is used in datashield.login() function. Connections names
+# and server names must match.
+datashield.assign.table(conns, "D", logindata)
+
+# assign the tables that are defined in the provided named list. Connections names
+# and server names must match.
+datashield.assign.table(conns, "D", list(server1="datashield.CNSIM1", server2="datashield.CNSIM2"))
 }
 }

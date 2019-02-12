@@ -30,12 +30,15 @@ datashield.methods <- function(conns, type = "aggregate") {
 #'
 #' Get the status of the DataSHIELD methods in the different data repositories to check if any method is missing.
 #'
-#' @param conns A list of \code{\link{DSConnection-class}}s.
+#' @param conns \code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.
 #' @param type Type of the method: "aggregate" (default) or "assign".
 #' @return Methods availability on each server.
 #' @export
 datashield.method_status <- function(conns, type = "aggregate") {
-  methods <- lapply(conns, function(c) { dsListMethods(c, type) })
+  # make a named list of connections
+  cs <- .asNamedListOfConnections(conns)
+
+  methods <- lapply(cs, function(c) { dsListMethods(c, type) })
   #unique method names
   unique_name <- unique(unlist(lapply(methods, function(x) x$name)))
 
@@ -49,17 +52,19 @@ datashield.method_status <- function(conns, type = "aggregate") {
 #'
 #' Get the status of the DataSHIELD packages in the different data repositories to check if any package is missing.
 #'
-#' @param conns A list of \code{\link{DSConnection-class}}s.
+#' @param conns \code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.
 #' @return Packages status for each server.
 #' @export
 datashield.pkg_status <- function(conns) {
+  # make a named list of connections
+  cs <- .asNamedListOfConnections(conns)
   types = c('aggregate','assign')
   df_pkges <- data.frame(NULL)
   df_verses <- data.frame(NULL)
   pkg_checked <- NULL
 
   for(type in types){
-    res <- lapply(conns, function(c) { dsListMethods(c, type) })
+    res <- lapply(cs, function(c) { dsListMethods(c, type) })
     #package names by type
     unique_pkg <- unique(unlist(lapply(res,function(x) x$package)))
 
@@ -98,20 +103,28 @@ datashield.pkg_status <- function(conns) {
 #'
 #' Get whether some identified tables are accessible in each of the data repositories.
 #'
-#' @param conns A list of \code{\link{DSConnection-class}}s.
-#' @param tables A named list of fully qualified table names, per servername.
+#' @param conns \code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.
+#' @param table Fully qualified name of a table in the data repository (can be a vector or must be
+#'   the same in each data repository); or a named list of fully qualified table names (one per server
+#'   name); or a data frame with 'server' and 'table' columns (such as the one that is used in
+#'   \code{\link{datashield.login}})
 #' @return Table status for each server.
 #' @export
-datashield.table_status <- function(conns, tables) {
-  server <- names(conns)
-  table <- rep(NA, length(server))
+datashield.table_status <- function(conns, table) {
+  # prepare tables as a named list
+  tables <- .asNamedListOfTables(conns, table)
+  # make a named list of connections
+  cs <- .asNamedListOfConnections(conns)
+
+  server <- names(cs)
+  tbl <- rep(NA, length(server))
   accessible <- rep(NA, length(server))
   for (i in 1:length(server)) {
     name <- server[i]
     if (!is.null(tables[[name]])) {
-      table[i] <- tables[[name]]
-      accessible[i] <- dsHasTable(conns[[name]], tables[[name]])
+      tbl[i] <- tables[[name]]
+      accessible[i] <- dsHasTable(cs[[name]], tables[[name]])
     }
   }
-  data.frame(server, table, accessible)
+  data.frame(server, table=tbl, accessible)
 }

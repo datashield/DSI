@@ -7,7 +7,7 @@
 datashield.method_status(conns, type = "aggregate")
 }
 \arguments{
-\item{conns}{A list of \code{\link{DSConnection-class}}s.}
+\item{conns}{\code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.}
 
 \item{type}{Type of the method: "aggregate" (default) or "assign".}
 }
