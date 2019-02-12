@@ -15,7 +15,7 @@ returns a list of \code{\link{DSConnection-class}} objects or stops the process
 }
 \description{
 If the user does not set the argument 'datasources', this function
-is called to searches for opal login objects in the environment. If more than one
-login object is found a prompt asks the user to choose one and if none is found
-the process stops.
+is called to searches for \code{\link{DSConnection-class}} objects in the environment (default
+environment is the Global one). If more than one connection object is found a prompt asks
+the user to choose one and if none is found the process stops.
 }

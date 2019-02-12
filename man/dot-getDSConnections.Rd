@@ -2,7 +2,7 @@
 % Please edit documentation in R/findDSConnections.R
 \name{.getDSConnections}
 \alias{.getDSConnections}
-\title{Gets the opal objects}
+\title{Gets the \code{\link{DSConnection-class}} objects}
 \usage{
 .getDSConnections(env)
 }
@@ -10,11 +10,11 @@
 \item{env}{The environment where to search for the connection symbols.}
 }
 \value{
-a list of opal object obtained after login into the servers
+A list of \code{\link{DSConnection-class}} objects obtained after login into the servers
 }
 \description{
 The function searches for a list containing object of type \code{\link{DSConnection-class}}
 in the current environment; if more than one list is found it return the lastest.
-This way no matter what the user calls his opal login object it will be captured.
+This way no matter what the user calls his connection object list it will be captured.
 }
 \keyword{internal}

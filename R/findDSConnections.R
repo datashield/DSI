@@ -1,9 +1,9 @@
 #' Searches for \code{\link{DSConnection-class}} objects in the environment
 #'
 #' If the user does not set the argument 'datasources', this function
-#' is called to searches for opal login objects in the environment. If more than one
-#' login object is found a prompt asks the user to choose one and if none is found
-#' the process stops.
+#' is called to searches for \code{\link{DSConnection-class}} objects in the environment (default
+#' environment is the Global one). If more than one connection object is found a prompt asks
+#' the user to choose one and if none is found the process stops.
 #'
 #' @param env The environment where to search for the connection symbols. Try to get it from the
 #' 'ds.env' option, with default to the Global Environment.
@@ -27,14 +27,14 @@ findDSConnections <- function(env=getOption("ds.env", globalenv())) {
   }
 }
 
-#' Gets the opal objects
+#' Gets the \code{\link{DSConnection-class}} objects
 #'
 #' The function searches for a list containing object of type \code{\link{DSConnection-class}}
 #' in the current environment; if more than one list is found it return the lastest.
-#' This way no matter what the user calls his opal login object it will be captured.
+#' This way no matter what the user calls his connection object list it will be captured.
 #'
 #' @param env The environment where to search for the connection symbols.
-#' @return a list of opal object obtained after login into the servers
+#' @return A list of \code{\link{DSConnection-class}} objects obtained after login into the servers
 #' @keywords internal
 .getDSConnections <- function(env) {
   # get the names of all the objects in the current work environment
