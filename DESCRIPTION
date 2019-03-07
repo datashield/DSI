@@ -17,7 +17,8 @@ Description: DataSHIELD is an infrastructure and series of R packages that
     data repositories.
 Depends:
     R (>= 3.1),
-    methods
+    methods,
+    progress
 Suggests: knitr
 License: GPL-3
 URL: http://datashield.ac.uk

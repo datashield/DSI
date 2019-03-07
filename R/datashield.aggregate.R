@@ -14,6 +14,7 @@ datashield.aggregate <- function(conns, expr, async=TRUE) {
   if (is.list(conns)) {
     results <- list()
     async <- lapply(conns, function(conn) { ifelse(async, dsIsAsync(conn)$aggregate, FALSE) })
+    pb <- .newProgress(total = 1 + length(conns))
     # async first
     for (n in names(conns)) {
       if(async[[n]]) {
@@ -23,12 +24,20 @@ datashield.aggregate <- function(conns, expr, async=TRUE) {
     # not async (blocking calls)
     for (n in names(conns)) {
       if(!async[[n]]) {
+        .tickProgress(pb, tokens = list(what = paste0("Aggregating ", conns[[n]]@name, " (", expr, ")")))
         results[[n]] <- dsAggregate(conns[[n]], expr, async=FALSE)
       }
     }
-    lapply(results, function(r) {
-      dsFetch(r)
+    rval <- lapply(names(conns), function(n) {
+      if(async[[n]]) {
+        .tickProgress(pb, tokens = list(what = paste0("Aggregating ", conns[[n]]@name, " (", expr, ")")))
+        dsFetch(results[[n]])
+      } else {
+        dsFetch(results[[n]])
+      }
     })
+    .tickProgress(pb, tokens = list(what = paste0("Aggregated (", expr, ")")))
+    rval
   } else {
     res <- dsAggregate(conns, expr)
     dsFetch(res)

@@ -82,22 +82,26 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
 
     if (is.list(conns)) {
     results <- list()
-    asyncs <- lapply(conns, function(conn) { ifelse(async, dsIsAsync(conn)$assignTable, FALSE) })
+    async <- lapply(conns, function(conn) { ifelse(async, dsIsAsync(conn)$assignTable, FALSE) })
+    pb <- .newProgress(total = 1 + length(conns))
     # async first
     for (n in names(conns)) {
-      if(asyncs[[n]]) {
+      if(async[[n]]) {
         results[[n]] <- dsAssignTable(conns[[n]], symbol, tables[[n]], variables, missings, identifiers, async=TRUE)
       }
     }
     # not async (blocking calls)
     for (n in names(conns)) {
-      if(!asyncs[[n]]) {
+      if(!async[[n]]) {
+        .tickProgress(pb, tokens = list(what = paste0("Assigning ", conns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
         results[[n]] <- dsAssignTable(conns[[n]], symbol, tables[[n]], variables, missings, identifiers, async=FALSE)
       }
     }
-    ignore <- lapply(results, function(r) {
-      dsGetInfo(r)
+    lapply(names(conns), function(n) {
+      if(async[[n]]) .tickProgress(pb, tokens = list(what = paste0("Assigning table ", conns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
+      dsGetInfo(results[[n]])
     })
+    ignore <- .tickProgress(pb, tokens = list(what = paste0("Assigned all table (", symbol, " <- ...)")))
   } else {
     res <- dsAssignTable(conns, symbol, tables[[conns@name]], variables, missings, identifiers)
     ignore <- dsGetInfo(res)
@@ -124,6 +128,7 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE) {
   if (is.list(conns)) {
     results <- list()
     async <- lapply(conns, function(conn) { ifelse(async, dsIsAsync(conn)$assignExpr, FALSE) })
+    pb <- .newProgress(total = 1 + length(conns))
     # async first
     for (n in names(conns)) {
       if(async[[n]]) {
@@ -133,12 +138,15 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE) {
     # not async (blocking calls)
     for (n in names(conns)) {
       if(!async[[n]]) {
+        .tickProgress(pb, tokens = list(what = paste0("Assigning expr. ", conns[[n]]@name, " (", symbol, " <- ", expr, ")")))
         results[[n]] <- dsAssignExpr(conns[[n]], symbol, expr, async=FALSE)
       }
     }
-    ignore <- lapply(results, function(r) {
-      dsGetInfo(r)
+    lapply(names(conns), function(n) {
+      if(async[[n]]) .tickProgress(pb, tokens = list(what = paste0("Assigning ", conns[[n]]@name, " (", symbol, " <- ", expr, ")")))
+      dsGetInfo(results[[n]])
     })
+    ignore <- .tickProgress(pb, tokens = list(what = paste0("Assigned expr. (", symbol, " <- ", expr, ")")))
   } else {
     res <- dsAssignExpr(conns, symbol, expr)
     ignore <- dsGetInfo(res)

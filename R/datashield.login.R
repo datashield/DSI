@@ -25,6 +25,7 @@
 #' @param restore The workspace name to restore (optional).
 #' @return object(s) of class DSConnection
 #' @export
+#' @import progress
 #' @examples
 #'\dontrun{
 #'
@@ -180,32 +181,37 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
     }
 
     # Assign data in parallel
-    message("\nAssigning data:")
+    message("\nAssigning data...")
     results <- list()
     async <- unlist(lapply(connections, function(conn) { dsIsAsync(conn)$assignTable }))
     # async first
+
+    pb <- .newProgress(total = 1 + length(connections) - length(excluded[excluded == TRUE]))
     for (i in 1:length(connections)) {
       if(!excluded[i] && async[i]) {
-        message(stdnames[i],"...")
         results[[i]] <- dsAssignTable(connections[[i]], symbol, paths[i], variables, identifiers=idmappings[i])
       }
     }
     # not async (blocking calls)
     for (i in 1:length(connections)) {
       if(!excluded[i] && !async[i]) {
-        message(stdnames[i],"...")
+        .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", paths[i], ")")))
         results[[i]] <- dsAssignTable(connections[[i]], symbol, paths[i], variables, identifiers=idmappings[i])
       }
     }
     for (i in 1:length(stdnames)) {
       res <- results[[i]]
       if (!is.null(res)) {
+        if (async[i]) {
+          .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", paths[i], ")")))
+        }
         resInfo <- dsGetInfo(res)
         if (resInfo$status == "FAILED") {
           warning("Data assignment of '", paths[i],"' failed for '", stdnames[i],"': ", res@error, call.=FALSE, immediate.=TRUE)
         }
       }
     }
+    .tickProgress(pb, tokens = list(what = "Assigned all tables"))
 
     # Get column names in parallel
     message("\nVariables assigned:")

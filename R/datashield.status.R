@@ -109,6 +109,7 @@ datashield.pkg_status <- function(conns) {
 #'   name); or a data frame with 'server' and 'table' columns (such as the one that is used in
 #'   \code{\link{datashield.login}})
 #' @return Table status for each server.
+#' @import progress
 #' @export
 datashield.table_status <- function(conns, table) {
   # prepare tables as a named list
@@ -119,12 +120,15 @@ datashield.table_status <- function(conns, table) {
   server <- names(cs)
   tbl <- rep(NA, length(server))
   accessible <- rep(NA, length(server))
+  pb <- .newProgress(total = 1 + length(server))
   for (i in 1:length(server)) {
     name <- server[i]
     if (!is.null(tables[[name]])) {
       tbl[i] <- tables[[name]]
       accessible[i] <- dsHasTable(cs[[name]], tables[[name]])
     }
+    .tickProgress(pb, tokens = list(what = paste0("Checking ", name)))
   }
+  .tickProgress(pb, tokens = list(what = "All servers checked"))
   data.frame(server, table=tbl, accessible)
 }
