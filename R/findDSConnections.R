@@ -40,7 +40,7 @@ findDSConnections <- function(env=getOption("ds.env", globalenv())) {
   # get the names of all the objects in the current work environment
   symbols <- ls(name=env)
 
-  # check which of the object is a list (the opal objects are kept in a list)
+  # check which of the object is a list (the connection objects are kept in a list)
   if (length(symbols) > 0) {
     connlist <- c()
     flag <- 0
