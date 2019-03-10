@@ -1,9 +1,11 @@
-#' Searches for \code{\link{DSConnection-class}} objects in the environment
+#' Searches for DSConnection objects in the environment
 #'
-#' If the user does not set the argument 'datasources', this function
-#' is called to searches for \code{\link{DSConnection-class}} objects in the environment (default
-#' environment is the Global one). If more than one connection object is found a prompt asks
-#' the user to choose one and if none is found the process stops.
+#' If the user does not set the argument 'datasources' in the client side analysis functions, this function
+#' is called to search for \code{\link{DSConnection-class}} objects in the environment (default
+#' environment is the Global one). If one set of DSConnection objects is found, it is assigned
+#' to 'default.connections' symbol in the analytic environment. If more than one set of DSConnection
+#' objects is found and none of them is called 'default.connections', the function stops and
+#' suggests user to use the \link{setDefaultDSConnections} function.
 #'
 #' @param env The environment where to search for the connection symbols. Try to get it from the
 #' 'datashield.env' option, with default to the Global Environment.
@@ -23,7 +25,7 @@ findDSConnections <- function(env=getOption("datashield.env", globalenv())) {
       }
     }
     message(paste0("More than one list of DSConnection objects were found with no default specified: '", paste(found$conns, collapse="', '"), "'!"))
-    stop("Please specify a default list of DSConnection objects using setDefaultDSConnection(name='name of opal in inverted commas')", call.=FALSE)
+    stop("Please specify a default list of DSConnection objects using setDefaultDSConnection()", call.=FALSE)
   }
 }
 

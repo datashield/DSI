@@ -2,7 +2,7 @@
 % Please edit documentation in R/findDSConnections.R
 \name{findDSConnections}
 \alias{findDSConnections}
-\title{Searches for \code{\link{DSConnection-class}} objects in the environment}
+\title{Searches for DSConnection objects in the environment}
 \usage{
 findDSConnections(env = getOption("datashield.env", globalenv()))
 }
@@ -14,8 +14,10 @@ findDSConnections(env = getOption("datashield.env", globalenv()))
 returns a list of \code{\link{DSConnection-class}} objects or stops the process
 }
 \description{
-If the user does not set the argument 'datasources', this function
-is called to searches for \code{\link{DSConnection-class}} objects in the environment (default
-environment is the Global one). If more than one connection object is found a prompt asks
-the user to choose one and if none is found the process stops.
+If the user does not set the argument 'datasources' in the client side analysis functions, this function
+is called to search for \code{\link{DSConnection-class}} objects in the environment (default
+environment is the Global one). If one set of DSConnection objects is found, it is assigned
+to 'default.connections' symbol in the analytic environment. If more than one set of DSConnection
+objects is found and none of them is called 'default.connections', the function stops and
+suggests user to use the \link{setDefaultDSConnections} function.
 }
