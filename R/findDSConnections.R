@@ -16,14 +16,14 @@ findDSConnections <- function(env=getOption("datashield.env", globalenv())) {
   } else if (found$flag == 0) {
     stop(" Are you logged in to any server? Please provide a valid DSConnection object! ", call.=FALSE)
   } else {
-    message(paste0("More than one list of DSConnection objects were found: '", paste(found$conns,collapse="', '"), "'!"))
-    userInput <- readline("Please enter the name of the DSConnection objects list you want to use: ")
-    datasources <- eval(parse(text=userInput))
-    if (.isDSConnection(datasources[[1]])) {
-      return (datasources)
-    } else {
-      stop("End of process: you failed to enter a valid connection object", call.=FALSE)
+    for (j in 1:length(found$conns)) {
+      if(found$conns[[j]] == "default.connections"){
+        datasources <- eval(parse(text=found$conns[[j]]), envir=env)
+        return(datasources)
+      }
     }
+    message(paste0("More than one list of DSConnection objects were found with no default specified: '", paste(found$conns, collapse="', '"), "'!"))
+    stop("Please specify a default list of DSConnection objects using setDefaultDSConnection(name='name of opal in inverted commas')", call.=FALSE)
   }
 }
 

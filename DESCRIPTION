@@ -10,7 +10,10 @@ Authors@R:
       person(given = "Amadou",
              family = "Gaye",
              role = "ctb",
-             comment = c(ORCID = "0000-0002-1180-2792")))
+             comment = c(ORCID = "0000-0002-1180-2792")),
+      person(given = "Paul",
+             family = "Burton",
+             role = "ctb"))
 Description: DataSHIELD is an infrastructure and series of R packages that 
     enables the remote and non-disclosive analysis of sensitive research data. 
     This package defines the API that is to be implemented by DataSHIELD-aware 
@@ -41,5 +44,7 @@ Collate:
     'datashield.symbol.R'
     'datashield.workspace.R'
     'findDSConnections.R'
+    'listDSConnections.R'
     'rd.R'
+    'setDefaultDSConnections.R'
     'utils.R'
