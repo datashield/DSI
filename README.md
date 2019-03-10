@@ -37,3 +37,11 @@ which result will be fetched through `DSResult` objects,
   the remote DataSHIELD sessions,
   * `datashield.table_status`, `datashield.pkg_status`, `datashield.method_status` and `datashield.methods` are 
   utility functions to explore the DataSHIELD setup across a set of data repositories.
+  
+## Options
+
+Some options can be set to modify the behavior of the DSI:
+
+* `datashield.env` is the R environment in which the `DSConnection` object list is to be looking for. Default value is the Global Environment: `globalenv()`.
+* `datashield.progress` is a logical to enable the visibility of the progress bars. Default value is `TRUE`.
+* `datashield.progress.clear` is a logical to make the progress bar disappear after it has been completed. Default value is `FALSE`. 

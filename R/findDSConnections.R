@@ -6,10 +6,10 @@
 #' the user to choose one and if none is found the process stops.
 #'
 #' @param env The environment where to search for the connection symbols. Try to get it from the
-#' 'ds.env' option, with default to the Global Environment.
+#' 'datashield.env' option, with default to the Global Environment.
 #' @return returns a list of \code{\link{DSConnection-class}} objects or stops the process
 #' @export
-findDSConnections <- function(env=getOption("ds.env", globalenv())) {
+findDSConnections <- function(env=getOption("datashield.env", globalenv())) {
   found <- .getDSConnections(env)
   if (found$flag == 1) {
     return (found$conns)
