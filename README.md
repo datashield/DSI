@@ -36,7 +36,9 @@ which result will be fetched through `DSResult` objects,
   * `datashield.symbols` and `datashield.symbol_rm` offer a minimalistic management of the R symbols living in 
   the remote DataSHIELD sessions,
   * `datashield.table_status`, `datashield.pkg_status`, `datashield.method_status` and `datashield.methods` are 
-  utility functions to explore the DataSHIELD setup across a set of data repositories.
+  utility functions to explore the DataSHIELD setup across a set of data repositories,
+  * `datashield.connections`, `datashield.connections_default` and `datashield.connections_find` are functions
+  for managing the list of `DSConnection` objects that will be discovered and used by the client-side analytic functions.
   
 ## Options
 

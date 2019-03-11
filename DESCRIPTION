@@ -38,6 +38,7 @@ Collate:
     'DSResult.R'
     'datashield.aggregate.R'
     'datashield.assign.R'
+    'datashield.connections.R'
     'datashield.login.R'
     'datashield.logout.R'
     'datashield.status.R'
