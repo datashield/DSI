@@ -109,6 +109,7 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
   message("\nLogging into the collaborating servers")
   connections <- vector("list", length(stdnames))
   names(connections) <- as.character(stdnames)
+  pb <- .newProgress(total = 1 + length(connections))
   for(i in 1:length(connections)) {
     # connection options
     conn.opts <- append(opts, eval(parse(text=as.character(options[[i]]))))
@@ -116,6 +117,8 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
     if (!is.null(restore)) {
       restoreId <- paste0(stdnames[i], ":", restore)
     }
+
+    .tickProgress(pb, tokens = list(what = paste0("Login ", stdnames[i])))
     # instanciate the DSDriver
     drv <- new(drivers[i])
     # if the connection is HTTPS use ssl options else they are not required
@@ -150,6 +153,7 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
       connections[[i]] <- dsConnect(drv, name=stdnames[i], username=u, password=p, url=urls[i], opts=conn.opts, restore=restoreId)
     }
   }
+  .tickProgress(pb, tokens = list(what = "Logged in all servers"))
 
   # sanity check: server availability and table path is valid
   excluded <- c()

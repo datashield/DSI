@@ -30,6 +30,8 @@ In addition to these S4 classes, DSI provides functions to handle a list of remo
 to the data repositories,
 * `datashield.aggregate` and `datashield.assign` will perform typical DataSHIELD operations on `DSConnection`s, 
 which result will be fetched through `DSResult` objects,
+* `datashield.connections`, `datashield.connections_default` and `datashield.connections_find` are functions
+for managing the list of `DSConnection` objects that will be discovered and used by the client-side analytic functions.
 * Other data management functions are provided by the `DSConnection` objects:
   * `datashield.workspaces`, `datashield.workspace_save` and `datashield.workspace_rm` allow to manage R images 
   of the remote DataSHIELD sessions (to speed up data analysis sessions),
@@ -37,8 +39,6 @@ which result will be fetched through `DSResult` objects,
   the remote DataSHIELD sessions,
   * `datashield.table_status`, `datashield.pkg_status`, `datashield.method_status` and `datashield.methods` are 
   utility functions to explore the DataSHIELD setup across a set of data repositories,
-  * `datashield.connections`, `datashield.connections_default` and `datashield.connections_find` are functions
-  for managing the list of `DSConnection` objects that will be discovered and used by the client-side analytic functions.
   
 ## Options
 

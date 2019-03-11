@@ -32,9 +32,9 @@ datashield.connections <- function(env=getOption("datashield.env", globalenv()))
   }
 
   if (found$flag > 1) {
-    message(paste0(" There is more than one set of DSConnection objects available, these are: '", paste(found$conns, collapse="', '"), "'"))
+    message(paste0(" There is more than one set of DSConnection objects available, these are: '", paste(found$conns, collapse="', '"), "'."))
     if ("default.connections" %in% found$conns) {
-      message(" \nShowing 'default.connections':")
+      message(" Showing 'default.connections':\n")
       print(datashield.connections_default(env = env))
     } else {
       message(paste0("\n You can either choose to specify the DSConnection objects you wish to use\n for each individual function call using the argument:\n 'datasources=name of DSConnection objects' [no inverted commas]\n or else use the datashield.connections_default() function\n to create the object 'default.connections', which all\n DataSHIELD functions will then use by default."))
