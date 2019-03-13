@@ -11,22 +11,20 @@ datashield.workspaces <- function(conns) {
     server <- c()
     name <- c()
     user <- c()
-    context <- c()
     lastAccessDate <- c()
     size <- c()
     for (n in names(res)) {
       wss <- res[[n]]
       if (!is.character(wss)) {
-        server <- c(server, as.vector(wss$server))
+        server <- c(server, rep(n, length(wss$name)))
         name <- c(name, as.vector(wss$name))
         user <- c(user, as.vector(wss$user))
-        context <- c(context, as.vector(wss$context))
         lastAccessDate <- c(lastAccessDate, as.vector(wss$lastAccessDate))
         size <- c(size, as.vector(wss$size))
       }
     }
     if (length(server)) {
-      data.frame(server=server, name=name, user=user, context=context, lastAccessDate=lastAccessDate, size=size)
+      data.frame(server=server, name=name, user=user, lastAccessDate=lastAccessDate, size=size)
     } else {
       data.frame()
     }
