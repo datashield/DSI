@@ -37,6 +37,7 @@ datashield.aggregate <- function(conns, expr, async=TRUE) {
       }
     })
     .tickProgress(pb, tokens = list(what = paste0("Aggregated (", expr, ")")))
+    names(rval) <- names(conns)
     rval
   } else {
     res <- dsAggregate(conns, expr)

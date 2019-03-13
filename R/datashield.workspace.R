@@ -7,7 +7,7 @@
 #' @export
 datashield.workspaces <- function(conns) {
   if (is.list(conns)) {
-    res <- lapply(conns, FUN=dsListWorkspaces)
+    res <- lapply(conns, function(c) dsListWorkspaces(c))
     server <- c()
     name <- c()
     user <- c()
@@ -45,7 +45,7 @@ datashield.workspaces <- function(conns) {
 #' @export
 datashield.workspace_save <- function(conns, ws) {
   if (is.list(conns)) {
-    ignore <- lapply(conns, FUN = datashield.workspace_save, ws)
+    ignore <- lapply(conns, function(c) datashield.workspace_save(c, ws))
   } else {
     name <- paste0(conns@name, ":", ws)
     ignore <- dsSaveWorkspace(conns, name)
@@ -61,7 +61,7 @@ datashield.workspace_save <- function(conns, ws) {
 #' @export
 datashield.workspace_rm <- function(conns, ws) {
   if (is.list(conns)) {
-    ignore <- lapply(conns, FUN = datashield.workspace_rm, ws)
+    ignore <- lapply(conns, function(c) datashield.workspace_rm(c, ws))
   } else {
     name <- paste0(conns@name, ":", ws)
     ignore <- dsRmWorkspace(conns, name)
