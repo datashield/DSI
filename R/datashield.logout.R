@@ -7,12 +7,17 @@
 #' @export
 datashield.logout <- function(conns, save=NULL) {
   if (is.list(conns)) {
-    ignore <- lapply(conns, function(c) { datashield.logout(c, save) })
+    pb <- .newProgress(total = 1 + length(conns))
+    lapply(conns, function(c) {
+      .tickProgress(pb, tokens = list(what = paste0("Logout ", c@name)))
+      datashield.logout(c, save)
+    })
+    ignore <- .tickProgress(pb, tokens = list(what = "Logged out from all servers"))
   } else if (!is.null(conns)) {
     saveId <- save
     if (!is.null(save)) {
       saveId <- paste0(conns@name, ":", save)
     }
-    dsDisconnect(conns, saveId)
+    tryCatch(dsDisconnect(conns, saveId))
   }
 }
