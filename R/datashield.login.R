@@ -217,19 +217,26 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
     }
     .tickProgress(pb, tokens = list(what = "Assigned all tables"))
 
-    # Get column names in parallel
-    message("\nVariables assigned:")
 
-    lapply(1:length(stdnames), function(i) {
-      if (!excluded[i]) {
-        varnames <- dsFetch(dsAggregate(connections[[i]], paste0('colnames(',symbol,')'), async = FALSE))
-        if(length(varnames[[1]]) > 0) {
-          message(stdnames[i],"--",paste(unlist(varnames), collapse=", "))
+    # Get column names in parallel
+    # Ensure the colnames aggregation is available
+    aggs <- datashield.method_status(rconnections, type="aggregate")
+    hasColnames <- aggs[aggs$name == "colnames",]
+    if (nrow(hasColnames)>0) {
+      message("\nVariables assigned:")
+      lapply(names(rconnections), function(n) {
+        if (hasColnames[[n]]) {
+          varnames <- dsFetch(dsAggregate(rconnections[[n]], paste0('colnames(', symbol,')'), async = FALSE))
+          if(length(varnames[[1]]) > 0) {
+            message(n," -- ",paste(unlist(varnames), collapse=", "))
+          } else {
+            message(n," -- No variables assigned. Please check login details for this study and verify that the variables are available!")
+          }
         } else {
-          message(stdnames[i],"-- No variables assigned. Please check login details for this study and verify that the variables are available!")
+          message(n," -- ? (colnames() aggregation method not available)")
         }
-      }
-    })
+      })
+    }
   }
 
   # return the DSConnection objects
