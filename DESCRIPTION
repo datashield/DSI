@@ -44,8 +44,5 @@ Collate:
     'datashield.status.R'
     'datashield.symbol.R'
     'datashield.workspace.R'
-    'findDSConnections.R'
-    'listDSConnections.R'
     'rd.R'
-    'setDefaultDSConnections.R'
     'utils.R'
