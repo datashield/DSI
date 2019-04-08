@@ -22,6 +22,8 @@ depending on the capabilities of the data repository server.
 All classes are *virtual*: they cannot be instantiated directly and instead must be subclassed. See [DSOpal](https://github.com/datashield/DSOpal) for a reference implementation of DSI based on the 
 [Opal](https://www.obiba.org/pages/products/opal/) data repository.
 
+These S4 classes and generic methods are meant **to be used for implementing connection to a DataSHIELD-aware data repository.**
+
 ## Higher Level Functions
 
 In addition to these S4 classes, DSI provides functions to handle a list of remote data repository servers:
@@ -39,6 +41,8 @@ for managing the list of `DSConnection` objects that will be discovered and used
   the remote DataSHIELD sessions,
   * `datashield.table_status`, `datashield.pkg_status`, `datashield.method_status` and `datashield.methods` are 
   utility functions to explore the DataSHIELD setup across a set of data repositories,
+
+These `datashield.*` functions are meant **to be used by DataSHIELD packages developers and users.**
   
 ## Options
 
