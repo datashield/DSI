@@ -45,7 +45,11 @@ datashield.method_status <- function(conns, type = "aggregate") {
   #loop over each study and look if each function (y) in unique name is present in study (x)
   status <- sapply(methods, function(x) { sapply(unique_name, function(y) { y %in% x$name }) })
 
-  data.frame(name = unique_name, type=type, status)
+  if (is.null(unique_name)) {
+    data.frame()
+  } else {
+    data.frame(name = unique_name, type=type, status)
+  }
 }
 
 #' Status of the DataSHIELD packages
