@@ -126,11 +126,15 @@ datashield.pkg_check <- function(conns, name, version, env=getOption("datashield
   version_status <- status$version_status
   pkg_version_status <- version_status[version_status$package == name,]
   if (nrow(pkg_version_status) == 0) {
-    stop("Package ", name, " is not installed in any of the servers. Minimum version required is ", version, call. = FALSE)
+    stop("Package ", name, " is not installed on any of the servers. Minimum version required is ", version, call. = FALSE)
   }
 
   minversion <- numeric_version(version)
-  for (conn in conns) {
+  connList <- conns
+  if (!is.list(conns)) {
+    connList <- list(conns)
+  }
+  for (conn in connList) {
     server <- conn@name
     v <- pkg_version_status[[server]]
     if (is.na(v)) {
