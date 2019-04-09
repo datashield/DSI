@@ -49,3 +49,12 @@
     expr
   }
 }
+
+#' Clear some cache
+#' @keywords internal
+.clearCache <- function(env=getOption("datashield.env", globalenv())) {
+  env <- getOption("datashield.env", globalenv())
+  if (exists(".datashield.pkg_status", envir = env)) {
+    rm(".datashield.pkg_status", envir = env)
+  }
+}

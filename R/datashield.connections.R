@@ -84,6 +84,7 @@ datashield.connections_default <- function(name=NULL, env=getOption("datashield.
       return(NULL)
     }
   }
+  .clearCache(env)
   base::assign("default.connections", base::get(name, envir = env), envir = env)
 }
 

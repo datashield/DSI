@@ -20,4 +20,5 @@ datashield.logout <- function(conns, save=NULL) {
     }
     tryCatch(dsDisconnect(conns, saveId))
   }
+  .clearCache()
 }

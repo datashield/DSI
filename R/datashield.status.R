@@ -103,6 +103,46 @@ datashield.pkg_status <- function(conns) {
   list(package_status = unique(df_pkges), version_status = unique(df_verses))
 }
 
+#' Check server-side package minimum version
+#'
+#' Check for each of the server, accessible through provided \code{\link{DSConnection-class}} objects, whether the installed
+#'
+#' @param conns \code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.
+#' @param name The name of the server-side package.
+#' @param version The minimum package version number to be matched.
+#' @param env Environment where the package status result should be cached. Try to get it from the
+#' 'datashield.env' option, with default to the Global Environment.
+#' @export
+datashield.pkg_check <- function(conns, name, version, env=getOption("datashield.env", globalenv())) {
+  status <- NULL
+  if (exists(".datashield.pkg_status", envir = env)) {
+    status <- get(".datashield.pkg_status", envir = env)
+  }
+  if (is.null(status)) {
+    status <- datashield.pkg_status(conns)
+    assign(".datashield.pkg_status", status, envir = env)
+  }
+
+  version_status <- status$version_status
+  pkg_version_status <- version_status[version_status$package == name,]
+  if (nrow(pkg_version_status) == 0) {
+    stop("Package ", name, " is not installed in any of the servers. Minimum version required is ", version, call. = FALSE)
+  }
+
+  minversion <- numeric_version(version)
+  for (conn in conns) {
+    server <- conn@name
+    v <- pkg_version_status[[server]]
+    if (is.na(v)) {
+      stop("Package ", name, " is not installed on server ", server, ". Minimum version required is ", version, call. = FALSE)
+    }
+    if (numeric_version(v) < minversion) {
+      stop("Package ", name, " on server ", server, " has not the minimum version required: ", v , " < ", version, call. = FALSE)
+    }
+  }
+
+}
+
 #' Status of some tables
 #'
 #' Get whether some identified tables are accessible in each of the data repositories.

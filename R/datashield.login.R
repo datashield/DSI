@@ -239,6 +239,8 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
     }
   }
 
+  .clearCache()
+
   # return the DSConnection objects
   rconnections
 }
