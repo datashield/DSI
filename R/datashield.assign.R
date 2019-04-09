@@ -135,18 +135,19 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE) {
         results[[n]] <- dsAssignExpr(conns[[n]], symbol, expr, async=TRUE)
       }
     }
+    dexpr <- .deparse(expr)
     # not async (blocking calls)
     for (n in names(conns)) {
       if(!async[[n]]) {
-        .tickProgress(pb, tokens = list(what = paste0("Assigning expr. ", conns[[n]]@name, " (", symbol, " <- ", expr, ")")))
+        .tickProgress(pb, tokens = list(what = paste0("Assigning expr. ", conns[[n]]@name, " (", symbol, " <- ", dexpr, ")")))
         results[[n]] <- dsAssignExpr(conns[[n]], symbol, expr, async=FALSE)
       }
     }
     lapply(names(conns), function(n) {
-      if(async[[n]]) .tickProgress(pb, tokens = list(what = paste0("Assigning ", conns[[n]]@name, " (", symbol, " <- ", expr, ")")))
+      if(async[[n]]) .tickProgress(pb, tokens = list(what = paste0("Assigning ", conns[[n]]@name, " (", symbol, " <- ", dexpr, ")")))
       dsGetInfo(results[[n]])
     })
-    ignore <- .tickProgress(pb, tokens = list(what = paste0("Assigned expr. (", symbol, " <- ", expr, ")")))
+    ignore <- .tickProgress(pb, tokens = list(what = paste0("Assigned expr. (", symbol, " <- ", dexpr, ")")))
   } else {
     res <- dsAssignExpr(conns, symbol, expr)
     ignore <- dsGetInfo(res)

@@ -39,3 +39,13 @@
 .tickProgress <- function(progress, tokens = list()) {
   if (getOption("datashield.progress", TRUE)) progress$tick(tokens = tokens)
 }
+
+#' Deparse language expression
+#' @keywords internal
+.deparse <- function(expr) {
+  if (is.language(expr)) {
+    deparse(expr)
+  } else {
+    expr
+  }
+}

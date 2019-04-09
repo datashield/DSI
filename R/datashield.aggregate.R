@@ -21,22 +21,23 @@ datashield.aggregate <- function(conns, expr, async=TRUE) {
         results[[n]] <- dsAggregate(conns[[n]], expr, async=TRUE)
       }
     }
+    dexpr <- .deparse(expr)
     # not async (blocking calls)
     for (n in names(conns)) {
       if(!async[[n]]) {
-        .tickProgress(pb, tokens = list(what = paste0("Aggregating ", conns[[n]]@name, " (", expr, ")")))
+        .tickProgress(pb, tokens = list(what = paste0("Aggregating ", conns[[n]]@name, " (", dexpr, ")")))
         results[[n]] <- dsAggregate(conns[[n]], expr, async=FALSE)
       }
     }
     rval <- lapply(names(conns), function(n) {
       if(async[[n]]) {
-        .tickProgress(pb, tokens = list(what = paste0("Aggregating ", conns[[n]]@name, " (", expr, ")")))
+        .tickProgress(pb, tokens = list(what = paste0("Aggregating ", conns[[n]]@name, " (", dexpr, ")")))
         dsFetch(results[[n]])
       } else {
         dsFetch(results[[n]])
       }
     })
-    .tickProgress(pb, tokens = list(what = paste0("Aggregated (", expr, ")")))
+    .tickProgress(pb, tokens = list(what = paste0("Aggregated (", dexpr, ")")))
     names(rval) <- names(conns)
     rval
   } else {
