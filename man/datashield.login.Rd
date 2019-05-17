@@ -5,7 +5,8 @@
 \title{Logs in a DataSHIELD R sessions and optionaly assigns variables to R}
 \usage{
 datashield.login(logins = NULL, assign = FALSE, variables = NULL,
-  symbol = "D", username = getOption("datashield.username"),
+  symbol = "D", id.name = NULL,
+  username = getOption("datashield.username"),
   password = getOption("datashield.password"),
   opts = getOption("datashield.opts", list()), restore = NULL)
 }
@@ -28,6 +29,9 @@ data repository's table is assigned.}
 
 \item{symbol}{A character, the name of the data frame to which the data repository's table will be
 assigned after login into the server(s).}
+
+\item{id.name}{Name of the column that will contain the entity identifiers. If not specified, the identifiers
+will be the data frame row names. When specified this column can be used to perform joins between data frames.}
 
 \item{username}{Default user name to be used in case it is not specified in the logins structure.}
 

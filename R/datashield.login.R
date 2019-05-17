@@ -19,6 +19,8 @@
 #'   data repository's table is assigned.
 #' @param symbol A character, the name of the data frame to which the data repository's table will be
 #'   assigned after login into the server(s).
+#' @param id.name Name of the column that will contain the entity identifiers. If not specified, the identifiers
+#'   will be the data frame row names. When specified this column can be used to perform joins between data frames.
 #' @param username Default user name to be used in case it is not specified in the logins structure.
 #' @param password Default user password to be used in case it is not specified in the logins structure.
 #' @param opts Default SSL options to be used in case it is not specified in the logins structure.
@@ -55,7 +57,7 @@
 #'connections <- datashield.login(logins=logindata,assign=TRUE,variables=myvar)
 #'}
 #'
-datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="D",
+datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="D", id.name=NULL,
                              username=getOption("datashield.username"), password=getOption("datashield.password"),
                              opts=getOption("datashield.opts", list()), restore=NULL){
 
@@ -81,6 +83,7 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
   if (is.null(idmappings)) {
     idmappings <- rep("", length(stdnames))
   }
+
   # DSConnection specific options
   options <- logins$options
   if (is.null(options)) {
@@ -193,14 +196,14 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
     pb <- .newProgress(total = 1 + length(connections) - length(excluded[excluded == TRUE]))
     for (i in 1:length(connections)) {
       if(!excluded[i] && async[i]) {
-        results[[i]] <- dsAssignTable(connections[[i]], symbol, paths[i], variables, identifiers=idmappings[i])
+        results[[i]] <- dsAssignTable(connections[[i]], symbol, paths[i], variables, identifiers=idmappings[i], id.name=id.name)
       }
     }
     # not async (blocking calls)
     for (i in 1:length(connections)) {
       if(!excluded[i] && !async[i]) {
         .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", paths[i], ")")))
-        results[[i]] <- dsAssignTable(connections[[i]], symbol, paths[i], variables, identifiers=idmappings[i])
+        results[[i]] <- dsAssignTable(connections[[i]], symbol, paths[i], variables, identifiers=idmappings[i], id.name=id.name)
       }
     }
     for (i in 1:length(stdnames)) {

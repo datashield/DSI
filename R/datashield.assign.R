@@ -14,6 +14,8 @@
 #'   Ignored if value is an R expression.
 #' @param identifiers Name of the identifiers mapping to use when assigning entities to R (if supported
 #'   by data repository).
+#' @param id.name Name of the column that will contain the entity identifiers. If not specified, the identifiers
+#'   will be the data frame row names. When specified this column can be used to perform joins between data frames.
 #' @param async Whether the result of the call should be retrieved asynchronously (TRUE means that calls are parallelized over
 #'   the connections, when the connection supports that feature, with an extra overhead of requests).
 #'
@@ -28,11 +30,11 @@
 #'   variables="name().matches('LAB_')")
 #' }
 #' @export
-datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FALSE, identifiers=NULL, async=TRUE) {
+datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FALSE, identifiers=NULL, id.name=NULL, async=TRUE) {
   if(is.language(value) || is.function(value)) {
     datashield.assign.expr(conns, symbol, value, async)
   } else {
-    datashield.assign.table(conns, symbol, value, variables, missings, identifiers, async)
+    datashield.assign.table(conns, symbol, value, variables, missings, identifiers, id.name, async)
   }
 }
 
@@ -53,6 +55,8 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #'   Ignored if value is an R expression.
 #' @param identifiers Name of the identifiers mapping to use when assigning entities to R (if supported
 #'   by the data repository).
+#' @param id.name Name of the column that will contain the entity identifiers. If not specified, the identifiers
+#'   will be the data frame row names. When specified this column can be used to perform joins between data frames.
 #' @param async Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
 #'   the connections, when the connection supports that feature, with an extra overhead of requests.
 #'
@@ -76,7 +80,7 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #' datashield.assign.table(conns, "D", list(server1="datashield.CNSIM1", server2="datashield.CNSIM2"))
 #' }
 #' @export
-datashield.assign.table <- function(conns, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, async=TRUE) {
+datashield.assign.table <- function(conns, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, id.name=NULL, async=TRUE) {
     # prepare tables as a named list
     tables <- .asNamedListOfTables(conns, table)
 
@@ -87,14 +91,14 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
     # async first
     for (n in names(conns)) {
       if(async[[n]]) {
-        results[[n]] <- dsAssignTable(conns[[n]], symbol, tables[[n]], variables, missings, identifiers, async=TRUE)
+        results[[n]] <- dsAssignTable(conns[[n]], symbol, tables[[n]], variables, missings, identifiers, id.name, async=TRUE)
       }
     }
     # not async (blocking calls)
     for (n in names(conns)) {
       if(!async[[n]]) {
         .tickProgress(pb, tokens = list(what = paste0("Assigning ", conns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
-        results[[n]] <- dsAssignTable(conns[[n]], symbol, tables[[n]], variables, missings, identifiers, async=FALSE)
+        results[[n]] <- dsAssignTable(conns[[n]], symbol, tables[[n]], variables, missings, identifiers, id.name, async=FALSE)
       }
     }
     lapply(names(conns), function(n) {
@@ -103,7 +107,7 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
     })
     ignore <- .tickProgress(pb, tokens = list(what = paste0("Assigned all table (", symbol, " <- ...)")))
   } else {
-    res <- dsAssignTable(conns, symbol, tables[[conns@name]], variables, missings, identifiers)
+    res <- dsAssignTable(conns, symbol, tables[[conns@name]], variables, missings, identifiers, id.name)
     ignore <- dsGetInfo(res)
   }
 }

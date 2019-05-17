@@ -91,6 +91,8 @@ setGeneric("dsHasTable",
 #' @param missings If TRUE, missing values will be pushed from data repository to R, default is FALSE.
 #' @param identifiers Name of the identifiers mapping to use when assigning entities to R (if supported
 #'   by the data repository).
+#' @param id.name Name of the column that will contain the entity identifiers. If not specified, the identifiers
+#'   will be the data frame row names. When specified this column can be used to perform joins between data frames.
 #' @param async Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
 #'   the connections, when the connection supports that feature, with an extra overhead of requests.
 #'
@@ -105,7 +107,7 @@ setGeneric("dsHasTable",
 #' @import methods
 #' @export
 setGeneric("dsAssignTable",
-           def = function(conn, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, async=TRUE) standardGeneric("dsAssignTable"),
+           def = function(conn, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, id.name=NULL, async=TRUE) standardGeneric("dsAssignTable"),
            valueClass = "DSResult")
 
 #' Assign an expression result
