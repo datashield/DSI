@@ -14,7 +14,7 @@ dsConnect(drv, name, restore = NULL, ...)
 \item{restore}{Workspace name to be restored in the newly created DataSHIELD R session.}
 
 \item{...}{authentication arguments needed by the data repository instance; these
-typically include `user`, `password`, `host`, `port`, `dbname`, etc.
+typically include `username`, `password`, `token`, `host`, `port`, `dbname`, etc.
 For details see the appropriate `DSDriver`.}
 }
 \description{

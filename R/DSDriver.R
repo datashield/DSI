@@ -29,7 +29,7 @@ setClass("DSDriver", contains = c("DSObject", "VIRTUAL"))
 #' @param name Name of the connection, which must be unique among all the DataSHIELD connections.
 #' @param restore Workspace name to be restored in the newly created DataSHIELD R session.
 #' @param ... authentication arguments needed by the data repository instance; these
-#'   typically include `user`, `password`, `host`, `port`, `dbname`, etc.
+#'   typically include `username`, `password`, `token`, `host`, `port`, `dbname`, etc.
 #'   For details see the appropriate `DSDriver`.
 #' @seealso \code{\link{dsDisconnect}} to disconnect from a data repository.
 #' @family DSDriver generics

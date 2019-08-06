@@ -3,12 +3,16 @@
 #' This function allows for clients to login to data repository servers and (optionaly)
 #' assign all the data or specific variables from the data repositories tables to R data
 #' frames. The assigned dataframes (one for each data repository) are named 'D' (by default).
+#' Different login strategies are supported: using a certificate/private key pair (2-way SSL encryption mechanism),
+#' using user credentials (user name and password) or using a personal access token (could be
+#' combined with a user name, depending on the data repository system).
 #'
 #' @param logins A dataframe table that holds login details. This table holds five elements required
 #'   to login to the servers where the data to analyse is stored. The expected column names are
 #'   'driver' (the \code{\link{DSDriver-class}} name, default is "OpalDriver"),
-#'   'server' (the server name), url' (the server url), 'user' (the user name or the certificate file path),
-#'   'password' (the user password or the private key file path), table' (the fully qualified name of
+#'   'server' (the server name), url' (the server url), 'user' (the user name or the certificate PEM file path),
+#'   'password' (the user password or the private key PEM file path),
+#'   'token' (the personal access token, ignored if 'user' is defined), 'table' (the fully qualified name of
 #'   the table in the data repository), 'options' (the SSL options). An additional column 'identifiers'
 #'   can be specified for identifiers mapping (if supported by data repository). See also the documentation
 #'   of the examplar input table \code{logindata} for details of the login elements.
@@ -21,8 +25,6 @@
 #'   assigned after login into the server(s).
 #' @param id.name Name of the column that will contain the entity identifiers. If not specified, the identifiers
 #'   will be the data frame row names. When specified this column can be used to perform joins between data frames.
-#' @param username Default user name to be used in case it is not specified in the logins structure.
-#' @param password Default user password to be used in case it is not specified in the logins structure.
 #' @param opts Default SSL options to be used in case it is not specified in the logins structure.
 #' @param restore The workspace name to restore (optional).
 #' @return object(s) of class DSConnection
@@ -50,15 +52,14 @@
 #'connections <- datashield.login(logins=logindata)
 #'
 #'# Example 2: login and assign the whole dataset
-#'connections <- datashield.login(logins=logindata,assign=TRUE)
+#'connections <- datashield.login(logins=logindata, assign=TRUE)
 #'
 #'# Example 3: login and assign specific variable(s)
 #'myvar <- list("LAB_TSC")
-#'connections <- datashield.login(logins=logindata,assign=TRUE,variables=myvar)
+#'connections <- datashield.login(logins=logindata, assign=TRUE, variables=myvar)
 #'}
 #'
 datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="D", id.name=NULL,
-                             username=getOption("datashield.username"), password=getOption("datashield.password"),
                              opts=getOption("datashield.opts", list()), restore=NULL){
 
   defaultDriver <- "OpalDriver"
@@ -76,6 +77,8 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
   userids <- as.character(logins$user)
   # passwords
   pwds <- as.character(logins$password)
+  # tokens
+  tokens <- as.character(logins$token)
   # table fully qualified name
   paths <- as.character(logins$table)
   # identifiers mapping
@@ -126,34 +129,18 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
     drv <- new(drivers[i])
     # if the connection is HTTPS use ssl options else they are not required
     protocol <- strsplit(urls[i], split="://")[[1]][1]
-    if(protocol=="https"){
-      # pem files or username/password ?
-      if (grepl("\\.pem$",userids[i])) {
+    if(protocol=="https") {
+      # pem files or username/password or token ?
+      if (grepl("\\.pem$", userids[i])) {
         cert <- userids[i]
         private <- pwds[i]
         conn.opts <- append(conn.opts, list(sslcert=cert, sslkey=private))
         connections[[i]] <- dsConnect(drv, name=stdnames[i], url=urls[i], opts=conn.opts, restore=restoreId)
       } else {
-        u <- userids[i];
-        if(is.null(u) || is.na(u)) {
-          u <- username;
-        }
-        p <- pwds[i];
-        if(is.null(p) || is.na(p)) {
-          p <- password;
-        }
-        connections[[i]] <- dsConnect(drv, name=stdnames[i], username=u, password=p, url=urls[i], opts=conn.opts, restore=restoreId)
+        connections[[i]] <- dsConnect(drv, name=stdnames[i], username=userids[i], password=pwds[i], token=tokens[i], url=urls[i], opts=conn.opts, restore=restoreId)
       }
     } else {
-      u <- userids[i];
-      if(is.null(u) || is.na(u)) {
-        u <- username;
-      }
-      p <- pwds[i];
-      if(is.null(p) || is.na(p)) {
-        p <- password;
-      }
-      connections[[i]] <- dsConnect(drv, name=stdnames[i], username=u, password=p, url=urls[i], opts=conn.opts, restore=restoreId)
+      connections[[i]] <- dsConnect(drv, name=stdnames[i], username=userids[i], password=pwds[i], token=tokens[i], url=urls[i], opts=conn.opts, restore=restoreId)
     }
   }
   .tickProgress(pb, tokens = list(what = "Logged in all servers"))
@@ -214,7 +201,7 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
         }
         resInfo <- dsGetInfo(res)
         if (resInfo$status == "FAILED") {
-          warning("Data assignment of '", paths[i],"' failed for '", stdnames[i],"': ", res@error, call.=FALSE, immediate.=TRUE)
+          warning("Data assignment of '", paths[i], "' failed for '", stdnames[i],"': ", res@error, call.=FALSE, immediate.=TRUE)
         }
       }
     }
@@ -231,12 +218,12 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
         if (hasColnames[[n]]) {
           varnames <- dsFetch(dsAggregate(rconnections[[n]], paste0('colnames(', symbol,')'), async = FALSE))
           if(length(varnames[[1]]) > 0) {
-            message(n," -- ",paste(unlist(varnames), collapse=", "))
+            message(n, " -- ", paste(unlist(varnames), collapse=", "))
           } else {
-            message(n," -- No variables assigned. Please check login details for this study and verify that the variables are available!")
+            message(n, " -- No variables assigned. Please check login details for this study and verify that the variables are available!")
           }
         } else {
-          message(n," -- ? (colnames() aggregation method not available)")
+          message(n, " -- ? (colnames() aggregation method not available)")
         }
       })
     }

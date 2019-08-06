@@ -5,17 +5,16 @@
 \title{Logs in a DataSHIELD R sessions and optionaly assigns variables to R}
 \usage{
 datashield.login(logins = NULL, assign = FALSE, variables = NULL,
-  symbol = "D", id.name = NULL,
-  username = getOption("datashield.username"),
-  password = getOption("datashield.password"),
-  opts = getOption("datashield.opts", list()), restore = NULL)
+  symbol = "D", id.name = NULL, opts = getOption("datashield.opts",
+  list()), restore = NULL)
 }
 \arguments{
 \item{logins}{A dataframe table that holds login details. This table holds five elements required
 to login to the servers where the data to analyse is stored. The expected column names are
 'driver' (the \code{\link{DSDriver-class}} name, default is "OpalDriver"),
-'server' (the server name), url' (the server url), 'user' (the user name or the certificate file path),
-'password' (the user password or the private key file path), table' (the fully qualified name of
+'server' (the server name), url' (the server url), 'user' (the user name or the certificate PEM file path),
+'password' (the user password or the private key PEM file path),
+'token' (the personal access token, ignored if 'user' is defined), 'table' (the fully qualified name of
 the table in the data repository), 'options' (the SSL options). An additional column 'identifiers'
 can be specified for identifiers mapping (if supported by data repository). See also the documentation
 of the examplar input table \code{logindata} for details of the login elements.}
@@ -33,10 +32,6 @@ assigned after login into the server(s).}
 \item{id.name}{Name of the column that will contain the entity identifiers. If not specified, the identifiers
 will be the data frame row names. When specified this column can be used to perform joins between data frames.}
 
-\item{username}{Default user name to be used in case it is not specified in the logins structure.}
-
-\item{password}{Default user password to be used in case it is not specified in the logins structure.}
-
 \item{opts}{Default SSL options to be used in case it is not specified in the logins structure.}
 
 \item{restore}{The workspace name to restore (optional).}
@@ -48,6 +43,9 @@ object(s) of class DSConnection
 This function allows for clients to login to data repository servers and (optionaly)
 assign all the data or specific variables from the data repositories tables to R data
 frames. The assigned dataframes (one for each data repository) are named 'D' (by default).
+Different login strategies are supported: using a certificate/private key pair (2-way SSL encryption mechanism),
+using user credentials (user name and password) or using a personal access token (could be
+combined with a user name, depending on the data repository system).
 }
 \examples{
 \dontrun{
@@ -71,11 +69,11 @@ data(logindata)
 connections <- datashield.login(logins=logindata)
 
 # Example 2: login and assign the whole dataset
-connections <- datashield.login(logins=logindata,assign=TRUE)
+connections <- datashield.login(logins=logindata, assign=TRUE)
 
 # Example 3: login and assign specific variable(s)
 myvar <- list("LAB_TSC")
-connections <- datashield.login(logins=logindata,assign=TRUE,variables=myvar)
+connections <- datashield.login(logins=logindata, assign=TRUE, variables=myvar)
 }
 
 }
