@@ -110,6 +110,7 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
     res <- dsAssignTable(conns, symbol, tables[[conns@name]], variables, missings, identifiers, id.name)
     ignore <- dsGetInfo(res)
   }
+  invisible(NULL)
 }
 
 #' Expression result assignment
@@ -156,4 +157,5 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE) {
     res <- dsAssignExpr(conns, symbol, expr)
     ignore <- dsGetInfo(res)
   }
+  invisible(NULL)
 }
