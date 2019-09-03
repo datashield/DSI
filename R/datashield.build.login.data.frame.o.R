@@ -9,6 +9,7 @@
 #' @param data.computers.table.name A vector of characters listing the name of the table stored in a data computer
 #' @param users.id A vector of characters listing a valid user name to log on on each server.
 #' @param users.password A vector of characters listing the password for each user to log in to a data computer.
+#' @param .silent Do not warn user when non secure HTTP urls are encountered. Default is FALSE.
 #' @return a data frame formatter in this manner: (server,url,user,password,table). If the arguments are not correct. Then a data.frame with no rows is created.
 #'
 #' The expactactions are as follow:
@@ -19,7 +20,7 @@
 #' Expectation no 4: the number of row is 0, if any of the urls does not start with http
 #' @author Patricia Ryser-Welch
 #' @export
-datashield.build.login.data.frame.o <- function (data.computers.name, data.computers.url, data.computers.table.name,  users.id, users.password) {
+datashield.build.login.data.frame.o <- function (data.computers.name, data.computers.url, data.computers.table.name,  users.id, users.password, .silent = FALSE) {
   #assign the arguments to the data frame format.
   server <- as.character(data.computers.name)
   url <- as.character(data.computers.url)
@@ -38,7 +39,7 @@ datashield.build.login.data.frame.o <- function (data.computers.name, data.compu
     stop("The length of the vectors passed as arguments are not the same length.")
   }
   else {
-    if (!all(startsWith(url,"https"))) {
+    if (!all(startsWith(url,"https")) && !.silent) {
       warning("Each url should starts with https")
     }
     return(data.frame(server,url,user,password,table))

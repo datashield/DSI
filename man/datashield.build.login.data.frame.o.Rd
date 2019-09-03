@@ -5,7 +5,8 @@
 \title{Builds a dataframe to login to datashield}
 \usage{
 datashield.build.login.data.frame.o(data.computers.name,
-  data.computers.url, data.computers.table.name, users.id, users.password)
+  data.computers.url, data.computers.table.name, users.id, users.password,
+  .silent = FALSE)
 }
 \arguments{
 \item{data.computers.name}{A vector of characters listing all the names of the data computers}
@@ -17,6 +18,8 @@ datashield.build.login.data.frame.o(data.computers.name,
 \item{users.id}{A vector of characters listing a valid user name to log on on each server.}
 
 \item{users.password}{A vector of characters listing the password for each user to log in to a data computer.}
+
+\item{.silent}{Do not warn user when non secure HTTP urls are encountered. Default is FALSE.}
 }
 \value{
 a data frame formatter in this manner: (server,url,user,password,table). If the arguments are not correct. Then a data.frame with no rows is created.
