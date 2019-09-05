@@ -17,7 +17,7 @@
 #' @param .silent Do not warn user when non secure HTTP urls are encountered. Default is FALSE.
 #' @return A data frame formatter in this manner: (server, url, driver, user, password, token, table). If the arguments are not correct. Then a data.frame with no rows is created.
 #' @export
-datashield.build.login.data.frame.o <- function (servers.name, servers.url, servers.table, servers.driver = NULL, users.name = NULL, users.password = NULL, users.token = NULL, .silent = FALSE) {
+datashield.build.login.data.frame.o <- function (servers.name, servers.url, servers.table, users.name = NULL, users.password = NULL, users.token = NULL, servers.driver = NULL, .silent = FALSE) {
   #assign the arguments to the data frame format.
   server <- as.character(servers.name)
   url <- as.character(servers.url)

@@ -5,8 +5,8 @@
 \title{Builds a dataframe to login to datashield}
 \usage{
 datashield.build.login.data.frame.o(servers.name, servers.url,
-  servers.table, servers.driver = NULL, users.name = NULL,
-  users.password = NULL, users.token = NULL, .silent = FALSE)
+  servers.table, users.name = NULL, users.password = NULL,
+  users.token = NULL, servers.driver = NULL, .silent = FALSE)
 }
 \arguments{
 \item{servers.name}{A vector of characters listing all the names of the data servers.}
@@ -16,14 +16,14 @@ http[s]://[TCPIP address or host name][:port]) or a R symbol name.}
 
 \item{servers.table}{A vector of characters listing the name of the table stored in a data server.}
 
-\item{servers.driver}{A vector of characters listing the name of the DS connection driver to be used, see \code{\link{DSDriver-class}}.
-When NULL this vector fallbacks to a vector of "OpalDriver" strings.}
-
 \item{users.name}{A vector of characters listing a valid user name to log on each server.}
 
 \item{users.password}{A vector of characters listing the password for each user to log in to a data server.}
 
 \item{users.token}{A vector of characters listing the API access tokens for each user to log in to a data server (ignored if user name and password are specified).}
+
+\item{servers.driver}{A vector of characters listing the name of the DS connection driver to be used, see \code{\link{DSDriver-class}}.
+When NULL this vector fallbacks to a vector of "OpalDriver" strings.}
 
 \item{.silent}{Do not warn user when non secure HTTP urls are encountered. Default is FALSE.}
 }
