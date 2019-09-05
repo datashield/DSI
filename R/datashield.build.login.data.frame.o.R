@@ -1,48 +1,62 @@
-#' @title Builds a dataframe to login to datashield
-#' @description This function generates a valid data frame, that can be used to login
-#' to some data computers (i.e. opal servers). The data frame models a double-entry table. The
-#' columns are defined as server, url, user, password and table name. Each row holds the information
-#' in relation to one data computer. The values for each column are passed  to the function as arguments.
+#' Builds a dataframe to login to datashield
 #'
-#' @param data.computers.name A vector of characters listing all the names of the data computers
-#' @param data.computers.url A vector of characters listing each data computer HTTP address. The format is https://[TCPIP address or host name][:port]
-#' @param data.computers.table.name A vector of characters listing the name of the table stored in a data computer
-#' @param users.id A vector of characters listing a valid user name to log on on each server.
-#' @param users.password A vector of characters listing the password for each user to log in to a data computer.
+#' This function generates a valid data frame, that can be used to login to some data servers implementing
+#' the \code{\link{DSConnection-class}}. Each row of the returned data frame holds the information
+#' in relation to one data computer: location of the server and of the dataset, connection class, credentials.
+#' See also \link{newDSLoginBuilder}.
+#'
+#' @param servers.name A vector of characters listing all the names of the data servers.
+#' @param servers.url A vector of characters listing each data server address:  can be a HTTP address (format is
+#'   http[s]://[TCPIP address or host name][:port]) or a R symbol name.
+#' @param servers.table A vector of characters listing the name of the table stored in a data server.
+#' @param servers.driver A vector of characters listing the name of the DS connection driver to be used, see \code{\link{DSDriver-class}}.
+#'   When NULL this vector fallbacks to a vector of "OpalDriver" strings.
+#' @param users.name A vector of characters listing a valid user name to log on each server.
+#' @param users.password A vector of characters listing the password for each user to log in to a data server.
+#' @param users.token A vector of characters listing the API access tokens for each user to log in to a data server (ignored if user name and password are specified).
 #' @param .silent Do not warn user when non secure HTTP urls are encountered. Default is FALSE.
-#' @return a data frame formatter in this manner: (server,url,user,password,table). If the arguments are not correct. Then a data.frame with no rows is created.
-#'
-#' The expactactions are as follow:
-#' Expectation no 0: the return value is a data.frame
-#' Expectation no 1: the number of columns is equal 5.
-#' Expectation no 2: the number of rows is equal to the number of servers
-#' Expectation no 3: the number of rows is equal to 0, if the length of url, user, or table is smaller than the length of server
-#' Expectation no 4: the number of row is 0, if any of the urls does not start with http
-#' @author Patricia Ryser-Welch
+#' @return A data frame formatter in this manner: (server, url, driver, user, password, token, table). If the arguments are not correct. Then a data.frame with no rows is created.
 #' @export
-datashield.build.login.data.frame.o <- function (data.computers.name, data.computers.url, data.computers.table.name,  users.id, users.password, .silent = FALSE) {
+datashield.build.login.data.frame.o <- function (servers.name, servers.url, servers.table, servers.driver = NULL, users.name = NULL, users.password = NULL, users.token = NULL, .silent = FALSE) {
   #assign the arguments to the data frame format.
-  server <- as.character(data.computers.name)
-  url <- as.character(data.computers.url)
-  user <- as.character(users.id)
+  server <- as.character(servers.name)
+  url <- as.character(servers.url)
+  table <- as.character(servers.table)
+  driver <- as.character(servers.driver)
+  if (is.null(servers.driver)) {
+    driver <- rep("OpalDriver", length(server))
+  }
+  user <- as.character(users.name)
+  if (is.null(users.name)) {
+    user <- rep("", length(server))
+  }
   password <- as.character(users.password)
-  table <- as.character(data.computers.table.name)
-  return.data.frame  =  data.frame(server = character(0), url = character(0), user= character(0), password = character(0), table=character(0))
-  colnames(return.data.frame) <- c('server','url','user','password','table')
-  NO.COLUMNS = 5
+  if (is.null(users.password)) {
+    password <- rep("", length(server))
+  }
+  token <- as.character(users.token)
+  if (is.null(users.token)) {
+    token <- rep("", length(server))
+  }
 
   #Verify the length of each vector is the same
+  NO.COLUMNS = 7
   expected.elements = length(server) * NO.COLUMNS
-  total.elements = length(server) + length(url) + length(user) + length(password) + length(table)
+  total.elements = length(server) + length(url) + length(driver) + length(table) + length(user) + length(password) + length(token)
 
   if (expected.elements != total.elements) {
     stop("The length of the vectors passed as arguments are not the same length.")
   }
-  else {
-    if (!all(startsWith(url,"https")) && !.silent) {
-      warning("Each url should starts with https")
-    }
-    return(data.frame(server,url,user,password,table))
-  }
-}
 
+  builder <- newDSLoginBuilder(.silent = .silent)
+  for (i in 1:length(server)) {
+    builder$append(server = server[i],
+                   url = url[i],
+                   table = table[i],
+                   driver = driver[i],
+                   user = user[i],
+                   password = password[i],
+                   token = token[i])
+  }
+  builder$build()
+}

@@ -4,39 +4,35 @@
 \alias{datashield.build.login.data.frame.o}
 \title{Builds a dataframe to login to datashield}
 \usage{
-datashield.build.login.data.frame.o(data.computers.name,
-  data.computers.url, data.computers.table.name, users.id, users.password,
-  .silent = FALSE)
+datashield.build.login.data.frame.o(servers.name, servers.url,
+  servers.table, servers.driver = NULL, users.name = NULL,
+  users.password = NULL, users.token = NULL, .silent = FALSE)
 }
 \arguments{
-\item{data.computers.name}{A vector of characters listing all the names of the data computers}
+\item{servers.name}{A vector of characters listing all the names of the data servers.}
 
-\item{data.computers.url}{A vector of characters listing each data computer HTTP address. The format is https://[TCPIP address or host name][:port]}
+\item{servers.url}{A vector of characters listing each data server address:  can be a HTTP address (format is
+http[s]://[TCPIP address or host name][:port]) or a R symbol name.}
 
-\item{data.computers.table.name}{A vector of characters listing the name of the table stored in a data computer}
+\item{servers.table}{A vector of characters listing the name of the table stored in a data server.}
 
-\item{users.id}{A vector of characters listing a valid user name to log on on each server.}
+\item{servers.driver}{A vector of characters listing the name of the DS connection driver to be used, see \code{\link{DSDriver-class}}.
+When NULL this vector fallbacks to a vector of "OpalDriver" strings.}
 
-\item{users.password}{A vector of characters listing the password for each user to log in to a data computer.}
+\item{users.name}{A vector of characters listing a valid user name to log on each server.}
+
+\item{users.password}{A vector of characters listing the password for each user to log in to a data server.}
+
+\item{users.token}{A vector of characters listing the API access tokens for each user to log in to a data server (ignored if user name and password are specified).}
 
 \item{.silent}{Do not warn user when non secure HTTP urls are encountered. Default is FALSE.}
 }
 \value{
-a data frame formatter in this manner: (server,url,user,password,table). If the arguments are not correct. Then a data.frame with no rows is created.
-
-The expactactions are as follow:
-Expectation no 0: the return value is a data.frame
-Expectation no 1: the number of columns is equal 5.
-Expectation no 2: the number of rows is equal to the number of servers
-Expectation no 3: the number of rows is equal to 0, if the length of url, user, or table is smaller than the length of server
-Expectation no 4: the number of row is 0, if any of the urls does not start with http
+A data frame formatter in this manner: (server, url, driver, user, password, token, table). If the arguments are not correct. Then a data.frame with no rows is created.
 }
 \description{
-This function generates a valid data frame, that can be used to login
-to some data computers (i.e. opal servers). The data frame models a double-entry table. The
-columns are defined as server, url, user, password and table name. Each row holds the information
-in relation to one data computer. The values for each column are passed  to the function as arguments.
-}
-\author{
-Patricia Ryser-Welch
+This function generates a valid data frame, that can be used to login to some data servers implementing
+the \code{\link{DSConnection-class}}. Each row of the returned data frame holds the information
+in relation to one data computer: location of the server and of the dataset, connection class, credentials.
+See also \link{newDSLoginBuilder}.
 }

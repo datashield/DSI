@@ -21,7 +21,8 @@ Description: DataSHIELD is an infrastructure and series of R packages that
 Depends:
     R (>= 3.1),
     methods,
-    progress
+    progress,
+    R6
 Suggests: knitr
 License: GPL-3
 URL: http://datashield.ac.uk
@@ -35,6 +36,7 @@ Collate:
     'hidden.R'
     'DSConnection.R'
     'DSDriver.R'
+    'DSLoginBuilder.R'
     'DSResult.R'
     'datashield.aggregate.R'
     'datashield.assign.R'
