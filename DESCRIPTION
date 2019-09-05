@@ -23,7 +23,9 @@ Depends:
     methods,
     progress,
     R6
-Suggests: knitr
+Suggests: 
+    knitr,
+    testthat (>= 2.1.0)
 License: GPL-3
 URL: http://datashield.ac.uk
 BugReports: https://github.com/datashield/DSI
