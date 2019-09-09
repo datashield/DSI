@@ -81,10 +81,14 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #' }
 #' @export
 datashield.assign.table <- function(conns, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, id.name=NULL, async=TRUE) {
-    # prepare tables as a named list
-    tables <- .asNamedListOfTables(conns, table)
+  if (is.null(table) || length(table) == 0) {
+    stop("Not a valid table name", call.=FALSE)
+  }
 
-    if (is.list(conns)) {
+  # prepare tables as a named list
+  tables <- .asNamedListOfTables(conns, table)
+
+  if (is.list(conns)) {
     results <- list()
     async <- lapply(conns, function(conn) { ifelse(async, dsIsAsync(conn)$assignTable, FALSE) })
     pb <- .newProgress(total = 1 + length(conns))
