@@ -154,12 +154,12 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE) {
     }
     lapply(names(conns), function(n) {
       if(async[[n]]) .tickProgress(pb, tokens = list(what = paste0("Assigning ", conns[[n]]@name, " (", symbol, " <- ", dexpr, ")")))
-      dsGetInfo(results[[n]])
+      dsFetch(results[[n]])
     })
     ignore <- .tickProgress(pb, tokens = list(what = paste0("Assigned expr. (", symbol, " <- ", dexpr, ")")))
   } else {
     res <- dsAssignExpr(conns, symbol, expr)
-    ignore <- dsGetInfo(res)
+    ignore <- dsFetch(res)
   }
   invisible(NULL)
 }
