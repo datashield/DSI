@@ -74,6 +74,30 @@ setGeneric("dsHasTable",
            def = function(conn, table) standardGeneric("dsHasTable"),
            valueClass = "logical")
 
+#' List remote resources
+#'
+#' List remote resources from the data repository. Returns the unquoted names of remote resources
+#' accessible through this connection.
+#'
+#' @template methods
+#' @templateVar method_name dsListResources
+#'
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
+#'
+#' @family DSConnection generics
+#' @examples
+#' \dontrun{
+#' con <- dbConnect(DSOpal::Opal(), "server1",
+#'   "username", "password", "https://opal.example.org")
+#' dsListResources(con)
+#' dsDisconnect(con)
+#' }
+#' @import methods
+#' @export
+setGeneric("dsListResources",
+           def = function(conn) standardGeneric("dsListResources"),
+           valueClass = "character")
+
 #' Check remote resource exists
 #'
 #' Check if a remote resource reference exists in the data repository. Returns a logical indicating the existence of a

@@ -34,6 +34,7 @@ Other DSConnection generics: \code{\link{DSConnection-class}},
   \code{\link{dsHasTable}}, \code{\link{dsIsAsync}},
   \code{\link{dsListMethods}},
   \code{\link{dsListPackages}},
+  \code{\link{dsListResources}},
   \code{\link{dsListSymbols}}, \code{\link{dsListTables}},
   \code{\link{dsRmSymbol}}, \code{\link{dsRmWorkspace}},
   \code{\link{dsSaveWorkspace}}
