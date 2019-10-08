@@ -27,8 +27,10 @@ Other DS classes: \code{\link{DSDriver-class}},
   \code{\link{DSResult-class}}
 
 Other DSConnection generics: \code{\link{dsAggregate}},
-  \code{\link{dsAssignExpr}}, \code{\link{dsAssignTable}},
-  \code{\link{dsDisconnect}}, \code{\link{dsGetInfo}},
+  \code{\link{dsAssignExpr}},
+  \code{\link{dsAssignResource}},
+  \code{\link{dsAssignTable}}, \code{\link{dsDisconnect}},
+  \code{\link{dsGetInfo}}, \code{\link{dsHasResource}},
   \code{\link{dsHasTable}}, \code{\link{dsIsAsync}},
   \code{\link{dsListMethods}},
   \code{\link{dsListPackages}},

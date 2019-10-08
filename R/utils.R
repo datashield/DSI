@@ -2,9 +2,23 @@
 #' Makes a character vector of table names a list named by the connections.
 #' @keywords internal
 .asNamedListOfTables <- function(conns, value) {
+  .asNamedListOfValues(conns, value, "table")
+}
+
+#' Makes a typical logindata data frame a list of resources named by the server in which they are defined.
+#' Makes a character vector of resource names a list named by the connections.
+#' @keywords internal
+.asNamedListOfResources <- function(conns, value) {
+  .asNamedListOfValues(conns, value, "resource")
+}
+
+#' Makes a typical logindata data frame a list of items named by the server in which they are defined.
+#' Makes a character vector of item names a list named by the connections.
+#' @keywords internal
+.asNamedListOfValues <- function(conns, value, colname) {
   rval <- value
-  if (is.data.frame(value) && !is.null(value$table) && !is.null(value$server)) {
-    rval <- as.character(value$table)
+  if (is.data.frame(value) && !is.null(value[[colname]]) && !is.null(value$server)) {
+    rval <- as.character(value[[colname]])
     names(rval) <- value$server
   } else if (is.character(value)) {
     if (length(value) == 1) {

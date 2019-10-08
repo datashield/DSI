@@ -5,8 +5,8 @@
 \title{Logs in a DataSHIELD R sessions and optionaly assigns variables to R}
 \usage{
 datashield.login(logins = NULL, assign = FALSE, variables = NULL,
-  symbol = "D", id.name = NULL, opts = getOption("datashield.opts",
-  list()), restore = NULL)
+  missings = FALSE, symbol = "D", id.name = NULL,
+  opts = getOption("datashield.opts", list()), restore = NULL)
 }
 \arguments{
 \item{logins}{A dataframe table that holds login details. This table holds five elements required
@@ -15,7 +15,8 @@ to login to the servers where the data to analyse is stored. The expected column
 'server' (the server name), url' (the server url), 'user' (the user name or the certificate PEM file path),
 'password' (the user password or the private key PEM file path),
 'token' (the personal access token, ignored if 'user' is defined), 'table' (the fully qualified name of
-the table in the data repository), 'options' (the SSL options). An additional column 'identifiers'
+the table in the data repository), 'resource' (the fully qualified name of
+the resource reference in the data repository), 'options' (the SSL options). An additional column 'identifiers'
 can be specified for identifiers mapping (if supported by data repository). See also the documentation
 of the examplar input table \code{logindata} for details of the login elements.}
 
@@ -25,6 +26,8 @@ table to R after login into the server(s).}
 \item{variables}{Specific variables to assign. If \code{assign} is set to FALSE this argument is ignored
 otherwise the specified variables are assigned to R. If no variables are specified (default) the whole
 data repository's table is assigned.}
+
+\item{missings}{If TRUE, missing values will be pushed from data repository to R, default is FALSE.}
 
 \item{symbol}{A character, the name of the data frame to which the data repository's table will be
 assigned after login into the server(s).}
@@ -53,14 +56,18 @@ combined with a user name, depending on the data repository system).
 #### The below examples illustrate an analysises that use test/simulated data ####
 
 # build your data.frame
-server <- c("study1", "study2")
-url <- c("https://some.opal.host:8443","https://another.opal.host")
-user <- c("user1", "datashield-certificate.pem")
-password <- c("user1pwd", "datashield-private.pem")
-table <- c("store.Dataset","foo.DS")
-options <- c("","c(ssl.verifyhost=2,ssl.verifypeer=1)")
-driver <- c("","OpalDriver")
-logindata <- data.frame(server,url,user,password,table,options,driver)
+builder <- newDSLoginBuilder()
+builder$append(server="server1", url="https://opal-demo.obiba.org",
+               table="datashield.CNSIM1", resource="datashield.CNSIM1r",
+               user="administrator", password="password",
+               options="list(ssl_verifyhost=0,ssl_verifypeer=0)")
+builder$append(server="server2", url="dslite.server",
+               table="CNSIM2", resource="CNSIM2r", driver="DSLiteDriver")
+builder$append(server="server3", url="https://molgenis.example.org",
+               table="CNSIM3", resource="CNSIM3r", token="123456789", driver="MolgenisDriver")
+builder$append(server="server4", url="dslite.server",
+               table="CNSIM4", resource="CNSIM4r", driver="DSLiteDriver")
+logindata <- builder$build()
 
 # or load the data.frame that contains the login details
 data(logindata)

@@ -34,8 +34,9 @@ newDSLoginBuilder <- function(logins = NULL, .silent = FALSE) {
 #'
 #' \code{$append(server, url, table, driver, user, password, token, options)} Append a row in the login data frame with the specifications:
 #' \code{server} is the server name, \code{url} is the url to connect to the server or a R symbol name, \code{table} is the table path
-#' in that identifies the dataset in the server, \code{driver} is the \code{\link{DSDriver-class}} name to build the \code{\link{DSConnection-class}}, \code{user}
-#' and \code{password} are the user credentials, \code{token} is the personal access token (ignored when user credentials are not empty),
+#' that identifies the dataset in the server, \code{resource} is the resource path that identifies the resource reference in the server,
+#' \code{driver} is the \code{\link{DSDriver-class}} name to build the \code{\link{DSConnection-class}}, \code{user} and \code{password}
+#' are the user credentials, \code{token} is the personal access token (ignored when user credentials are not empty),
 #' \code{options} any options (R code to be parsed) that could be relevant for the DS connection object.
 #'
 #' \code{$build()} Get the created login details data frame.
@@ -70,11 +71,20 @@ DSLoginBuilder <- R6::R6Class(
           stop("The provided login details is missing url column", call. = FALSE)
         }
         url <- df$url
-        if (!("table" %in% cnames)) {
-          stop("The provided login details is missing table column", call. = FALSE)
+        if (!("table" %in% cnames) && !("resource" %in% cnames)) {
+          stop("The provided login details is missing both table and resource columns", call. = FALSE)
         }
-        table <- df$table
 
+        if (!("table" %in% cnames)) {
+          table <- rep("", length(server))
+        } else {
+          table <- df$table
+        }
+        if (!("resource" %in% cnames)) {
+          resource <- rep("", length(server))
+        } else {
+          resource <- df$resource
+        }
         if (!("driver" %in% cnames)) {
           driver <- rep("", length(server))
         } else {
@@ -100,8 +110,8 @@ DSLoginBuilder <- R6::R6Class(
         } else {
           options <- df$options
         }
-        table <- df$table
-        data.frame(server=server, url=url, table=table, driver=driver,
+
+        data.frame(server=server, url=url, table=table, resource=resource, driver=driver,
                    user=user, password=password, token=token,
                    options=options, stringsAsFactors = FALSE)
       } else {
@@ -114,7 +124,7 @@ DSLoginBuilder <- R6::R6Class(
       private$.logins <- private$.as.logins(logins)
       private$.silent <- .silent
     },
-    append = function(server, url, table, driver = "OpalDriver", user = "", password = "", token = "", options = "") {
+    append = function(server, url, table="", resource="", driver = "OpalDriver", user = "", password = "", token = "", options = "") {
       if (private$.is.empty(server)) {
         stop("The server parameter cannot be empty", call. = FALSE)
       }
@@ -123,8 +133,8 @@ DSLoginBuilder <- R6::R6Class(
       } else if (startsWith(url,"http") && !startsWith(url,"https") && !private$.silent) {
         warning("Secure HTTP connection is recommended: ", url, call. = FALSE)
       }
-      if (private$.is.empty(table)) {
-        stop("The table parameter cannot be empty", call. = FALSE)
+      if (private$.is.empty(table) && private$.is.empty(resource)) {
+        stop("The table and resource parameters cannot be both empty", call. = FALSE)
       }
 
       lg  <- private$.get.logins()
@@ -132,6 +142,7 @@ DSLoginBuilder <- R6::R6Class(
         private$.logins <- data.frame(server=as.character(server),
                                       url=as.character(url),
                                       table=as.character(table),
+                                      resource=as.character(resource),
                                       driver=as.character(driver),
                                       user=as.character(user),
                                       password=as.character(password),
@@ -145,6 +156,7 @@ DSLoginBuilder <- R6::R6Class(
         private$.logins <- rbind(lg, list(server=as.character(server),
                                           url=as.character(url),
                                           table=as.character(table),
+                                          resource=as.character(resource),
                                           driver=as.character(driver),
                                           user=as.character(user),
                                           password=as.character(password),

@@ -26,8 +26,9 @@ See also \link{newDSLoginBuilder}.
 
 \code{$append(server, url, table, driver, user, password, token, options)} Append a row in the login data frame with the specifications:
 \code{server} is the server name, \code{url} is the url to connect to the server or a R symbol name, \code{table} is the table path
-in that identifies the dataset in the server, \code{driver} is the \code{\link{DSDriver-class}} name to build the \code{\link{DSConnection-class}}, \code{user}
-and \code{password} are the user credentials, \code{token} is the personal access token (ignored when user credentials are not empty),
+that identifies the dataset in the server, \code{resource} is the resource path that identifies the resource reference in the server,
+\code{driver} is the \code{\link{DSDriver-class}} name to build the \code{\link{DSConnection-class}}, \code{user} and \code{password}
+are the user credentials, \code{token} is the personal access token (ignored when user credentials are not empty),
 \code{options} any options (R code to be parsed) that could be relevant for the DS connection object.
 
 \code{$build()} Get the created login details data frame.
