@@ -87,23 +87,23 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
   tokens <- as.character(logins$token)
   # table fully qualified names
   tables <- as.character(logins$table)
-  if (is.null(tables)) {
+  if (is.null(tables) || length(tables) == 0) {
     tables <- rep("", length(stdnames))
   }
   # resource fully qualified names
   resources <- as.character(logins$resource)
-  if (is.null(resources)) {
+  if (is.null(resources) || length(resources) == 0) {
     resources <- rep("", length(stdnames))
   }
   # identifiers mapping
   idmappings <- logins$identifiers
-  if (is.null(idmappings)) {
+  if (is.null(idmappings) || length(idmappings) == 0) {
     idmappings <- rep("", length(stdnames))
   }
 
   # DSConnection specific options
   options <- logins$options
-  if (is.null(options)) {
+  if (is.null(options) || length(options) == 0) {
     options <- rep("", length(stdnames))
   }
   # DSDriver class name for instanciation
@@ -180,7 +180,7 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
   # if argument 'assign' is true assign data/resources to the data repository server(s) you logged in to.
   if(assign && length(rconnections) > 0) {
 
-    isNotEmpty <- Vectorize(function(x) { !(is.null(x) || is.na(x) || nchar(x) == 0) })
+    isNotEmpty <- Vectorize(function(x) { !(is.null(x) || is.na(x) || length(x) == 0 || nchar(x) == 0) })
 
     assignResources <- function() {
       # Assign resource data in parallel
@@ -234,14 +234,14 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
       pb <- .newProgress(total = 1 + length(connections) - length(excluded[excluded == TRUE]))
       for (i in 1:length(connections)) {
         if(!excluded[i] && async[i]) {
-          results[[i]] <- dsAssignTable(connections[[i]], symbol, tables[i], variables=variables, missings=missing, identifiers=idmappings[i], id.name=id.name)
+          results[[i]] <- dsAssignTable(connections[[i]], symbol, tables[i], variables=variables, missings=missings, identifiers=idmappings[i], id.name=id.name)
         }
       }
       # not async (blocking calls)
       for (i in 1:length(connections)) {
         if(!excluded[i] && !async[i]) {
           .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", tables[i], ")")))
-          results[[i]] <- dsAssignTable(connections[[i]], symbol, tables[i], variables=variables, missings=missing, identifiers=idmappings[i], id.name=id.name)
+          results[[i]] <- dsAssignTable(connections[[i]], symbol, tables[i], variables=variables, missings=missings, identifiers=idmappings[i], id.name=id.name)
         }
       }
       for (i in 1:length(stdnames)) {
