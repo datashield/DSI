@@ -162,10 +162,18 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
   # sanity check: server availability and table path is valid
   excluded <- c()
   for(i in 1:length(connections)) {
-    res <- try(dsHasTable(connections[[i]], tables[i]), silent=TRUE)
-    excluded <- append(excluded, inherits(res, "try-error"))
-    if ((is.logical(res) && !res) || inherits(res, "try-error")) {
-      warning(stdnames[i], " will be excluded: ", res[1], call.=FALSE, immediate.=TRUE)
+    if (!is.null(tables[i]) && nchar(tables[i])>0) {
+      res <- try(dsHasTable(connections[[i]], tables[i]), silent=TRUE)
+      excluded <- append(excluded, inherits(res, "try-error"))
+      if ((is.logical(res) && !res) || inherits(res, "try-error")) {
+        warning(stdnames[i], " will be excluded because table ", tables[i]," is not accessible", call.=FALSE, immediate.=TRUE)
+      }
+    } else if (!is.null(resources[i]) && nchar(resources[i])>0) {
+      res <- try(dsHasResource(connections[[i]], resources[i]), silent=TRUE)
+      excluded <- append(excluded, inherits(res, "try-error"))
+      if ((is.logical(res) && !res) || inherits(res, "try-error")) {
+        warning(stdnames[i], " will be excluded because resource ", resources[i], " is not accessible", call.=FALSE, immediate.=TRUE)
+      }
     }
   }
   rconnections <- c()
