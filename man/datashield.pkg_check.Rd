@@ -4,8 +4,12 @@
 \alias{datashield.pkg_check}
 \title{Check server-side package minimum version}
 \usage{
-datashield.pkg_check(conns, name, version,
-  env = getOption("datashield.env", globalenv()))
+datashield.pkg_check(
+  conns,
+  name,
+  version,
+  env = getOption("datashield.env", globalenv())
+)
 }
 \arguments{
 \item{conns}{\code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.}

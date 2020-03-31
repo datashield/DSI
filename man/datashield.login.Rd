@@ -4,9 +4,16 @@
 \alias{datashield.login}
 \title{Logs in a DataSHIELD R sessions and optionaly assigns variables to R}
 \usage{
-datashield.login(logins = NULL, assign = FALSE, variables = NULL,
-  missings = FALSE, symbol = "D", id.name = NULL,
-  opts = getOption("datashield.opts", list()), restore = NULL)
+datashield.login(
+  logins = NULL,
+  assign = FALSE,
+  variables = NULL,
+  missings = FALSE,
+  symbol = "D",
+  id.name = NULL,
+  opts = getOption("datashield.opts", list()),
+  restore = NULL
+)
 }
 \arguments{
 \item{logins}{A dataframe table that holds login details. This table holds five elements required

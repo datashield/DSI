@@ -18,12 +18,14 @@ DS generics.
 }
 
 \seealso{
-Other DS classes: \code{\link{DSConnection-class}},
-  \code{\link{DSDriver-class}},
-  \code{\link{DSObject-class}}
+Other DS classes: 
+\code{\link{DSConnection-class}},
+\code{\link{DSDriver-class}},
+\code{\link{DSObject-class}}
 
-Other DSResult generics: \code{\link{dsFetch}},
-  \code{\link{dsGetInfo}}
+Other DSResult generics: 
+\code{\link{dsFetch}()},
+\code{\link{dsGetInfo}()}
 }
 \concept{DS classes}
 \concept{DSResult generics}

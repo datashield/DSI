@@ -4,8 +4,10 @@
 \alias{datashield.connections_default}
 \title{Set or get the default list of DSConnection objects in the analytic environment}
 \usage{
-datashield.connections_default(name = NULL,
-  env = getOption("datashield.env", globalenv()))
+datashield.connections_default(
+  name = NULL,
+  env = getOption("datashield.env", globalenv())
+)
 }
 \arguments{
 \item{name}{Symbol name that identifies the set of \code{\link{DSConnection-class}} objects to be used by default. If not provided,
@@ -41,7 +43,8 @@ the 'datasources=' argument overrides the defaults and allows the user to base h
 on any set of DSConnections and any subset of those DSConnections.
 }
 \seealso{
-Other Connections management: \code{\link{datashield.connections_find}},
-  \code{\link{datashield.connections}}
+Other Connections management: 
+\code{\link{datashield.connections_find}()},
+\code{\link{datashield.connections}()}
 }
 \concept{Connections management}

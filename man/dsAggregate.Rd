@@ -30,18 +30,24 @@ dsDisconnect(con)
 }
 }
 \seealso{
-Other DSConnection generics: \code{\link{DSConnection-class}},
-  \code{\link{dsAssignExpr}},
-  \code{\link{dsAssignResource}},
-  \code{\link{dsAssignTable}}, \code{\link{dsDisconnect}},
-  \code{\link{dsGetInfo}}, \code{\link{dsHasResource}},
-  \code{\link{dsHasTable}}, \code{\link{dsIsAsync}},
-  \code{\link{dsListMethods}},
-  \code{\link{dsListPackages}},
-  \code{\link{dsListResources}},
-  \code{\link{dsListSymbols}}, \code{\link{dsListTables}},
-  \code{\link{dsListWorkspaces}}, \code{\link{dsRmSymbol}},
-  \code{\link{dsRmWorkspace}},
-  \code{\link{dsSaveWorkspace}}
+Other DSConnection generics: 
+\code{\link{DSConnection-class}},
+\code{\link{dsAssignExpr}()},
+\code{\link{dsAssignResource}()},
+\code{\link{dsAssignTable}()},
+\code{\link{dsDisconnect}()},
+\code{\link{dsGetInfo}()},
+\code{\link{dsHasResource}()},
+\code{\link{dsHasTable}()},
+\code{\link{dsIsAsync}()},
+\code{\link{dsListMethods}()},
+\code{\link{dsListPackages}()},
+\code{\link{dsListResources}()},
+\code{\link{dsListSymbols}()},
+\code{\link{dsListTables}()},
+\code{\link{dsListWorkspaces}()},
+\code{\link{dsRmSymbol}()},
+\code{\link{dsRmWorkspace}()},
+\code{\link{dsSaveWorkspace}()}
 }
 \concept{DSConnection generics}

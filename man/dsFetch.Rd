@@ -27,7 +27,8 @@ dsDisconnect(con)
 }
 }
 \seealso{
-Other DSResult generics: \code{\link{DSResult-class}},
-  \code{\link{dsGetInfo}}
+Other DSResult generics: 
+\code{\link{DSResult-class}},
+\code{\link{dsGetInfo}()}
 }
 \concept{DSResult generics}
