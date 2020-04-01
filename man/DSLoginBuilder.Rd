@@ -53,7 +53,6 @@ Append login information for a specific server.
   server,
   url,
   table = "",
-  resource = "",
   driver = "OpalDriver",
   user = "",
   password = "",
@@ -70,8 +69,6 @@ Append login information for a specific server.
 \item{\code{url}}{The url to connect to the server or a R symbol name.}
 
 \item{\code{table}}{The table path that identifies the dataset in the server.}
-
-\item{\code{resource}}{The resource path that identifies the resource reference in the server.}
 
 \item{\code{driver}}{The \code{\link{DSDriver-class}} name to build the \code{\link{DSConnection-class}}.}
 

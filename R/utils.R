@@ -5,13 +5,6 @@
   .asNamedListOfValues(conns, value, "table")
 }
 
-#' Makes a typical logindata data frame a list of resources named by the server in which they are defined.
-#' Makes a character vector of resource names a list named by the connections.
-#' @keywords internal
-.asNamedListOfResources <- function(conns, value) {
-  .asNamedListOfValues(conns, value, "resource")
-}
-
 #' Makes a typical logindata data frame a list of items named by the server in which they are defined.
 #' Makes a character vector of item names a list named by the connections.
 #' @keywords internal

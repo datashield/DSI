@@ -180,37 +180,3 @@ datashield.table_status <- function(conns, table) {
   .tickProgress(pb, tokens = list(what = "All servers checked"))
   data.frame(server, table=tbl, accessible)
 }
-
-#' Status of some resources
-#'
-#' Get whether some identified resources are accessible in each of the data repositories.
-#'
-#' @param conns \code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.
-#' @param resource Fully qualified name of a resource in the data repository (can be a vector or must be
-#'   the same in each data repository); or a named list of fully qualified resource names (one per server
-#'   name); or a data frame with 'server' and 'resource' columns (such as the one that is used in
-#'   \code{\link{datashield.login}})
-#' @return Resource status for each server.
-#' @import progress
-#' @export
-datashield.resource_status <- function(conns, resource) {
-  # prepare resources as a named list
-  resources <- .asNamedListOfResources(conns, resource)
-  # make a named list of connections
-  cs <- .asNamedListOfConnections(conns)
-
-  server <- names(cs)
-  tbl <- rep(NA, length(server))
-  accessible <- rep(NA, length(server))
-  pb <- .newProgress(total = 1 + length(server))
-  for (i in 1:length(server)) {
-    name <- server[i]
-    if (!is.null(resources[[name]])) {
-      tbl[i] <- resources[[name]]
-      accessible[i] <- dsHasResource(cs[[name]], resources[[name]])
-    }
-    .tickProgress(pb, tokens = list(what = paste0("Checking ", name)))
-  }
-  .tickProgress(pb, tokens = list(what = "All servers checked"))
-  data.frame(server, resource=tbl, accessible)
-}

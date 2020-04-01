@@ -14,7 +14,7 @@ When a \code{\link{DSResult-class}} object is returned on aggregation or assignm
 the raw result can be accessed asynchronously, allowing parallelization of DataSHIELD calls
 over multpile servers. The returned named list of logicals will specify if asynchronicity is supported for:
 aggregation operation ('aggregate'), table assignment operation ('assignTable'),
-resource assignment operation ('assignResource') and expression assignment operation ('assignExpr').
+and expression assignment operation ('assignExpr').
 
 \Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsIsAsync")}
 }
@@ -31,15 +31,12 @@ Other DSConnection generics:
 \code{\link{DSConnection-class}},
 \code{\link{dsAggregate}()},
 \code{\link{dsAssignExpr}()},
-\code{\link{dsAssignResource}()},
 \code{\link{dsAssignTable}()},
 \code{\link{dsDisconnect}()},
 \code{\link{dsGetInfo}()},
-\code{\link{dsHasResource}()},
 \code{\link{dsHasTable}()},
 \code{\link{dsListMethods}()},
 \code{\link{dsListPackages}()},
-\code{\link{dsListResources}()},
 \code{\link{dsListSymbols}()},
 \code{\link{dsListTables}()},
 \code{\link{dsListWorkspaces}()},

@@ -1,6 +1,6 @@
 Package: DSI
 Title: DataSHIELD Interface
-Version: 1.1.0
+Version: 1.0.0
 Authors@R:
     c(person(given = "Yannick",
              family = "Marcon",
@@ -42,7 +42,6 @@ Collate:
     'DSResult.R'
     'datashield.aggregate.R'
     'datashield.assign.R'
-    'datashield.build.login.data.frame.o.R'
     'datashield.connections.R'
     'datashield.login.R'
     'datashield.logout.R'

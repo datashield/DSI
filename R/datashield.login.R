@@ -13,8 +13,7 @@
 #'   'server' (the server name), url' (the server url), 'user' (the user name or the certificate PEM file path),
 #'   'password' (the user password or the private key PEM file path),
 #'   'token' (the personal access token, ignored if 'user' is defined), 'table' (the fully qualified name of
-#'   the table in the data repository), 'resource' (the fully qualified name of
-#'   the resource reference in the data repository), 'options' (the SSL options). An additional column 'identifiers'
+#'   the table in the data repository), 'options' (the SSL options). An additional column 'identifiers'
 #'   can be specified for identifiers mapping (if supported by data repository). See also the documentation
 #'   of the examplar input table \code{logindata} for details of the login elements.
 #' @param assign A boolean which tells whether or not data should be assigned from the data repository
@@ -40,15 +39,15 @@
 #' # build your data.frame
 #' builder <- newDSLoginBuilder()
 #' builder$append(server="server1", url="https://opal-demo.obiba.org",
-#'                table="datashield.CNSIM1", resource="datashield.CNSIM1r",
+#'                table="datashield.CNSIM1",
 #'                user="administrator", password="password",
 #'                options="list(ssl_verifyhost=0,ssl_verifypeer=0)")
 #' builder$append(server="server2", url="dslite.server",
-#'                table="CNSIM2", resource="CNSIM2r", driver="DSLiteDriver")
+#'                table="CNSIM2", driver="DSLiteDriver")
 #' builder$append(server="server3", url="https://molgenis.example.org",
-#'                table="CNSIM3", resource="CNSIM3r", token="123456789", driver="MolgenisDriver")
+#'                table="CNSIM3", token="123456789", driver="MolgenisDriver")
 #' builder$append(server="server4", url="dslite.server",
-#'                table="CNSIM4", resource="CNSIM4r", driver="DSLiteDriver")
+#'                table="CNSIM4", driver="DSLiteDriver")
 #' logindata <- builder$build()
 #'
 #' # or load the data.frame that contains the login details
@@ -89,11 +88,6 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
   tables <- as.character(logins$table)
   if (is.null(tables) || length(tables) == 0) {
     tables <- rep("", length(stdnames))
-  }
-  # resource fully qualified names
-  resources <- as.character(logins$resource)
-  if (is.null(resources) || length(resources) == 0) {
-    resources <- rep("", length(stdnames))
   }
   # identifiers mapping
   idmappings <- logins$identifiers
@@ -168,12 +162,6 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
       if ((is.logical(res) && !res) || inherits(res, "try-error")) {
         warning(stdnames[i], " will be excluded because table ", tables[i]," is not accessible", call.=FALSE, immediate.=TRUE)
       }
-    } else if (!is.null(resources[i]) && nchar(resources[i])>0) {
-      res <- try(dsHasResource(connections[[i]], resources[i]), silent=TRUE)
-      excluded <- append(excluded, inherits(res, "try-error"))
-      if ((is.logical(res) && !res) || inherits(res, "try-error")) {
-        warning(stdnames[i], " will be excluded because resource ", resources[i], " is not accessible", call.=FALSE, immediate.=TRUE)
-      }
     }
   }
   rconnections <- c()
@@ -185,45 +173,10 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
     }
   }
 
-  # if argument 'assign' is true assign data/resources to the data repository server(s) you logged in to.
+  # if argument 'assign' is true assign data to the data repository server(s) you logged in to.
   if(assign && length(rconnections) > 0) {
 
     isNotEmpty <- Vectorize(function(x) { !(is.null(x) || is.na(x) || length(x) == 0 || nchar(x) == 0) })
-
-    assignResources <- function() {
-      # Assign resource data in parallel
-      message("\nAssigning resource data...")
-      results <- list()
-      async <- unlist(lapply(connections, function(conn) { dsIsAsync(conn)$assignResource }))
-      # async first
-
-      pb <- .newProgress(total = 1 + length(connections) - length(excluded[excluded == TRUE]))
-      for (i in 1:length(connections)) {
-        if(!excluded[i] && async[i]) {
-          results[[i]] <- dsAssignResource(connections[[i]], symbol, resources[i])
-        }
-      }
-      # not async (blocking calls)
-      for (i in 1:length(connections)) {
-        if(!excluded[i] && !async[i]) {
-          .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", resources[i], ")")))
-          results[[i]] <- dsAssignResource(connections[[i]], symbol, resources[i])
-        }
-      }
-      for (i in 1:length(stdnames)) {
-        res <- results[[i]]
-        if (!is.null(res)) {
-          if (async[i]) {
-            .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", resources[i], ")")))
-          }
-          resInfo <- dsGetInfo(res)
-          if (resInfo$status == "FAILED") {
-            warning("Resource assignment of '", resources[i], "' failed for '", stdnames[i],"': ", res@error, call.=FALSE, immediate.=TRUE)
-          }
-        }
-      }
-      .tickProgress(pb, tokens = list(what = "Assigned all resources"))
-    }
 
     assignTables <- function() {
       if(is.null(variables)) {
@@ -285,10 +238,6 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
           }
         })
       }
-    }
-
-    if (all(isNotEmpty(resources))) {
-      assignResources()
     }
 
     if (all(isNotEmpty(tables))) {
