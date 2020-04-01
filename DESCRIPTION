@@ -1,5 +1,5 @@
 Package: DSI
-Title: DataSHIELD Interface
+Title: 'DataSHIELD' Interface
 Version: 1.1.0
 Authors@R:
     c(person(given = "Yannick",
@@ -14,9 +14,9 @@ Authors@R:
       person(given = "Paul",
              family = "Burton",
              role = "ctb"))
-Description: DataSHIELD is an infrastructure and series of R packages that 
+Description: 'DataSHIELD' is an infrastructure and series of R packages that 
     enables the remote and non-disclosive analysis of sensitive research data. 
-    This package defines the API that is to be implemented by DataSHIELD-aware 
+    This package defines the API that is to be implemented by 'DataSHIELD' compliant 
     data repositories.
 Depends:
     R (>= 3.1),
