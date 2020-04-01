@@ -38,7 +38,8 @@ dsDisconnect(con)
 \seealso{
 \code{\link{dsDisconnect}} to disconnect from a data repository.
 
-Other DSDriver generics: \code{\link{DSDriver-class}},
-  \code{\link{dsGetInfo}}
+Other DSDriver generics: 
+\code{\link{DSDriver-class}},
+\code{\link{dsGetInfo}()}
 }
 \concept{DSDriver generics}

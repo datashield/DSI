@@ -27,7 +27,8 @@ for each call, or can alternatively use the \link{datashield.connections_default
 set of DSConnections to be used by all client-side calls unless over-ruled by the 'datasources=' argument.
 }
 \seealso{
-Other Connections management: \code{\link{datashield.connections_default}},
-  \code{\link{datashield.connections_find}}
+Other Connections management: 
+\code{\link{datashield.connections_default}()},
+\code{\link{datashield.connections_find}()}
 }
 \concept{Connections management}

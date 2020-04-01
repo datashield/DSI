@@ -37,22 +37,33 @@ being executed (`expression`) and if the query is complete (`has.completed`).
 }
 
 \seealso{
-Other DSDriver generics: \code{\link{DSDriver-class}},
-  \code{\link{dsConnect}}
+Other DSDriver generics: 
+\code{\link{DSDriver-class}},
+\code{\link{dsConnect}()}
 
-Other DSConnection generics: \code{\link{DSConnection-class}},
-  \code{\link{dsAggregate}}, \code{\link{dsAssignExpr}},
-  \code{\link{dsAssignTable}}, \code{\link{dsDisconnect}},
-  \code{\link{dsHasTable}}, \code{\link{dsIsAsync}},
-  \code{\link{dsListMethods}},
-  \code{\link{dsListPackages}},
-  \code{\link{dsListSymbols}}, \code{\link{dsListTables}},
-  \code{\link{dsListWorkspaces}}, \code{\link{dsRmSymbol}},
-  \code{\link{dsRmWorkspace}},
-  \code{\link{dsSaveWorkspace}}
+Other DSConnection generics: 
+\code{\link{DSConnection-class}},
+\code{\link{dsAggregate}()},
+\code{\link{dsAssignExpr}()},
+\code{\link{dsAssignResource}()},
+\code{\link{dsAssignTable}()},
+\code{\link{dsDisconnect}()},
+\code{\link{dsHasResource}()},
+\code{\link{dsHasTable}()},
+\code{\link{dsIsAsync}()},
+\code{\link{dsListMethods}()},
+\code{\link{dsListPackages}()},
+\code{\link{dsListResources}()},
+\code{\link{dsListSymbols}()},
+\code{\link{dsListTables}()},
+\code{\link{dsListWorkspaces}()},
+\code{\link{dsRmSymbol}()},
+\code{\link{dsRmWorkspace}()},
+\code{\link{dsSaveWorkspace}()}
 
-Other DSResult generics: \code{\link{DSResult-class}},
-  \code{\link{dsFetch}}
+Other DSResult generics: 
+\code{\link{DSResult-class}},
+\code{\link{dsFetch}()}
 }
 \concept{DSConnection generics}
 \concept{DSDriver generics}

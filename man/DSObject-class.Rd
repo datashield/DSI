@@ -49,8 +49,9 @@ dsDisconnect(con)
 }
 }
 \seealso{
-Other DS classes: \code{\link{DSConnection-class}},
-  \code{\link{DSDriver-class}},
-  \code{\link{DSResult-class}}
+Other DS classes: 
+\code{\link{DSConnection-class}},
+\code{\link{DSDriver-class}},
+\code{\link{DSResult-class}}
 }
 \concept{DS classes}

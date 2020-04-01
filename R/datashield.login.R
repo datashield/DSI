@@ -13,7 +13,8 @@
 #'   'server' (the server name), url' (the server url), 'user' (the user name or the certificate PEM file path),
 #'   'password' (the user password or the private key PEM file path),
 #'   'token' (the personal access token, ignored if 'user' is defined), 'table' (the fully qualified name of
-#'   the table in the data repository), 'options' (the SSL options). An additional column 'identifiers'
+#'   the table in the data repository), 'resource' (the fully qualified name of
+#'   the resource reference in the data repository), 'options' (the SSL options). An additional column 'identifiers'
 #'   can be specified for identifiers mapping (if supported by data repository). See also the documentation
 #'   of the examplar input table \code{logindata} for details of the login elements.
 #' @param assign A boolean which tells whether or not data should be assigned from the data repository
@@ -21,6 +22,7 @@
 #' @param variables Specific variables to assign. If \code{assign} is set to FALSE this argument is ignored
 #'   otherwise the specified variables are assigned to R. If no variables are specified (default) the whole
 #'   data repository's table is assigned.
+#' @param missings If TRUE, missing values will be pushed from data repository to R, default is FALSE.
 #' @param symbol A character, the name of the data frame to which the data repository's table will be
 #'   assigned after login into the server(s).
 #' @param id.name Name of the column that will contain the entity identifiers. If not specified, the identifiers
@@ -35,31 +37,35 @@
 #'
 #'#### The below examples illustrate an analysises that use test/simulated data ####
 #'
-#'# build your data.frame
-#'server <- c("study1", "study2")
-#'url <- c("https://some.opal.host:8443","https://another.opal.host")
-#'user <- c("user1", "datashield-certificate.pem")
-#'password <- c("user1pwd", "datashield-private.pem")
-#'table <- c("store.Dataset","foo.DS")
-#'options <- c("","c(ssl.verifyhost=2,ssl.verifypeer=1)")
-#'driver <- c("","OpalDriver")
-#'logindata <- data.frame(server,url,user,password,table,options,driver)
+#' # build your data.frame
+#' builder <- newDSLoginBuilder()
+#' builder$append(server="server1", url="https://opal-demo.obiba.org",
+#'                table="datashield.CNSIM1", resource="datashield.CNSIM1r",
+#'                user="administrator", password="password",
+#'                options="list(ssl_verifyhost=0,ssl_verifypeer=0)")
+#' builder$append(server="server2", url="dslite.server",
+#'                table="CNSIM2", resource="CNSIM2r", driver="DSLiteDriver")
+#' builder$append(server="server3", url="https://molgenis.example.org",
+#'                table="CNSIM3", resource="CNSIM3r", token="123456789", driver="MolgenisDriver")
+#' builder$append(server="server4", url="dslite.server",
+#'                table="CNSIM4", resource="CNSIM4r", driver="DSLiteDriver")
+#' logindata <- builder$build()
 #'
-#'# or load the data.frame that contains the login details
-#'data(logindata)
+#' # or load the data.frame that contains the login details
+#' data(logindata)
 #'
-#'# Example 1: just login (default)
-#'connections <- datashield.login(logins=logindata)
+#' # Example 1: just login (default)
+#' connections <- datashield.login(logins=logindata)
 #'
-#'# Example 2: login and assign the whole dataset
-#'connections <- datashield.login(logins=logindata, assign=TRUE)
+#' # Example 2: login and assign the whole dataset
+#' connections <- datashield.login(logins=logindata, assign=TRUE)
 #'
-#'# Example 3: login and assign specific variable(s)
-#'myvar <- list("LAB_TSC")
-#'connections <- datashield.login(logins=logindata, assign=TRUE, variables=myvar)
+#' # Example 3: login and assign specific variable(s)
+#' myvar <- list("LAB_TSC")
+#' connections <- datashield.login(logins=logindata, assign=TRUE, variables=myvar)
 #'}
 #'
-datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="D", id.name=NULL,
+datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings=FALSE, symbol="D", id.name=NULL,
                              opts=getOption("datashield.opts", list()), restore=NULL){
 
   defaultDriver <- "OpalDriver"
@@ -79,17 +85,25 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
   pwds <- as.character(logins$password)
   # tokens
   tokens <- as.character(logins$token)
-  # table fully qualified name
-  paths <- as.character(logins$table)
+  # table fully qualified names
+  tables <- as.character(logins$table)
+  if (is.null(tables) || length(tables) == 0) {
+    tables <- rep("", length(stdnames))
+  }
+  # resource fully qualified names
+  resources <- as.character(logins$resource)
+  if (is.null(resources) || length(resources) == 0) {
+    resources <- rep("", length(stdnames))
+  }
   # identifiers mapping
   idmappings <- logins$identifiers
-  if (is.null(idmappings)) {
+  if (is.null(idmappings) || length(idmappings) == 0) {
     idmappings <- rep("", length(stdnames))
   }
 
   # DSConnection specific options
   options <- logins$options
-  if (is.null(options)) {
+  if (is.null(options) || length(options) == 0) {
     options <- rep("", length(stdnames))
   }
   # DSDriver class name for instanciation
@@ -148,10 +162,18 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
   # sanity check: server availability and table path is valid
   excluded <- c()
   for(i in 1:length(connections)) {
-    res <- try(dsHasTable(connections[[i]], paths[i]), silent=TRUE)
-    excluded <- append(excluded, inherits(res, "try-error"))
-    if ((is.logical(res) && !res) || inherits(res, "try-error")) {
-      warning(stdnames[i], " will be excluded: ", res[1], call.=FALSE, immediate.=TRUE)
+    if (!is.null(tables[i]) && nchar(tables[i])>0) {
+      res <- try(dsHasTable(connections[[i]], tables[i]), silent=TRUE)
+      excluded <- append(excluded, inherits(res, "try-error"))
+      if ((is.logical(res) && !res) || inherits(res, "try-error")) {
+        warning(stdnames[i], " will be excluded because table ", tables[i]," is not accessible", call.=FALSE, immediate.=TRUE)
+      }
+    } else if (!is.null(resources[i]) && nchar(resources[i])>0) {
+      res <- try(dsHasResource(connections[[i]], resources[i]), silent=TRUE)
+      excluded <- append(excluded, inherits(res, "try-error"))
+      if ((is.logical(res) && !res) || inherits(res, "try-error")) {
+        warning(stdnames[i], " will be excluded because resource ", resources[i], " is not accessible", call.=FALSE, immediate.=TRUE)
+      }
     }
   }
   rconnections <- c()
@@ -163,70 +185,116 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, symbol="
     }
   }
 
-  # if argument 'assign' is true assign data to the data repository server(s) you logged
-  # in to. If no variables are specified the whole dataset is assigned
-  # i.e. all the variables in the repository are assigned
+  # if argument 'assign' is true assign data/resources to the data repository server(s) you logged in to.
   if(assign && length(rconnections) > 0) {
-    if(is.null(variables)){
-      # if the user does not specify variables (default behaviour)
-      # display a message telling the user that the whole dataset
-      # will be assigned since he did not specify variables
-      message("\n  No variables have been specified. \n  All the variables in the table \n  (the whole dataset) will be assigned to R!")
-    }
 
-    # Assign data in parallel
-    message("\nAssigning data...")
-    results <- list()
-    async <- unlist(lapply(connections, function(conn) { dsIsAsync(conn)$assignTable }))
-    # async first
+    isNotEmpty <- Vectorize(function(x) { !(is.null(x) || is.na(x) || length(x) == 0 || nchar(x) == 0) })
 
-    pb <- .newProgress(total = 1 + length(connections) - length(excluded[excluded == TRUE]))
-    for (i in 1:length(connections)) {
-      if(!excluded[i] && async[i]) {
-        results[[i]] <- dsAssignTable(connections[[i]], symbol, paths[i], variables, identifiers=idmappings[i], id.name=id.name)
-      }
-    }
-    # not async (blocking calls)
-    for (i in 1:length(connections)) {
-      if(!excluded[i] && !async[i]) {
-        .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", paths[i], ")")))
-        results[[i]] <- dsAssignTable(connections[[i]], symbol, paths[i], variables, identifiers=idmappings[i], id.name=id.name)
-      }
-    }
-    for (i in 1:length(stdnames)) {
-      res <- results[[i]]
-      if (!is.null(res)) {
-        if (async[i]) {
-          .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", paths[i], ")")))
-        }
-        resInfo <- dsGetInfo(res)
-        if (resInfo$status == "FAILED") {
-          warning("Data assignment of '", paths[i], "' failed for '", stdnames[i],"': ", res@error, call.=FALSE, immediate.=TRUE)
+    assignResources <- function() {
+      # Assign resource data in parallel
+      message("\nAssigning resource data...")
+      results <- list()
+      async <- unlist(lapply(connections, function(conn) { dsIsAsync(conn)$assignResource }))
+      # async first
+
+      pb <- .newProgress(total = 1 + length(connections) - length(excluded[excluded == TRUE]))
+      for (i in 1:length(connections)) {
+        if(!excluded[i] && async[i]) {
+          results[[i]] <- dsAssignResource(connections[[i]], symbol, resources[i])
         }
       }
-    }
-    .tickProgress(pb, tokens = list(what = "Assigned all tables"))
-
-
-    # Get column names in parallel
-    # Ensure the colnames aggregation is available
-    aggs <- datashield.method_status(rconnections, type="aggregate")
-    hasColnames <- aggs[aggs$name == "colnames",]
-    if (nrow(hasColnames)>0) {
-      message("\nVariables assigned:")
-      lapply(names(rconnections), function(n) {
-        if (hasColnames[[n]]) {
-          varnames <- dsFetch(dsAggregate(rconnections[[n]], paste0('colnames(', symbol,')'), async = FALSE))
-          if(length(varnames[[1]]) > 0) {
-            message(n, " -- ", paste(unlist(varnames), collapse=", "))
-          } else {
-            message(n, " -- No variables assigned. Please check login details for this study and verify that the variables are available!")
+      # not async (blocking calls)
+      for (i in 1:length(connections)) {
+        if(!excluded[i] && !async[i]) {
+          .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", resources[i], ")")))
+          results[[i]] <- dsAssignResource(connections[[i]], symbol, resources[i])
+        }
+      }
+      for (i in 1:length(stdnames)) {
+        res <- results[[i]]
+        if (!is.null(res)) {
+          if (async[i]) {
+            .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", resources[i], ")")))
           }
-        } else {
-          message(n, " -- ? (colnames() aggregation method not available)")
+          resInfo <- dsGetInfo(res)
+          if (resInfo$status == "FAILED") {
+            warning("Resource assignment of '", resources[i], "' failed for '", stdnames[i],"': ", res@error, call.=FALSE, immediate.=TRUE)
+          }
         }
-      })
+      }
+      .tickProgress(pb, tokens = list(what = "Assigned all resources"))
     }
+
+    assignTables <- function() {
+      if(is.null(variables)) {
+        # if the user does not specify variables (default behaviour)
+        # display a message telling the user that the whole dataset
+        # will be assigned since he did not specify variables
+        message("\n  No variables have been specified. \n  All the variables in the table \n  (the whole dataset) will be assigned to R!")
+      }
+
+      # Assign table data in parallel
+      message("\nAssigning table data...")
+      results <- list()
+      async <- unlist(lapply(connections, function(conn) { dsIsAsync(conn)$assignTable }))
+      # async first
+
+      pb <- .newProgress(total = 1 + length(connections) - length(excluded[excluded == TRUE]))
+      for (i in 1:length(connections)) {
+        if(!excluded[i] && async[i]) {
+          results[[i]] <- dsAssignTable(connections[[i]], symbol, tables[i], variables=variables, missings=missings, identifiers=idmappings[i], id.name=id.name)
+        }
+      }
+      # not async (blocking calls)
+      for (i in 1:length(connections)) {
+        if(!excluded[i] && !async[i]) {
+          .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", tables[i], ")")))
+          results[[i]] <- dsAssignTable(connections[[i]], symbol, tables[i], variables=variables, missings=missings, identifiers=idmappings[i], id.name=id.name)
+        }
+      }
+      for (i in 1:length(stdnames)) {
+        res <- results[[i]]
+        if (!is.null(res)) {
+          if (async[i]) {
+            .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", tables[i], ")")))
+          }
+          resInfo <- dsGetInfo(res)
+          if (resInfo$status == "FAILED") {
+            warning("Data assignment of '", tables[i], "' failed for '", stdnames[i],"': ", res@error, call.=FALSE, immediate.=TRUE)
+          }
+        }
+      }
+      .tickProgress(pb, tokens = list(what = "Assigned all tables"))
+
+      # Get column names in parallel
+      # Ensure the colnames aggregation is available
+      aggs <- datashield.method_status(rconnections, type="aggregate")
+      hasColnames <- aggs[aggs$name == "colnames",]
+      if (nrow(hasColnames)>0) {
+        message("\nVariables assigned:")
+        lapply(names(rconnections), function(n) {
+          if (hasColnames[[n]]) {
+            varnames <- dsFetch(dsAggregate(rconnections[[n]], paste0('colnames(', symbol,')'), async = FALSE))
+            if(length(varnames[[1]]) > 0) {
+              message(n, " -- ", paste(unlist(varnames), collapse=", "))
+            } else {
+              message(n, " -- No variables assigned. Please check login details for this study and verify that the variables are available!")
+            }
+          } else {
+            message(n, " -- ? (colnames() aggregation method not available)")
+          }
+        })
+      }
+    }
+
+    if (all(isNotEmpty(resources))) {
+      assignResources()
+    }
+
+    if (all(isNotEmpty(tables))) {
+      assignTables()
+    }
+
   }
 
   .clearCache()

@@ -4,9 +4,16 @@
 \alias{datashield.assign}
 \title{Data assignment}
 \usage{
-datashield.assign(conns, symbol, value, variables = NULL,
-  missings = FALSE, identifiers = NULL, id.name = NULL,
-  async = TRUE)
+datashield.assign(
+  conns,
+  symbol,
+  value,
+  variables = NULL,
+  missings = FALSE,
+  identifiers = NULL,
+  id.name = NULL,
+  async = TRUE
+)
 }
 \arguments{
 \item{conns}{\code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.}

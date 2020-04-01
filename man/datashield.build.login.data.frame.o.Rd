@@ -4,9 +4,16 @@
 \alias{datashield.build.login.data.frame.o}
 \title{Builds a dataframe to login to datashield}
 \usage{
-datashield.build.login.data.frame.o(servers.name, servers.url,
-  servers.table, users.name = NULL, users.password = NULL,
-  users.token = NULL, servers.driver = NULL, .silent = FALSE)
+datashield.build.login.data.frame.o(
+  servers.name,
+  servers.url,
+  servers.table,
+  users.name = NULL,
+  users.password = NULL,
+  users.token = NULL,
+  servers.driver = NULL,
+  .silent = FALSE
+)
 }
 \arguments{
 \item{servers.name}{A vector of characters listing all the names of the data servers.}

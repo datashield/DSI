@@ -5,32 +5,113 @@
 \alias{DSLoginBuilder}
 \title{DataSHIELD login details builder}
 \format{A R6 object of class DSLoginBuilder}
-\usage{
-DSLoginBuilder
-}
 \description{
+DataSHIELD login details builder
+
+DataSHIELD login details builder
+}
+\details{
 Helper class for creating a valid data frame that can be used to perform \code{\link{datashield.login}}.
 See also \link{newDSLoginBuilder}.
 }
-\section{Fields}{
+\section{Methods}{
+\subsection{Public methods}{
+\itemize{
+\item \href{#method-new}{\code{DSLoginBuilder$new()}}
+\item \href{#method-append}{\code{DSLoginBuilder$append()}}
+\item \href{#method-build}{\code{DSLoginBuilder$build()}}
+\item \href{#method-clone}{\code{DSLoginBuilder$clone()}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-new"></a>}}
+\subsection{Method \code{new()}}{
+Create a new DSLoginBuilder instance.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DSLoginBuilder$new(logins = NULL, .silent = FALSE)}\if{html}{\out{</div>}}
+}
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
 \describe{
 \item{\code{logins}}{A valid login details data frame to initiate the builder, optional.}
 
 \item{\code{.silent}}{Do not warn user when non secure HTTP urls are encountered. Default is FALSE.}
-}}
-
-\section{Methods}{
-
-\code{$new(logins, .silent)} Create new DSLoginBuilder instance with the arguments described in the Fields section.
-
-\code{$append(server, url, table, driver, user, password, token, options)} Append a row in the login data frame with the specifications:
-\code{server} is the server name, \code{url} is the url to connect to the server or a R symbol name, \code{table} is the table path
-in that identifies the dataset in the server, \code{driver} is the \code{\link{DSDriver-class}} name to build the \code{\link{DSConnection-class}}, \code{user}
-and \code{password} are the user credentials, \code{token} is the personal access token (ignored when user credentials are not empty),
-\code{options} any options (R code to be parsed) that could be relevant for the DS connection object.
-
-\code{$build()} Get the created login details data frame.
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+A DSLoginBuilder object.
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-append"></a>}}
+\subsection{Method \code{append()}}{
+Append login information for a specific server.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DSLoginBuilder$append(
+  server,
+  url,
+  table = "",
+  resource = "",
+  driver = "OpalDriver",
+  user = "",
+  password = "",
+  token = "",
+  options = ""
+)}\if{html}{\out{</div>}}
 }
 
-\keyword{datasets}
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{server}}{The server name (must be unique).}
+
+\item{\code{url}}{The url to connect to the server or a R symbol name.}
+
+\item{\code{table}}{The table path that identifies the dataset in the server.}
+
+\item{\code{resource}}{The resource path that identifies the resource reference in the server.}
+
+\item{\code{driver}}{The \code{\link{DSDriver-class}} name to build the \code{\link{DSConnection-class}}.}
+
+\item{\code{user}}{The user name in the user credentials.}
+
+\item{\code{password}}{The user password in the user credentials.}
+
+\item{\code{token}}{The personal access token (ignored when user credentials are not empty).}
+
+\item{\code{options}}{Any options (R code to be parsed) that could be relevant for the DS connection object.}
+}
+\if{html}{\out{</div>}}
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-build"></a>}}
+\subsection{Method \code{build()}}{
+Build the DSLoginBuilder instance.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DSLoginBuilder$build()}\if{html}{\out{</div>}}
+}
+
+\subsection{Returns}{
+The DataSHIELD logindata data.frame
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-clone"></a>}}
+\subsection{Method \code{clone()}}{
+The objects of this class are cloneable with this method.
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{DSLoginBuilder$clone(deep = FALSE)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{deep}}{Whether to make a deep clone.}
+}
+\if{html}{\out{</div>}}
+}
+}
+}

@@ -74,10 +74,59 @@ setGeneric("dsHasTable",
            def = function(conn, table) standardGeneric("dsHasTable"),
            valueClass = "logical")
 
-#' Assign a remote table
+#' List remote resources
 #'
-#' Assign a remote table from the data repository to a symbol in the DataSHIELD R session.
-#' The table to be assigned must exist for the DataSHIELD user.
+#' List remote resources from the data repository. Returns the unquoted names of remote resources
+#' accessible through this connection.
+#'
+#' @template methods
+#' @templateVar method_name dsListResources
+#'
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
+#'
+#' @family DSConnection generics
+#' @examples
+#' \dontrun{
+#' con <- dbConnect(DSOpal::Opal(), "server1",
+#'   "username", "password", "https://opal.example.org")
+#' dsListResources(con)
+#' dsDisconnect(con)
+#' }
+#' @import methods
+#' @export
+setGeneric("dsListResources",
+           def = function(conn) standardGeneric("dsListResources"),
+           valueClass = "character")
+
+#' Check remote resource exists
+#'
+#' Check if a remote resource reference exists in the data repository. Returns a logical indicating the existence of a
+#' remote resource accessible through this connection.
+#'
+#' @template methods
+#' @templateVar method_name dsHasResource
+#'
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
+#' @param resource the resource fully qualified name
+#'
+#' @family DSConnection generics
+#' @examples
+#' \dontrun{
+#' con <- dbConnect(DSOpal::Opal(), "server1",
+#'   "username", "password", "https://opal.example.org")
+#' dsHasResource(con, "test.CNSIM")
+#' dsDisconnect(con)
+#' }
+#' @import methods
+#' @export
+setGeneric("dsHasResource",
+           def = function(conn, resource) standardGeneric("dsHasResource"),
+           valueClass = "logical")
+
+#' Assign a data table
+#'
+#' Assign a data table from the data repository to a symbol in the DataSHIELD R session.
+#' The table to be assigned must exist (i.e. proper permissions apply) for the DataSHIELD user.
 #'
 #' @template methods
 #' @templateVar method_name dsAssignTable
@@ -108,6 +157,34 @@ setGeneric("dsHasTable",
 #' @export
 setGeneric("dsAssignTable",
            def = function(conn, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, id.name=NULL, async=TRUE) standardGeneric("dsAssignTable"),
+           valueClass = "DSResult")
+
+#' Assign a resource object
+#'
+#' Assign a resource object of class 'ResourceClient' from the data repository to a symbol in the DataSHIELD R session.
+#' The resource reference to be assigned must exist (i.e. proper permissions apply) for the DataSHIELD user.
+#'
+#' @template methods
+#' @templateVar method_name dsAssignResource
+#'
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
+#' @param symbol Name of the R symbol.
+#' @param resource Fully qualified name of a resource reference in the data repository.
+#' @param async Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
+#'   the connections, when the connection supports that feature, with an extra overhead of requests.
+#'
+#' @family DSConnection generics
+#' @examples
+#' \dontrun{
+#' con <- dbConnect(DSOpal::Opal(), "server1",
+#'   "username", "password", "https://opal.example.org")
+#' dsAssignResource(con, "D", "test.CNSIM")
+#' dsDisconnect(con)
+#' }
+#' @import methods
+#' @export
+setGeneric("dsAssignResource",
+           def = function(conn, symbol, resource, async=TRUE) standardGeneric("dsAssignResource"),
            valueClass = "DSResult")
 
 #' Assign an expression result
@@ -348,7 +425,7 @@ setGeneric("dsRmWorkspace",
 #' the raw result can be accessed asynchronously, allowing parallelization of DataSHIELD calls
 #' over multpile servers. The returned named list of logicals will specify if asynchronicity is supported for:
 #' aggregation operation ('aggregate'), table assignment operation ('assignTable'),
-#' expression assignment operation ('assignExpr').
+#' resource assignment operation ('assignResource') and expression assignment operation ('assignExpr').
 #'
 #' @template methods
 #' @templateVar method_name dsIsAsync

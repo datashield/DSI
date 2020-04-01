@@ -4,8 +4,7 @@
 \alias{datashield.connections_find}
 \title{Search for DSConnection objects in the analytic environment}
 \usage{
-datashield.connections_find(env = getOption("datashield.env",
-  globalenv()))
+datashield.connections_find(env = getOption("datashield.env", globalenv()))
 }
 \arguments{
 \item{env}{The environment where to search for the connection symbols. Try to get it from the
@@ -23,7 +22,8 @@ objects is found and none of them is called 'default.connections', the function 
 suggests user to use the \link{datashield.connections_default} function.
 }
 \seealso{
-Other Connections management: \code{\link{datashield.connections_default}},
-  \code{\link{datashield.connections}}
+Other Connections management: 
+\code{\link{datashield.connections_default}()},
+\code{\link{datashield.connections}()}
 }
 \concept{Connections management}

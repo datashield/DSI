@@ -1,6 +1,6 @@
 Package: DSI
 Title: DataSHIELD Interface
-Version: 1.0.0
+Version: 1.1.0
 Authors@R:
     c(person(given = "Yannick",
              family = "Marcon",
@@ -29,7 +29,7 @@ Suggests:
 License: LGPL (>= 2.1)
 URL: http://datashield.ac.uk
 BugReports: https://github.com/datashield/DSI
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true

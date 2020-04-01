@@ -22,20 +22,30 @@ dsDisconnect(con)
 }
 }
 \seealso{
-Other DS classes: \code{\link{DSDriver-class}},
-  \code{\link{DSObject-class}},
-  \code{\link{DSResult-class}}
+Other DS classes: 
+\code{\link{DSDriver-class}},
+\code{\link{DSObject-class}},
+\code{\link{DSResult-class}}
 
-Other DSConnection generics: \code{\link{dsAggregate}},
-  \code{\link{dsAssignExpr}}, \code{\link{dsAssignTable}},
-  \code{\link{dsDisconnect}}, \code{\link{dsGetInfo}},
-  \code{\link{dsHasTable}}, \code{\link{dsIsAsync}},
-  \code{\link{dsListMethods}},
-  \code{\link{dsListPackages}},
-  \code{\link{dsListSymbols}}, \code{\link{dsListTables}},
-  \code{\link{dsListWorkspaces}}, \code{\link{dsRmSymbol}},
-  \code{\link{dsRmWorkspace}},
-  \code{\link{dsSaveWorkspace}}
+Other DSConnection generics: 
+\code{\link{dsAggregate}()},
+\code{\link{dsAssignExpr}()},
+\code{\link{dsAssignResource}()},
+\code{\link{dsAssignTable}()},
+\code{\link{dsDisconnect}()},
+\code{\link{dsGetInfo}()},
+\code{\link{dsHasResource}()},
+\code{\link{dsHasTable}()},
+\code{\link{dsIsAsync}()},
+\code{\link{dsListMethods}()},
+\code{\link{dsListPackages}()},
+\code{\link{dsListResources}()},
+\code{\link{dsListSymbols}()},
+\code{\link{dsListTables}()},
+\code{\link{dsListWorkspaces}()},
+\code{\link{dsRmSymbol}()},
+\code{\link{dsRmWorkspace}()},
+\code{\link{dsSaveWorkspace}()}
 }
 \concept{DS classes}
 \concept{DSConnection generics}

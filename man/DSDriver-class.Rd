@@ -10,12 +10,14 @@ The virtual class `DSDriver` defines the operations for creating
 connections.
 }
 \seealso{
-Other DS classes: \code{\link{DSConnection-class}},
-  \code{\link{DSObject-class}},
-  \code{\link{DSResult-class}}
+Other DS classes: 
+\code{\link{DSConnection-class}},
+\code{\link{DSObject-class}},
+\code{\link{DSResult-class}}
 
-Other DSDriver generics: \code{\link{dsConnect}},
-  \code{\link{dsGetInfo}}
+Other DSDriver generics: 
+\code{\link{dsConnect}()},
+\code{\link{dsGetInfo}()}
 }
 \concept{DS classes}
 \concept{DSDriver generics}

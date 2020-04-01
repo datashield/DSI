@@ -2,10 +2,18 @@
 % Please edit documentation in R/DSConnection.R
 \name{dsAssignTable}
 \alias{dsAssignTable}
-\title{Assign a remote table}
+\title{Assign a data table}
 \usage{
-dsAssignTable(conn, symbol, table, variables = NULL, missings = FALSE,
-  identifiers = NULL, id.name = NULL, async = TRUE)
+dsAssignTable(
+  conn,
+  symbol,
+  table,
+  variables = NULL,
+  missings = FALSE,
+  identifiers = NULL,
+  id.name = NULL,
+  async = TRUE
+)
 }
 \arguments{
 \item{conn}{An object that inherits from \code{\link{DSConnection-class}}.}
@@ -30,8 +38,8 @@ will be the data frame row names. When specified this column can be used to perf
 the connections, when the connection supports that feature, with an extra overhead of requests.}
 }
 \description{
-Assign a remote table from the data repository to a symbol in the DataSHIELD R session.
-The table to be assigned must exist for the DataSHIELD user.
+Assign a data table from the data repository to a symbol in the DataSHIELD R session.
+The table to be assigned must exist (i.e. proper permissions apply) for the DataSHIELD user.
 
 \Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsAssignTable")}
 }
@@ -44,15 +52,24 @@ dsDisconnect(con)
 }
 }
 \seealso{
-Other DSConnection generics: \code{\link{DSConnection-class}},
-  \code{\link{dsAggregate}}, \code{\link{dsAssignExpr}},
-  \code{\link{dsDisconnect}}, \code{\link{dsGetInfo}},
-  \code{\link{dsHasTable}}, \code{\link{dsIsAsync}},
-  \code{\link{dsListMethods}},
-  \code{\link{dsListPackages}},
-  \code{\link{dsListSymbols}}, \code{\link{dsListTables}},
-  \code{\link{dsListWorkspaces}}, \code{\link{dsRmSymbol}},
-  \code{\link{dsRmWorkspace}},
-  \code{\link{dsSaveWorkspace}}
+Other DSConnection generics: 
+\code{\link{DSConnection-class}},
+\code{\link{dsAggregate}()},
+\code{\link{dsAssignExpr}()},
+\code{\link{dsAssignResource}()},
+\code{\link{dsDisconnect}()},
+\code{\link{dsGetInfo}()},
+\code{\link{dsHasResource}()},
+\code{\link{dsHasTable}()},
+\code{\link{dsIsAsync}()},
+\code{\link{dsListMethods}()},
+\code{\link{dsListPackages}()},
+\code{\link{dsListResources}()},
+\code{\link{dsListSymbols}()},
+\code{\link{dsListTables}()},
+\code{\link{dsListWorkspaces}()},
+\code{\link{dsRmSymbol}()},
+\code{\link{dsRmWorkspace}()},
+\code{\link{dsSaveWorkspace}()}
 }
 \concept{DSConnection generics}
