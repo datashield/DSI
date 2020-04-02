@@ -1,4 +1,5 @@
 Package: DSI
+Type: Package
 Title: 'DataSHIELD' Interface
 Version: 1.0.0
 Authors@R:
