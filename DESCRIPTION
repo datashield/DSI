@@ -16,7 +16,7 @@ Authors@R:
              family = "Burton",
              role = "ctb"))
 Description: 'DataSHIELD' is an infrastructure and series of R packages that 
-    enables the remote and non-disclosive analysis of sensitive research data. 
+    enables the remote and 'non-disclosive' analysis of sensitive research data. 
     This package defines the API that is to be implemented by 'DataSHIELD' compliant 
     data repositories.
 Depends:
@@ -25,13 +25,11 @@ Depends:
     progress,
     R6
 Suggests: 
-    knitr,
     testthat (>= 2.1.0)
 License: LGPL (>= 2.1)
 URL: http://datashield.ac.uk
 BugReports: https://github.com/datashield/DSI
 RoxygenNote: 7.0.2
-VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
 Collate: 
