@@ -1,5 +1,7 @@
 # DataSHIELD Interface
 
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/DSI)](https://cran.r-project.org/package=DSI)
+
 The DataSHIELD Interface (DSI) defines a set of [S4 classes and generic methods](http://adv-r.had.co.nz/S4.html) 
 that can be implemented for accessing a data repository supporting the DataSHIELD infrastructure: controlled 
 R commands to be executed on the server side are garanteeing that non disclosive information is returned 
