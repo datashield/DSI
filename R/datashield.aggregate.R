@@ -11,6 +11,8 @@
 #'
 #' @export
 datashield.aggregate <- function(conns, expr, async=TRUE) {
+  .clearLastErrors()
+  rval <- NULL
   if (is.list(conns)) {
     results <- list()
     async <- lapply(conns, function(conn) { ifelse(async, dsIsAsync(conn)$aggregate, FALSE) })
@@ -18,30 +20,53 @@ datashield.aggregate <- function(conns, expr, async=TRUE) {
     # async first
     for (n in names(conns)) {
       if(async[[n]]) {
-        results[[n]] <- dsAggregate(conns[[n]], expr, async=TRUE)
+        tryCatch({
+          results[[n]] <- dsAggregate(conns[[n]], expr, async=TRUE)
+        }, error = function(e) {
+          .appendError(n, e$message)
+        })
       }
     }
     dexpr <- .deparse(expr)
     # not async (blocking calls)
     for (n in names(conns)) {
       if(!async[[n]]) {
-        .tickProgress(pb, tokens = list(what = paste0("Aggregating ", conns[[n]]@name, " (", dexpr, ")")))
-        results[[n]] <- dsAggregate(conns[[n]], expr, async=FALSE)
+        tryCatch({
+          .tickProgress(pb, tokens = list(what = paste0("Aggregating ", conns[[n]]@name, " (", dexpr, ")")))
+          results[[n]] <- dsAggregate(conns[[n]], expr, async=FALSE)
+        }, error = function(e) {
+          .appendError(n, e$message)
+        })
       }
     }
     rval <- lapply(names(conns), function(n) {
-      if(async[[n]]) {
-        .tickProgress(pb, tokens = list(what = paste0("Aggregating ", conns[[n]]@name, " (", dexpr, ")")))
-        dsFetch(results[[n]])
-      } else {
-        dsFetch(results[[n]])
-      }
+      tryCatch({
+        if (!.hasLastErrors(n)) {
+          if(async[[n]]) {
+            .tickProgress(pb, tokens = list(what = paste0("Aggregating ", conns[[n]]@name, " (", dexpr, ")")))
+            dsFetch(results[[n]])
+          } else {
+            dsFetch(results[[n]])
+          }
+        } else {
+          NULL
+        }
+      }, error = function(e) {
+        .appendError(n, e$message)
+        NULL
+      })
     })
     .tickProgress(pb, tokens = list(what = paste0("Aggregated (", dexpr, ")")))
     names(rval) <- names(conns)
-    rval
   } else {
-    res <- dsAggregate(conns, expr)
-    dsFetch(res)
+    rval <- tryCatch({
+      res <- dsAggregate(conns, expr)
+      dsFetch(res)
+    }, error = function(e) {
+      .appendError(n, e$message)
+      NULL
+    })
   }
+  .checkLastErrors()
+  rval
 }

@@ -29,7 +29,7 @@ Suggests:
 License: LGPL (>= 2.1)
 URL: http://datashield.ac.uk
 BugReports: https://github.com/datashield/DSI
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 Encoding: UTF-8
 LazyData: true
 Collate: 
@@ -42,6 +42,7 @@ Collate:
     'datashield.aggregate.R'
     'datashield.assign.R'
     'datashield.connections.R'
+    'datashield.errors.R'
     'datashield.login.R'
     'datashield.logout.R'
     'datashield.status.R'

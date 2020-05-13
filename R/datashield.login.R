@@ -67,7 +67,7 @@
 #'
 datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings=FALSE, symbol="D", id.name=NULL,
                              opts=getOption("datashield.opts", list()), restore=NULL){
-
+  .clearLastErrors()
   defaultDriver <- "OpalDriver"
 
   # issue an alert and stop the process if no login table is provided

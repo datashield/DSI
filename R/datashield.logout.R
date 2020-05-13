@@ -6,6 +6,7 @@
 #' @param save Save datashield sessions on each DataSHIELD data repository (if feature is supported) with provided ID (must be a character string).
 #' @export
 datashield.logout <- function(conns, save=NULL) {
+  .clearLastErrors()
   if (is.list(conns)) {
     pb <- .newProgress(total = 1 + length(conns))
     lapply(conns, function(c) {
