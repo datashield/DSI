@@ -17,6 +17,6 @@ Get the list of all the tables from the different data repositories.
 }
 \examples{
 \dontrun{
-  datashield.table(conns)
+  datashield.tables(conns)
 }
 }

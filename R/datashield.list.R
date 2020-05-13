@@ -6,7 +6,7 @@
 #' @return Table unique names from all the servers.
 #' @examples
 #' \dontrun{
-#'   datashield.table(conns)
+#'   datashield.tables(conns)
 #' }
 #' @export
 datashield.tables <- function(conns) {
