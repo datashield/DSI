@@ -43,6 +43,7 @@ Collate:
     'datashield.assign.R'
     'datashield.connections.R'
     'datashield.errors.R'
+    'datashield.list.R'
     'datashield.login.R'
     'datashield.logout.R'
     'datashield.status.R'
