@@ -9,6 +9,12 @@
 #'
 #' @return The result of the aggregation
 #'
+#' @examples
+#'\dontrun{
+#' # call aggregate function on server side
+#' datashield.aggregate(conns, expr = quote(someFunction(D, 123)))
+#'}
+#'
 #' @export
 datashield.aggregate <- function(conns, expr, async=TRUE) {
   .clearLastErrors()

@@ -20,3 +20,10 @@ The result of the aggregation
 \description{
 Aggregates the expression result using the specified aggregation method in the current Datashield session.
 }
+\examples{
+\dontrun{
+# call aggregate function on server side
+datashield.aggregate(conns, expr = quote(someFunction(D, 123)))
+}
+
+}

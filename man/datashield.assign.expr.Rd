@@ -21,7 +21,7 @@ Assign the result of the execution of an expression to a R symbol in the Datashi
 }
 \examples{
 \dontrun{
-# assign a  o
-datashield.assign.expr(o, symbol="G", expr=quote(as.numeric(D$GENDER)))
+# assign a G symbol
+datashield.assign.expr(conns, symbol = "G", expr = quote(as.numeric(D$GENDER)))
 }
 }

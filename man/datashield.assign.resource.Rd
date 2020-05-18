@@ -25,16 +25,16 @@ Assign a resource object of class 'ResourceClient' to a R symbol in the Datashie
 \examples{
 \dontrun{
 # assign a resource HOP
-datashield.assign.resource(conn, symbol="D", resource="demo.HOP")
+datashield.assign.resource(conn, symbol="rsrc", resource="demo.HOP")
 
 # assign the tables that are defined in the logindata ('server' and 'resource' columns are
 # expected) data frame that is used in datashield.login() function. Connections names
 # and server names must match.
-datashield.assign.resource(conns, "D", logindata)
+datashield.assign.resource(conns, "rsrc", logindata)
 
 # assign the resources that are defined in the provided named list. Connections names
 # and server names must match.
-datashield.assign.resource(conns, "D",
+datashield.assign.resource(conns, "rsrc",
   list(server1="datashield.CNSIM1", server2="datashield.CNSIM2"))
 }
 }
