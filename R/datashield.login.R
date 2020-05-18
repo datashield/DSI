@@ -178,7 +178,7 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
   }
   rconnections <- c()
   for (i in 1:length(connections)) {
-    if(!excluded[i]) {
+    if (is.null(excluded) || !excluded[i]) {
       x <- list(connections[[i]])
       names(x) <- stdnames[[i]]
       rconnections <- append(rconnections, x)
@@ -218,7 +218,7 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
           }
           resInfo <- dsGetInfo(res)
           if (resInfo$status == "FAILED") {
-            warning("Resource assignment of '", resources[i], "' failed for '", stdnames[i],"': ", res@error, call.=FALSE, immediate.=TRUE)
+            warning("Resource assignment of '", resources[i], "' failed for '", stdnames[i],"': ", resInfo$error, call.=FALSE, immediate.=TRUE)
           }
         }
       }
@@ -260,7 +260,7 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
           }
           resInfo <- dsGetInfo(res)
           if (resInfo$status == "FAILED") {
-            warning("Data assignment of '", tables[i], "' failed for '", stdnames[i],"': ", res@error, call.=FALSE, immediate.=TRUE)
+            warning("Data assignment of '", tables[i], "' failed for '", stdnames[i],"': ", resInfo$error, call.=FALSE, immediate.=TRUE)
           }
         }
       }
