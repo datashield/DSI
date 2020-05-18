@@ -62,9 +62,9 @@ DSLoginBuilder <- R6::R6Class(
       } else if (startsWith(url,"http") && !startsWith(url,"https") && !private$.silent) {
         warning("Secure HTTP connection is recommended: ", url, call. = FALSE)
       }
-      if (private$.is.empty(table) && private$.is.empty(resource)) {
-        stop("The table and resource parameters cannot be both empty", call. = FALSE)
-      }
+      #if (private$.is.empty(table) && private$.is.empty(resource)) {
+      #  stop("The table and resource parameters cannot be both empty", call. = FALSE)
+      #}
 
       lg  <- private$.get.logins()
       if (ncol(lg) == 0) {

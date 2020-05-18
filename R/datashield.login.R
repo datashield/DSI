@@ -41,7 +41,7 @@
 #' builder <- newDSLoginBuilder()
 #' builder$append(server="server1", url="https://opal-demo.obiba.org",
 #'                table="datashield.CNSIM1", resource="datashield.CNSIM1r",
-#'                user="administrator", password="password",
+#'                user="dsuser", password="password",
 #'                options="list(ssl_verifyhost=0,ssl_verifypeer=0)")
 #' builder$append(server="server2", url="dslite.server",
 #'                table="CNSIM2", resource="CNSIM2r", driver="DSLiteDriver")
@@ -63,6 +63,21 @@
 #' # Example 3: login and assign specific variable(s)
 #' myvar <- list("LAB_TSC")
 #' connections <- datashield.login(logins=logindata, assign=TRUE, variables=myvar)
+#'
+#' # note that the asignment information can also be provided afterwards
+#' builder <- newDSLoginBuilder()
+#' builder$append(server="server1", url="https://opal-demo.obiba.org",
+#'                user="dsuser", password="password")
+#' builder$append(server="server2", url="https://opal-test.obiba.org",
+#'                token="123456789")
+#' logindata <- builder$build()
+#' connections <- datashield.login(logins=logindata)
+#' datashield.assign.table(connections, symbol = "D",
+#'                         table = list(server1 = "CNSIM.CNSIM1",
+#'                                      server2 = "CNSIM.CNSIM2"))
+#' datashield.assign.resource(connections, symbol = "rsrc",
+#'                            table = list(server1 = "res.CNSIM1",
+#'                                         server2 = "res.CNSIM2"))
 #'}
 #'
 datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings=FALSE, symbol="D", id.name=NULL,
