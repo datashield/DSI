@@ -120,6 +120,7 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
         tryCatch({
           if(async[[n]]) .tickProgress(pb, tokens = list(what = paste0("Assigning table ", conns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
           dsGetInfo(results[[n]])
+          dsFetch(results[[n]])
         }, error = function(e) {
           .appendError(n, e$message)
         })
@@ -129,7 +130,8 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
   } else {
     tryCatch({
       res <- dsAssignTable(conns, symbol, tables[[conns@name]], variables, missings, identifiers, id.name)
-      ignore <- dsGetInfo(res)
+      dsGetInfo(res)
+      ignore <- dsFetch(res)
     }, error = function(e) {
       .appendError(n, e$message)
     })
@@ -207,6 +209,7 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE) {
         tryCatch({
           if(async[[n]]) .tickProgress(pb, tokens = list(what = paste0("Assigning resource ", conns[[n]]@name, " (", symbol, " <- `", resources[[n]], "`)")))
           dsGetInfo(results[[n]])
+          dsFetch(results[[n]])
         }, error = function(e) {
           .appendError(n, e$message)
         })
@@ -216,7 +219,8 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE) {
   } else {
     tryCatch({
       res <- dsAssignResource(conns, symbol, resources[[conns@name]])
-      ignore <- dsGetInfo(res)
+      dsGetInfo(res)
+      ignore <- dsFetch(res)
     }, error = function(e) {
       .appendError(n, e$message)
     })
