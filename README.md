@@ -54,4 +54,5 @@ Some options can be set to modify the behavior of the DSI:
 
 * `datashield.env` is the R environment in which the `DSConnection` object list is to be looking for. Default value is the Global Environment: `globalenv()`.
 * `datashield.progress` is a logical to enable the visibility of the progress bars. Default value is `TRUE`.
-* `datashield.progress.clear` is a logical to make the progress bar disappear after it has been completed. Default value is `FALSE`. 
+* `datashield.progress.clear` is a logical to make the progress bar disappear after it has been completed. Default value is `FALSE`.
+* `datashiel.error.stop` is a logical to alter error handling behavior: if `TRUE` an error is raised when at least one server has failed, otherwise a warning message is issued. Default value is `TRUE`.
