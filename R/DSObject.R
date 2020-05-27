@@ -61,7 +61,7 @@ setClass("DSObject", "VIRTUAL")
 #' password.
 #'
 #' For `DSResult` objects, this should include the R expression
-#' being executed (an expression oject tailored by the implementation) 
+#' being executed (an expression object tailored by the implementation of DSI) 
 #' and if the query is complete (a result object tailored by the implementation of DSI).
 #'
 #' @param dsObj An object inheriting from \code{\link{DSObject-class}},
