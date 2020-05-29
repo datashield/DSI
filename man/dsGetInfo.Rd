@@ -33,7 +33,8 @@ It MAY also include any other arguments related to the connection
 password.
 
 For `DSResult` objects, this should include the R expression
-being executed (`expression`) and if the query is complete (`has.completed`).
+being executed (an expression object tailored by the implementation of DSI) 
+and if the query is complete (a result object tailored by the implementation of DSI).
 }
 
 \seealso{
