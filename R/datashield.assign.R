@@ -133,7 +133,7 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
       dsGetInfo(res)
       ignore <- dsFetch(res)
     }, error = function(e) {
-      .appendError(n, e$message)
+      .appendError(conns@name, e$message)
     })
   }
   .checkLastErrors()
@@ -222,7 +222,7 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE) {
       dsGetInfo(res)
       ignore <- dsFetch(res)
     }, error = function(e) {
-      .appendError(n, e$message)
+      .appendError(conns@name, e$message)
     })
   }
   .checkLastErrors()
@@ -289,7 +289,7 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE) {
       res <- dsAssignExpr(conns, symbol, expr)
       ignore <- dsFetch(res)
     }, error = function(e) {
-      .appendError(n, e$message)
+      .appendError(conns@name, e$message)
     })
   }
   .checkLastErrors()

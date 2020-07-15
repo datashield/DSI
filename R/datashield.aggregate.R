@@ -69,7 +69,7 @@ datashield.aggregate <- function(conns, expr, async=TRUE) {
       res <- dsAggregate(conns, expr)
       dsFetch(res)
     }, error = function(e) {
-      .appendError(n, e$message)
+      .appendError(conns@name, e$message)
       NULL
     })
   }
