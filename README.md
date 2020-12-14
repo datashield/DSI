@@ -36,6 +36,7 @@ to the data repositories,
 which result will be fetched through `DSResult` objects,
 * `datashield.connections`, `datashield.connections_default` and `datashield.connections_find` are functions
 for managing the list of `DSConnection` objects that will be discovered and used by the client-side analytic functions.
+* `datashield.errors` will report the last R errors that may have occurred after a `datashield.assign` or `datashield.aggregate` call.
 * Other data management functions are provided by the `DSConnection` objects:
   * `datashield.workspaces`, `datashield.workspace_save` and `datashield.workspace_rm` allow to manage R images 
   of the remote DataSHIELD sessions (to speed up data analysis sessions),
