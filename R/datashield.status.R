@@ -66,41 +66,63 @@ datashield.pkg_status <- function(conns) {
   df_pkges <- data.frame(NULL)
   df_verses <- data.frame(NULL)
   pkg_checked <- NULL
-
-  for(type in types){
+  
+  pkgs <- NULL
+  
+  # get packages from methods info
+  for(type in types) {
     res <- lapply(cs, function(c) { dsListMethods(c, type) })
-    #package names by type
-    unique_pkg <- unique(unlist(lapply(res,function(x) x$package)))
-
-    #new package to check
-    pkg_tocheck <- subset(unique_pkg,!unique_pkg %in% pkg_checked)
-
-    #pkg_tbl
-    status <- sapply(res, function(x) { sapply(pkg_tocheck, function(y) { y %in% x$package }) })
-    df_pkg <- data.frame(package = pkg_tocheck, status)
-    df_pkges <- rbind(df_pkges, df_pkg)
-
-    #pkg_vers
-    vers <- sapply(res, function(x) {
-      sapply(pkg_tocheck, function(y) {
-        pkg.in.study <- as.character(x$package) #avoid problem with different factor levels (e.g: one study has less levels than pkg_tocheck)
-        idx <- which(y == pkg.in.study)
-        idx <- idx[1]
-        return (x$version[idx])
-      })
+    type_pkgs <- lapply(res, function(r) { 
+      if (nrow(r)>0) {
+        unique(data.frame(package = r$package, version = r$version))
+      } else {
+        data.frame()
+      } 
     })
-
-    df_vers <- data.frame(package = pkg_tocheck, vers)
-    df_verses <- rbind(df_verses, df_vers)
-
-    #update already checked package
-    pkg_checked <- c(pkg_checked, pkg_tocheck)
+    type_pkgs
+    
+    # merge package info
+    if (is.null(pkgs)) {
+      pkgs <- type_pkgs
+    } else {
+      for (n in names(type_pkgs)) {
+        if (nrow(pkgs[[n]]) == 0) {
+          pkgs[[n]] <- type_pkgs[[n]]
+        } else if (nrow(type_pkgs[[n]])>0) {
+          pkgs[[n]] <- unique(rbind(pkgs[[n]], type_pkgs[[n]]))
+        }
+      }
+    }
   }
-
-  df_pkges <- subset(df_pkges, !is.na(df_pkges$package)) #take only valid packages (eg: <NA> is not package)
-  df_verses <- subset(df_verses, !is.na(df_verses$package)) #take only valid packages (eg: <NA> is not package)
-
-  list(package_status = unique(df_pkges), version_status = unique(df_verses))
+  
+  # package names
+  unique_pkgs <- unique(unlist(lapply(pkgs,function(x) x$package)))
+  
+  # package status
+  status <- sapply(pkgs, function(x) { sapply(unique_pkgs, function(y) { y %in% x$package }) })
+  status
+  if (!"matrix" %in% class(status)) {
+    status <- t(as.matrix(status))
+    dimnames(status) <- list(unique_pkgs, names(pkgs))
+  }
+  status
+  
+  # package versions
+  versions <- sapply(pkgs, function(x) { sapply(unique_pkgs, function(y) {
+    pkg.in.study <- as.character(x$package) #avoid problem with different factor levels (e.g: one study has less levels than pkg_tocheck)
+    idx <- which(y == pkg.in.study)
+    idx <- idx[1]
+    return (ifelse(is.na(idx), NA, x$version[idx]))
+  })
+  })
+  versions
+  if (!"matrix" %in% class(versions)) {
+    versions <- t(as.matrix(versions))
+    dimnames(versions) <- list(unique_pkgs, names(pkgs))
+  }
+  versions
+  
+  list(package_status = status, version_status = versions)
 }
 
 #' Check server-side package minimum version
