@@ -36,6 +36,7 @@ Other DSConnection generics:
 \code{\link{dsGetInfo}()},
 \code{\link{dsHasTable}()},
 \code{\link{dsIsAsync}()},
+\code{\link{dsKeepAlive}()},
 \code{\link{dsListMethods}()},
 \code{\link{dsListPackages}()},
 \code{\link{dsListResources}()},

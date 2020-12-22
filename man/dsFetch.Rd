@@ -12,7 +12,7 @@ dsFetch(res)
 \description{
 Wait for the result to be available and fetch the result from a previous assignment or aggregation operation that may have been
 run asynchronously, in which case it is a one-shot call. When the assignment or aggregation operation was not asynchronous,
-the result is wrapped in the object and can be fetched mutliple times.
+the result is wrapped in the object and can be fetched multiple times.
 
 \Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsFetch")}
 }
@@ -29,6 +29,7 @@ dsDisconnect(con)
 \seealso{
 Other DSResult generics: 
 \code{\link{DSResult-class}},
-\code{\link{dsGetInfo}()}
+\code{\link{dsGetInfo}()},
+\code{\link{dsIsCompleted}()}
 }
 \concept{DSResult generics}

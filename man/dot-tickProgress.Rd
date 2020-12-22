@@ -2,11 +2,11 @@
 % Please edit documentation in R/utils.R
 \name{.tickProgress}
 \alias{.tickProgress}
-\title{Output the progress status if option "datashield.progress" is allows to.}
+\title{Update and increment the progress status if option "datashield.progress" is TRUE.}
 \usage{
 .tickProgress(progress, tokens = list())
 }
 \description{
-Output the progress status if option "datashield.progress" is allows to.
+Update and increment the progress status if option "datashield.progress" is TRUE.
 }
 \keyword{internal}

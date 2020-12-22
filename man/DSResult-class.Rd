@@ -25,7 +25,8 @@ Other DS classes:
 
 Other DSResult generics: 
 \code{\link{dsFetch}()},
-\code{\link{dsGetInfo}()}
+\code{\link{dsGetInfo}()},
+\code{\link{dsIsCompleted}()}
 }
 \concept{DS classes}
 \concept{DSResult generics}

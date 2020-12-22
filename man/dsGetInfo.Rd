@@ -52,6 +52,7 @@ Other DSConnection generics:
 \code{\link{dsHasResource}()},
 \code{\link{dsHasTable}()},
 \code{\link{dsIsAsync}()},
+\code{\link{dsKeepAlive}()},
 \code{\link{dsListMethods}()},
 \code{\link{dsListPackages}()},
 \code{\link{dsListResources}()},
@@ -64,7 +65,8 @@ Other DSConnection generics:
 
 Other DSResult generics: 
 \code{\link{DSResult-class}},
-\code{\link{dsFetch}()}
+\code{\link{dsFetch}()},
+\code{\link{dsIsCompleted}()}
 }
 \concept{DSConnection generics}
 \concept{DSDriver generics}

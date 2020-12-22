@@ -115,17 +115,55 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
         })
       }
     }
-    lapply(names(conns), function(n) {
-      if (!.hasLastErrors(n)) {
-        tryCatch({
-          if(async[[n]]) .tickProgress(pb, tokens = list(what = paste0("Assigning table ", conns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
-          dsGetInfo(results[[n]])
-          dsFetch(results[[n]])
-        }, error = function(e) {
-          .appendError(n, e$message)
-        })
+    # polling
+    completed <- replicate(length(conns), FALSE)
+    names(completed) <- names(conns)
+    checks <- 1
+    while (!all(completed)) {
+      for (n in names(conns)) {
+        if (!completed[[n]]) {
+          if (!.hasLastErrors(n)) {
+            tryCatch({
+              if(async[[n]]) {
+                .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Checking ", conns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
+                completed[[n]] <- dsIsCompleted(results[[n]])
+                if (completed[[n]]) {
+                  .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", conns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
+                  dsFetch(results[[n]])
+                }
+              } else {
+                completed[[n]] <- TRUE
+                dsFetch(results[[n]])
+              }
+            }, error = function(e) {
+              .appendError(n, e$message)
+              completed[[n]] <- TRUE
+            })
+          } else {
+            completed[[n]] <- TRUE
+          }
+        } else {
+          # heart beat request
+          dsKeepAlive(conns[[n]])
+        }
       }
-    })
+      if (!all(completed)) {
+        .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Waiting... ", " (", symbol, " <- ...)")))
+        t <- getOption("datashield.polling.sleep", 1)
+        if (checks>=10 && checks<60) {
+          # wait 2s after 10s
+          t <- t + 1
+        } else if (checks>=60 && checks<600) {
+          # wait 10s after 1min
+          t <- t * 10
+        } else if (checks>=600) {
+          # wait 1min after 10mins
+          t <- t * 60
+        }
+        Sys.sleep(t)
+        checks <- checks + 1
+      }
+    }
     ignore <- .tickProgress(pb, tokens = list(what = paste0("Assigned all table (", symbol, " <- ...)")))
   } else {
     tryCatch({
@@ -204,17 +242,55 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE) {
         })
       }
     }
-    lapply(names(conns), function(n) {
-      if (!.hasLastErrors(n)) {
-        tryCatch({
-          if(async[[n]]) .tickProgress(pb, tokens = list(what = paste0("Assigning resource ", conns[[n]]@name, " (", symbol, " <- `", resources[[n]], "`)")))
-          dsGetInfo(results[[n]])
-          dsFetch(results[[n]])
-        }, error = function(e) {
-          .appendError(n, e$message)
-        })
+    # polling
+    completed <- replicate(length(conns), FALSE)
+    names(completed) <- names(conns)
+    checks <- 1
+    while (!all(completed)) {
+      for (n in names(conns)) {
+        if (!completed[[n]]) {
+          if (!.hasLastErrors(n)) {
+            tryCatch({
+              if(async[[n]]) {
+                .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Checking ", conns[[n]]@name, " (", symbol, " <- `", resources[[n]], "`)")))
+                completed[[n]] <- dsIsCompleted(results[[n]])
+                if (completed[[n]]) {
+                  .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", conns[[n]]@name, " (", symbol, " <- `", resources[[n]], "`)")))
+                  dsFetch(results[[n]])
+                }
+              } else {
+                completed[[n]] <- TRUE
+                dsFetch(results[[n]])
+              }
+            }, error = function(e) {
+              .appendError(n, e$message)
+              completed[[n]] <- TRUE
+            })
+          } else {
+            completed[[n]] <- TRUE
+          }
+        } else {
+          # heart beat request
+          dsKeepAlive(conns[[n]])
+        }
       }
-    })
+      if (!all(completed)) {
+        .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Waiting... ", " (", symbol, " <- ...)")))
+        t <- getOption("datashield.polling.sleep", 1)
+        if (checks>=10 && checks<60) {
+          # wait 2s after 10s
+          t <- t + 1
+        } else if (checks>=60 && checks<600) {
+          # wait 10s after 1min
+          t <- t * 10
+        } else if (checks>=600) {
+          # wait 1min after 10mins
+          t <- t * 60
+        }
+        Sys.sleep(t)
+        checks <- checks + 1
+      }
+    }
     ignore <- .tickProgress(pb, tokens = list(what = paste0("Assigned all resource (", symbol, " <- ...)")))
   } else {
     tryCatch({
@@ -273,16 +349,55 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE) {
         })
       }
     }
-    lapply(names(conns), function(n) {
-      tryCatch({
-        if (!.hasLastErrors(n)) {
-          if(async[[n]]) .tickProgress(pb, tokens = list(what = paste0("Assigning ", conns[[n]]@name, " (", symbol, " <- ", dexpr, ")")))
-          dsFetch(results[[n]])
+    # polling
+    completed <- replicate(length(conns), FALSE)
+    names(completed) <- names(conns)
+    checks <- 1
+    while (!all(completed)) {
+      for (n in names(conns)) {
+        if (!completed[[n]]) {
+          if (!.hasLastErrors(n)) {
+            tryCatch({
+              if(async[[n]]) {
+                .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Checking ", conns[[n]]@name, " (", symbol, " <- ", dexpr, ")")))
+                completed[[n]] <- dsIsCompleted(results[[n]])
+                if (completed[[n]]) {
+                  .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", conns[[n]]@name, " (", symbol, " <- ", dexpr, ")")))
+                  dsFetch(results[[n]])
+                }
+              } else {
+                completed[[n]] <- TRUE
+                dsFetch(results[[n]])
+              }
+            }, error = function(e) {
+              .appendError(n, e$message)
+              completed[[n]] <- TRUE
+            })
+          } else {
+            completed[[n]] <- TRUE
+          }
+        } else {
+          # heart beat request
+          dsKeepAlive(conns[[n]])
         }
-      }, error = function(e) {
-        .appendError(n, e$message)
-      })
-    })
+      }
+      if (!all(completed)) {
+        .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Waiting... ", " (", symbol, " <- ", dexpr, ")")))
+        t <- getOption("datashield.polling.sleep", 1)
+        if (checks>=10 && checks<60) {
+          # wait 2s after 10s
+          t <- t + 1
+        } else if (checks>=60 && checks<600) {
+          # wait 10s after 1min
+          t <- t * 10
+        } else if (checks>=600) {
+          # wait 1min after 10mins
+          t <- t * 60
+        }
+        Sys.sleep(t)
+        checks <- checks + 1
+      }
+    }
     ignore <- .tickProgress(pb, tokens = list(what = paste0("Assigned expr. (", symbol, " <- ", dexpr, ")")))
   } else {
     tryCatch({

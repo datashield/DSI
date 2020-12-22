@@ -446,6 +446,29 @@ setGeneric("dsIsAsync",
            def = function(conn) standardGeneric("dsIsAsync"),
            valueClass = "list")
 
+#' Keep a connection alive
+#'
+#' As the DataSHIELD sessions are working in parallel, this function helps at keeping
+#' idle connections alive while others are working.
+#'
+#' @template methods
+#' @templateVar method_name dsKeepAlive
+#'
+#' @param conn An object inheriting from \code{\link{DSConnection-class}}.
+#'
+#' @family DSConnection generics
+#' @examples
+#' \dontrun{
+#' con <- dbConnect(DSOpal::Opal(), "server1",
+#'   "username", "password", "https://opal.example.org")
+#' dsKeepAlive(con)
+#' dsDisconnect(con)
+#' }
+#' @import methods
+#' @export
+setGeneric("dsKeepAlive",
+           def = function(conn) standardGeneric("dsKeepAlive"))
+
 #' Disconnect (close) a connection
 #'
 #' This closes the connection, discards all pending work, and frees

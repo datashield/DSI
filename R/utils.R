@@ -48,10 +48,16 @@
   progress::progress_bar$new(format = format, clear = clear, total = total, width = width)
 }
 
-#' Output the progress status if option "datashield.progress" is allows to.
+#' Update and increment the progress status if option "datashield.progress" is TRUE.
 #' @keywords internal
 .tickProgress <- function(progress, tokens = list()) {
   if (getOption("datashield.progress", TRUE)) progress$tick(tokens = tokens)
+}
+
+#' Update the progress status if option "datashield.progress" is TRUE.
+#' @keywords internal
+.updateProgress <- function(progress, step, total, tokens = list()) {
+  if (getOption("datashield.progress", TRUE)) progress$update(ratio = step/total, tokens = tokens)
 }
 
 #' Deparse language expression

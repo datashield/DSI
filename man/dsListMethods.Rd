@@ -39,6 +39,7 @@ Other DSConnection generics:
 \code{\link{dsHasResource}()},
 \code{\link{dsHasTable}()},
 \code{\link{dsIsAsync}()},
+\code{\link{dsKeepAlive}()},
 \code{\link{dsListPackages}()},
 \code{\link{dsListResources}()},
 \code{\link{dsListSymbols}()},
