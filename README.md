@@ -58,7 +58,7 @@ Some options can be set to modify the behavior of the DSI:
 * `datashield.progress.clear` is a logical to make the progress bar disappear after it has been completed. Default value is `FALSE`.
 * `datashiel.error.stop` is a logical to alter error handling behavior: if `TRUE` an error is raised when at least one server has failed, otherwise a warning message is issued. Default value is `TRUE`.
 * `datashield.polling.sleep.1` base time in seconds to wait before checking async calls completion. Default value is 1 second.
-* `datashield.polling.sleep.10` time in seconds to wait before checking async calls completion, after 10 checks (~10 seconds). Default value is the increment of the base time (2 seconds).
-* `datashield.polling.sleep.60` time in seconds to wait before checking async calls completion, after 60 checks (~1 minute). Default value is x10 the base time (10 seconds).
-* `datashield.polling.sleep.600` time in seconds to wait before checking async calls completion, after 600 checks (~10 minutes). Default value is x60 the base time (1 minute).
-* `datashield.polling.sleep.3600` time in seconds to wait before checking async calls completion, after 3600 checks (~1 hour). Default value is x600 the base time (10 minutes).
+* `datashield.polling.sleep.10` time in seconds to wait before checking async calls completion, after ~10 seconds. Default value is x2 the base time (2 seconds).
+* `datashield.polling.sleep.60` time in seconds to wait before checking async calls completion, after ~1 minute. Default value is x10 the base time (10 seconds).
+* `datashield.polling.sleep.600` time in seconds to wait before checking async calls completion, after ~10 minutes. Default value is x60 the base time (1 minute).
+* `datashield.polling.sleep.3600` time in seconds to wait before checking async calls completion, after ~1 hour. Default value is x600 the base time (10 minutes).

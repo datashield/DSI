@@ -130,19 +130,28 @@
 #' Get time to sleep depending on the numer of previous iterations
 #' @keywords internal
 .getSleepTime <- function(checks) {
-  t <- getOption("datashield.polling.sleep.1", 1)
-  if (checks>=10 && checks<60) {
-    # wait 2s after 10s
-    t <- getOption("datashield.polling.sleep.10", t + 1)
-  } else if (checks>=60 && checks<600) {
-    # wait 10s after 1min
-    t <- getOption("datashield.polling.sleep.60", t * 10)
-  } else if (checks>=600) {
-    # wait 1min after 10mins
-    t <- getOption("datashield.polling.sleep.600", t * 60)
-  } else if (checks>=3600) {
-    # wait 10min after 1h
-    t <- getOption("datashield.polling.sleep.3600", t * 600)
+  t0 <- getOption("datashield.polling.sleep.1", 1)
+  # wait 2s after 10s
+  t10 <- getOption("datashield.polling.sleep.10", t0 * 2)
+  # wait 10s after 1min
+  t60 <- getOption("datashield.polling.sleep.60", t0 * 10)
+  # wait 1min after 10mins
+  t600 <- getOption("datashield.polling.sleep.600", t0 * 60)
+  # wait 10min after 1h
+  t3600 <- getOption("datashield.polling.sleep.3600", t0 * 600)
+  n10 <- 10 / t0
+  n60 <- n10 + 50 / t10
+  n600 <- n60 + 540 / t60
+  n3600 <- n600 + 3000 / t600
+  t <- t0
+  if (checks>=n10 && checks<n60) {
+    t <- t10
+  } else if (checks>=n60 && checks<n600) {
+    t <- t60
+  } else if (checks>=n600 && checks<n3600) {
+    t <- t600
+  } else if (checks>=n3600) {
+    t <- t3600
   }
   t
 }
