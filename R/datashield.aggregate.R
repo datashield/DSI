@@ -61,20 +61,20 @@ datashield.aggregate <- function(conns, expr, async=TRUE) {
                 completed[[n]] <- dsIsCompleted(results[[n]])
                 if (completed[[n]]) {
                   .tickProgress(pb, tokens = list(what = paste0("Getting aggregate ", conns[[n]]@name, " (", dexpr, ")")))
-                  rval[n] <- dsFetch(results[[n]])  
+                  rval[[n]] <- dsFetch(results[[n]])  
                 }
               } else {
                 completed[[n]] <- TRUE
-                rval[n] <- dsFetch(results[[n]])
+                rval[[n]] <- dsFetch(results[[n]])
               }
             } else {
               completed[[n]] <- TRUE
-              rval[n] <- NULL
+              rval[[n]] <- NULL
             }
           }, error = function(e) {
             .appendError(n, e$message)
             completed[[n]] <- TRUE
-            rval[n] <- NULL
+            rval[[n]] <- NULL
           })
         } else {
           # heart beat request
@@ -83,18 +83,7 @@ datashield.aggregate <- function(conns, expr, async=TRUE) {
       }
       if (!all(completed)) {
         .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Waiting... ", " (", dexpr, ")")))
-        t <- getOption("datashield.polling.sleep", 1)
-        if (checks>=10 && checks<60) {
-          # wait 2s after 10s
-          t <- t + 1
-        } else if (checks>=60 && checks<600) {
-          # wait 10s after 1min
-          t <- t * 10
-        } else if (checks>=600) {
-          # wait 1min after 10mins
-          t <- t * 60
-        }
-        Sys.sleep(t)
+        Sys.sleep(.getSleepTime(checks))
         checks <- checks + 1
       }
     }

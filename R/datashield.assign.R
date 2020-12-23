@@ -149,18 +149,7 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
       }
       if (!all(completed)) {
         .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Waiting... ", " (", symbol, " <- ...)")))
-        t <- getOption("datashield.polling.sleep", 1)
-        if (checks>=10 && checks<60) {
-          # wait 2s after 10s
-          t <- t + 1
-        } else if (checks>=60 && checks<600) {
-          # wait 10s after 1min
-          t <- t * 10
-        } else if (checks>=600) {
-          # wait 1min after 10mins
-          t <- t * 60
-        }
-        Sys.sleep(t)
+        Sys.sleep(.getSleepTime(checks))
         checks <- checks + 1
       }
     }
@@ -276,18 +265,7 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE) {
       }
       if (!all(completed)) {
         .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Waiting... ", " (", symbol, " <- ...)")))
-        t <- getOption("datashield.polling.sleep", 1)
-        if (checks>=10 && checks<60) {
-          # wait 2s after 10s
-          t <- t + 1
-        } else if (checks>=60 && checks<600) {
-          # wait 10s after 1min
-          t <- t * 10
-        } else if (checks>=600) {
-          # wait 1min after 10mins
-          t <- t * 60
-        }
-        Sys.sleep(t)
+        Sys.sleep(.getSleepTime(checks))
         checks <- checks + 1
       }
     }
@@ -383,18 +361,7 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE) {
       }
       if (!all(completed)) {
         .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Waiting... ", " (", symbol, " <- ", dexpr, ")")))
-        t <- getOption("datashield.polling.sleep", 1)
-        if (checks>=10 && checks<60) {
-          # wait 2s after 10s
-          t <- t + 1
-        } else if (checks>=60 && checks<600) {
-          # wait 10s after 1min
-          t <- t * 10
-        } else if (checks>=600) {
-          # wait 1min after 10mins
-          t <- t * 60
-        }
-        Sys.sleep(t)
+        Sys.sleep(.getSleepTime(checks))
         checks <- checks + 1
       }
     }

@@ -126,3 +126,23 @@
     assign(".datashield.last_errors", value = errs, envir = env)
   }
 }
+
+#' Get time to sleep depending on the numer of previous iterations
+#' @keywords internal
+.getSleepTime <- function(checks) {
+  t <- getOption("datashield.polling.sleep.1", 1)
+  if (checks>=10 && checks<60) {
+    # wait 2s after 10s
+    t <- getOption("datashield.polling.sleep.10", t + 1)
+  } else if (checks>=60 && checks<600) {
+    # wait 10s after 1min
+    t <- getOption("datashield.polling.sleep.60", t * 10)
+  } else if (checks>=600) {
+    # wait 1min after 10mins
+    t <- getOption("datashield.polling.sleep.600", t * 60)
+  } else if (checks>=3600) {
+    # wait 10min after 1h
+    t <- getOption("datashield.polling.sleep.3600", t * 600)
+  }
+  t
+}

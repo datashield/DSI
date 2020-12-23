@@ -449,7 +449,8 @@ setGeneric("dsIsAsync",
 #' Keep a connection alive
 #'
 #' As the DataSHIELD sessions are working in parallel, this function helps at keeping
-#' idle connections alive while others are working.
+#' idle connections alive while others are working. Any communication failure must
+#' be silently processed.
 #'
 #' @template methods
 #' @templateVar method_name dsKeepAlive
