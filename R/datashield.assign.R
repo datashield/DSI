@@ -133,6 +133,7 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
                 }
               } else {
                 completed[[n]] <- TRUE
+                .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", conns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
                 dsFetch(results[[n]])
               }
             }, error = function(e) {
@@ -249,6 +250,7 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE) {
                 }
               } else {
                 completed[[n]] <- TRUE
+                .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", conns[[n]]@name, " (", symbol, " <- `", resources[[n]], "`)")))
                 dsFetch(results[[n]])
               }
             }, error = function(e) {
@@ -345,6 +347,7 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE) {
                 }
               } else {
                 completed[[n]] <- TRUE
+                .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", conns[[n]]@name, " (", symbol, " <- ", dexpr, ")")))
                 dsFetch(results[[n]])
               }
             }, error = function(e) {

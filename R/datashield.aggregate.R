@@ -65,6 +65,7 @@ datashield.aggregate <- function(conns, expr, async=TRUE) {
                 }
               } else {
                 completed[[n]] <- TRUE
+                .tickProgress(pb, tokens = list(what = paste0("Getting aggregate ", conns[[n]]@name, " (", dexpr, ")")))
                 rval[[n]] <- dsFetch(results[[n]])
               }
             } else {
