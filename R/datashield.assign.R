@@ -124,8 +124,8 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
         if (!completed[[n]]) {
           if (!.hasLastErrors(n)) {
             tryCatch({
+              .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Checking ", conns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
               if(async[[n]]) {
-                .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Checking ", conns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
                 completed[[n]] <- dsIsCompleted(results[[n]])
                 if (completed[[n]]) {
                   .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", conns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
@@ -241,8 +241,8 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE) {
         if (!completed[[n]]) {
           if (!.hasLastErrors(n)) {
             tryCatch({
+              .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Checking ", conns[[n]]@name, " (", symbol, " <- `", resources[[n]], "`)")))
               if(async[[n]]) {
-                .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Checking ", conns[[n]]@name, " (", symbol, " <- `", resources[[n]], "`)")))
                 completed[[n]] <- dsIsCompleted(results[[n]])
                 if (completed[[n]]) {
                   .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", conns[[n]]@name, " (", symbol, " <- `", resources[[n]], "`)")))
@@ -338,8 +338,8 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE) {
         if (!completed[[n]]) {
           if (!.hasLastErrors(n)) {
             tryCatch({
+              .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Checking ", conns[[n]]@name, " (", symbol, " <- ", dexpr, ")")))
               if(async[[n]]) {
-                .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Checking ", conns[[n]]@name, " (", symbol, " <- ", dexpr, ")")))
                 completed[[n]] <- dsIsCompleted(results[[n]])
                 if (completed[[n]]) {
                   .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", conns[[n]]@name, " (", symbol, " <- ", dexpr, ")")))

@@ -45,7 +45,9 @@
 #' @import progress
 #' @keywords internal
 .newProgress <- function(format = "  :what [:bar] :percent /:elapsed", clear = getOption("datashield.progress.clear", FALSE), total, width = 100) {
-  progress::progress_bar$new(format = format, clear = clear, total = total, width = width)
+  pb <- progress::progress_bar$new(format = format, clear = clear, total = total, width = width, show_after = 0)
+  pb$tick(0, tokens = list(what = ''))
+  pb
 }
 
 #' Update and increment the progress status if option "datashield.progress" is TRUE.

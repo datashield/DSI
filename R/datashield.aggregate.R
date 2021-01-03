@@ -56,8 +56,8 @@ datashield.aggregate <- function(conns, expr, async=TRUE) {
         if (!completed[[n]]) {
           tryCatch({
             if (!.hasLastErrors(n)) {
+              .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Checking ", conns[[n]]@name, " (", dexpr, ")")))
               if (async[[n]]) {
-                .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Checking ", conns[[n]]@name, " (", dexpr, ")")))
                 completed[[n]] <- dsIsCompleted(results[[n]])
                 if (completed[[n]]) {
                   .tickProgress(pb, tokens = list(what = paste0("Getting aggregate ", conns[[n]]@name, " (", dexpr, ")")))
