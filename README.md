@@ -56,7 +56,7 @@ Some options can be set to modify the behavior of the DSI:
 * `datashield.env` is the R environment in which the `DSConnection` object list is to be looking for. Default value is the Global Environment: `globalenv()`.
 * `datashield.progress` is a logical to enable the visibility of the progress bars. Default value is `TRUE`.
 * `datashield.progress.clear` is a logical to make the progress bar disappear after it has been completed. Default value is `FALSE`.
-* `datashiel.error.stop` is a logical to alter error handling behavior: if `TRUE` an error is raised when at least one server has failed, otherwise a warning message is issued. Default value is `TRUE`.
+* `datashield.errors.stop` is a logical to alter error handling behavior: if `TRUE` an error is raised when at least one server has failed, otherwise a warning message is issued. Default value is `TRUE`.
 * `datashield.polling.sleep.1` base time in seconds to wait before checking async calls completion. Default value is 1 second.
 * `datashield.polling.sleep.10` time in seconds to wait before checking async calls completion, after ~10 seconds. Default value is x2 the base time (2 seconds).
 * `datashield.polling.sleep.60` time in seconds to wait before checking async calls completion, after ~1 minute. Default value is x10 the base time (10 seconds).
