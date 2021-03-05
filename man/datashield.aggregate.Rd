@@ -24,6 +24,11 @@ Aggregates the expression result using the specified aggregation method in the c
 \dontrun{
 # call aggregate function on server side
 datashield.aggregate(conns, expr = quote(someFunction(D, 123)))
+
+# call aggregate functions that are defined in the provided named list. 
+# Connections are filtered by the list names.
+datashield.aggregate(conns,
+  list(server1=quote(someFunction(D, 123)), server2=quote(someFunction(G, 456)))
 }
 
 }

@@ -59,8 +59,8 @@ datashield.assign.table(conn, symbol="D", table="demo.HOP",
 # are filtered by the list names.
 datashield.assign.table(conns, "D", logindata)
 
-# assign the tables that are defined in the provided named list. Connections names
-# and server names must match.
+# assign the tables that are defined in the provided named list. 
+# Connections are filtered by the list names.
 datashield.assign.table(conns, "D", list(server1="datashield.CNSIM1", server2="datashield.CNSIM2"))
 }
 }

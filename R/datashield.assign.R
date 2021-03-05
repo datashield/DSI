@@ -76,8 +76,8 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #' # are filtered by the list names.
 #' datashield.assign.table(conns, "D", logindata)
 #'
-#' # assign the tables that are defined in the provided named list. Connections names
-#' # and server names must match.
+#' # assign the tables that are defined in the provided named list. 
+#' # Connections are filtered by the list names.
 #' datashield.assign.table(conns, "D", list(server1="datashield.CNSIM1", server2="datashield.CNSIM2"))
 #' }
 #' @export
@@ -194,8 +194,8 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
 #' # and server names must match.
 #' datashield.assign.resource(conns, "rsrc", logindata)
 #'
-#' # assign the resources that are defined in the provided named list. Connections 
-#' # are filtered by the list names.
+#' # assign the resources that are defined in the provided named list. 
+#' # Connections are filtered by the list names.
 #' datashield.assign.resource(conns, "rsrc",
 #'   list(server1="datashield.CNSIM1", server2="datashield.CNSIM2"))
 #' }
@@ -305,8 +305,8 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE) {
 #' # assign an expression to G
 #' datashield.assign.expr(conns, symbol = "G", expr = quote(as.numeric(D$GENDER)))
 #' 
-#' # assign the expressions that are defined in the provided named list. Connections 
-#' # are filtered by the list names.
+#' # assign the expressions that are defined in the provided named list. 
+#' # Connections are filtered by the list names.
 #' datashield.assign.expr(conns, "G",
 #'   list(server1=quote(as.numeric(D$GENDER)), server2=quote(as.numeric(D$SEX))))
 #' }
@@ -314,7 +314,7 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE) {
 datashield.assign.expr <- function(conns, symbol, expr, async=TRUE) {
   .clearLastErrors()
   
-  # prepare resources as a named list
+  # prepare expressions as a named list
   exprs <- .asNamedListOfValues(conns, expr)
   
   if (is.list(conns)) {

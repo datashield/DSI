@@ -13,59 +13,71 @@
 #'\dontrun{
 #' # call aggregate function on server side
 #' datashield.aggregate(conns, expr = quote(someFunction(D, 123)))
-#'}
+#' 
+#' # call aggregate functions that are defined in the provided named list. 
+#' # Connections are filtered by the list names.
+#' datashield.aggregate(conns,
+#'   list(server1=quote(someFunction(D, 123)), server2=quote(someFunction(G, 456)))
+#' }
 #'
 #' @export
 datashield.aggregate <- function(conns, expr, async=TRUE) {
   .clearLastErrors()
   rval <- NULL
+  
+  # prepare expressions as a named list
+  exprs <- .asNamedListOfValues(conns, expr)
+  
   if (is.list(conns)) {
+    # filter connections to aggregate 
+    fconns <- .filterConnectionsByName(conns, names(exprs))
+    
     results <- list()
-    async <- lapply(conns, function(conn) { ifelse(async, dsIsAsync(conn)$aggregate, FALSE) })
-    pb <- .newProgress(total = 1 + length(conns))
+    async <- lapply(fconns, function(conn) { ifelse(async, dsIsAsync(conn)$aggregate, FALSE) })
+    pb <- .newProgress(total = 1 + length(fconns))
     # async first
-    for (n in names(conns)) {
+    for (n in names(fconns)) {
       if(async[[n]]) {
         tryCatch({
-          results[[n]] <- dsAggregate(conns[[n]], expr, async=TRUE)
+          results[[n]] <- dsAggregate(fconns[[n]], exprs[[n]], async=TRUE)
         }, error = function(e) {
           .appendError(n, e$message)
         })
       }
     }
-    dexpr <- .deparse(expr)
     # not async (blocking calls)
-    for (n in names(conns)) {
+    for (n in names(fconns)) {
       if(!async[[n]]) {
         tryCatch({
-          .tickProgress(pb, tokens = list(what = paste0("Aggregating ", conns[[n]]@name, " (", dexpr, ")")))
-          results[[n]] <- dsAggregate(conns[[n]], expr, async=FALSE)
+          .tickProgress(pb, tokens = list(what = paste0("Aggregating ", fconns[[n]]@name, " (", .deparse(exprs[[n]]), ")")))
+          results[[n]] <- dsAggregate(fconns[[n]], exprs[[n]], async=FALSE)
         }, error = function(e) {
           .appendError(n, e$message)
         })
       }
     }
     # polling
-    rval <- replicate(length(conns), NULL)
-    names(rval) <- names(conns)
-    completed <- replicate(length(conns), FALSE)
-    names(completed) <- names(conns)
+    rval <- replicate(length(fconns), NULL)
+    names(rval) <- names(fconns)
+    completed <- replicate(length(fconns), FALSE)
+    names(completed) <- names(fconns)
     checks <- 1
     while (!all(completed)) {
-      for (n in names(conns)) {
+      for (n in names(fconns)) {
+        dexpr <- .deparse(exprs[[n]])
         if (!completed[[n]]) {
           tryCatch({
             if (!.hasLastErrors(n)) {
-              .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Checking ", conns[[n]]@name, " (", dexpr, ")")))
+              .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(fconns), tokens = list(what = paste0("Checking ", fconns[[n]]@name, " (", dexpr, ")")))
               if (async[[n]]) {
                 completed[[n]] <- dsIsCompleted(results[[n]])
                 if (completed[[n]]) {
-                  .tickProgress(pb, tokens = list(what = paste0("Getting aggregate ", conns[[n]]@name, " (", dexpr, ")")))
+                  .tickProgress(pb, tokens = list(what = paste0("Getting aggregate ", fconns[[n]]@name, " (", dexpr, ")")))
                   rval[[n]] <- dsFetch(results[[n]])  
                 }
               } else {
                 completed[[n]] <- TRUE
-                .tickProgress(pb, tokens = list(what = paste0("Getting aggregate ", conns[[n]]@name, " (", dexpr, ")")))
+                .tickProgress(pb, tokens = list(what = paste0("Getting aggregate ", fconns[[n]]@name, " (", dexpr, ")")))
                 rval[[n]] <- dsFetch(results[[n]])
               }
             } else {
@@ -79,19 +91,19 @@ datashield.aggregate <- function(conns, expr, async=TRUE) {
           })
         } else {
           # heart beat request
-          dsKeepAlive(conns[[n]])
+          dsKeepAlive(fconns[[n]])
         }
       }
       if (!all(completed)) {
-        .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Waiting... ", " (", dexpr, ")")))
+        .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(fconns), tokens = list(what = paste0("Waiting... ", " (", ifelse(is.vector(expr), "...", .deparse(expr)), ")")))
         Sys.sleep(.getSleepTime(checks))
         checks <- checks + 1
       }
     }
-    .tickProgress(pb, tokens = list(what = paste0("Aggregated (", dexpr, ")")))
+    .tickProgress(pb, tokens = list(what = paste0("Aggregated (", ifelse(is.vector(expr), "...", .deparse(expr)), ")")))
   } else {
     rval <- tryCatch({
-      res <- dsAggregate(conns, expr)
+      res <- dsAggregate(conns, exprs[[conns@name]])
       dsFetch(res)
     }, error = function(e) {
       .appendError(conns@name, e$message)

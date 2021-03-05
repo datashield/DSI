@@ -32,8 +32,8 @@ datashield.assign.resource(conn, symbol="rsrc", resource="demo.HOP")
 # and server names must match.
 datashield.assign.resource(conns, "rsrc", logindata)
 
-# assign the resources that are defined in the provided named list. Connections 
-# are filtered by the list names.
+# assign the resources that are defined in the provided named list. 
+# Connections are filtered by the list names.
 datashield.assign.resource(conns, "rsrc",
   list(server1="datashield.CNSIM1", server2="datashield.CNSIM2"))
 }
