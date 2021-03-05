@@ -5,7 +5,7 @@
 \title{Makes a typical logindata data frame a list of items named by the server in which they are defined.
 Makes a character vector of item names a list named by the connections.}
 \usage{
-.asNamedListOfValues(conns, value, colname)
+.asNamedListOfValues(conns, value, colname = NULL)
 }
 \description{
 Makes a typical logindata data frame a list of items named by the server in which they are defined.

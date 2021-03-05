@@ -21,7 +21,12 @@ Assign the result of the execution of an expression to a R symbol in the Datashi
 }
 \examples{
 \dontrun{
-# assign a G symbol
+# assign an expression to G
 datashield.assign.expr(conns, symbol = "G", expr = quote(as.numeric(D$GENDER)))
+
+# assign the expressions that are defined in the provided named list. Connections 
+# are filtered by the list names.
+datashield.assign.expr(conns, "G",
+  list(server1=quote(as.numeric(D$GENDER)), server2=quote(as.numeric(D$SEX))))
 }
 }

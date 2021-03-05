@@ -72,8 +72,8 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #'   variables="name().matches('LAB_')")
 #'
 #' # assign the tables that are defined in the logindata ('server' and 'table' columns are
-#' # expected) data frame that is used in datashield.login() function. Connections names
-#' # and server names must match.
+#' # expected) data frame that is used in datashield.login() function. Connections 
+#' # are filtered by the list names.
 #' datashield.assign.table(conns, "D", logindata)
 #'
 #' # assign the tables that are defined in the provided named list. Connections names
@@ -91,49 +91,52 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
   tables <- .asNamedListOfTables(conns, table)
 
   if (is.list(conns)) {
+    # filter connections to assign 
+    fconns <- .filterConnectionsByName(conns, names(tables))
+    
     results <- list()
-    async <- lapply(conns, function(conn) { ifelse(async, dsIsAsync(conn)$assignTable, FALSE) })
-    pb <- .newProgress(total = 1 + length(conns))
+    async <- lapply(fconns, function(conn) { ifelse(async, dsIsAsync(conn)$assignTable, FALSE) })
+    pb <- .newProgress(total = 1 + length(fconns))
     # async first
-    for (n in names(conns)) {
+    for (n in names(fconns)) {
       if(async[[n]]) {
         tryCatch({
-          results[[n]] <- dsAssignTable(conns[[n]], symbol, tables[[n]], variables, missings, identifiers, id.name, async=TRUE)
+          results[[n]] <- dsAssignTable(fconns[[n]], symbol, tables[[n]], variables, missings, identifiers, id.name, async=TRUE)
         }, error = function(e) {
           .appendError(n, e$message)
         })
       }
     }
     # not async (blocking calls)
-    for (n in names(conns)) {
+    for (n in names(fconns)) {
       if(!async[[n]]) {
         tryCatch({
-          .tickProgress(pb, tokens = list(what = paste0("Assigning ", conns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
-          results[[n]] <- dsAssignTable(conns[[n]], symbol, tables[[n]], variables, missings, identifiers, id.name, async=FALSE)
+          .tickProgress(pb, tokens = list(what = paste0("Assigning ", fconns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
+          results[[n]] <- dsAssignTable(fconns[[n]], symbol, tables[[n]], variables, missings, identifiers, id.name, async=FALSE)
         }, error = function(e) {
           .appendError(n, e$message)
         })
       }
     }
     # polling
-    completed <- replicate(length(conns), FALSE)
-    names(completed) <- names(conns)
+    completed <- replicate(length(fconns), FALSE)
+    names(completed) <- names(fconns)
     checks <- 1
     while (!all(completed)) {
-      for (n in names(conns)) {
+      for (n in names(fconns)) {
         if (!completed[[n]]) {
           if (!.hasLastErrors(n)) {
             tryCatch({
-              .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Checking ", conns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
+              .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(fconns), tokens = list(what = paste0("Checking ", fconns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
               if(async[[n]]) {
                 completed[[n]] <- dsIsCompleted(results[[n]])
                 if (completed[[n]]) {
-                  .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", conns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
+                  .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", fconns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
                   dsFetch(results[[n]])
                 }
               } else {
                 completed[[n]] <- TRUE
-                .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", conns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
+                .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", fconns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
                 dsFetch(results[[n]])
               }
             }, error = function(e) {
@@ -145,11 +148,11 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
           }
         } else {
           # heart beat request
-          dsKeepAlive(conns[[n]])
+          dsKeepAlive(fconns[[n]])
         }
       }
       if (!all(completed)) {
-        .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Waiting... ", " (", symbol, " <- ...)")))
+        .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(fconns), tokens = list(what = paste0("Waiting... ", " (", symbol, " <- ...)")))
         Sys.sleep(.getSleepTime(checks))
         checks <- checks + 1
       }
@@ -167,7 +170,6 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
   .checkLastErrors()
   invisible(NULL)
 }
-
 
 #' Resource assignment
 #'
@@ -192,8 +194,8 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
 #' # and server names must match.
 #' datashield.assign.resource(conns, "rsrc", logindata)
 #'
-#' # assign the resources that are defined in the provided named list. Connections names
-#' # and server names must match.
+#' # assign the resources that are defined in the provided named list. Connections 
+#' # are filtered by the list names.
 #' datashield.assign.resource(conns, "rsrc",
 #'   list(server1="datashield.CNSIM1", server2="datashield.CNSIM2"))
 #' }
@@ -208,49 +210,52 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE) {
   resources <- .asNamedListOfResources(conns, resource)
 
   if (is.list(conns)) {
+    # filter connections to assign 
+    fconns <- .filterConnectionsByName(conns, names(resources))
+    
     results <- list()
-    async <- lapply(conns, function(conn) { ifelse(async, dsIsAsync(conn)$assignResource, FALSE) })
-    pb <- .newProgress(total = 1 + length(conns))
+    async <- lapply(fconns, function(conn) { ifelse(async, dsIsAsync(conn)$assignResource, FALSE) })
+    pb <- .newProgress(total = 1 + length(fconns))
     # async first
-    for (n in names(conns)) {
+    for (n in names(fconns)) {
       if(async[[n]]) {
         tryCatch({
-          results[[n]] <- dsAssignResource(conns[[n]], symbol, resources[[n]], async=TRUE)
+          results[[n]] <- dsAssignResource(fconns[[n]], symbol, resources[[n]], async=TRUE)
         }, error = function(e) {
           .appendError(n, e$message)
         })
       }
     }
     # not async (blocking calls)
-    for (n in names(conns)) {
+    for (n in names(fconns)) {
       if(!async[[n]]) {
         tryCatch({
-          .tickProgress(pb, tokens = list(what = paste0("Assigning ", conns[[n]]@name, " (", symbol, " <- `", resources[[n]], "`)")))
-          results[[n]] <- dsAssignResource(conns[[n]], symbol, resources[[n]], async=FALSE)
+          .tickProgress(pb, tokens = list(what = paste0("Assigning ", fconns[[n]]@name, " (", symbol, " <- `", resources[[n]], "`)")))
+          results[[n]] <- dsAssignResource(fconns[[n]], symbol, resources[[n]], async=FALSE)
         }, error = function(e) {
           .appendError(n, e$message)
         })
       }
     }
     # polling
-    completed <- replicate(length(conns), FALSE)
-    names(completed) <- names(conns)
+    completed <- replicate(length(fconns), FALSE)
+    names(completed) <- names(fconns)
     checks <- 1
     while (!all(completed)) {
-      for (n in names(conns)) {
+      for (n in names(fconns)) {
         if (!completed[[n]]) {
           if (!.hasLastErrors(n)) {
             tryCatch({
-              .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Checking ", conns[[n]]@name, " (", symbol, " <- `", resources[[n]], "`)")))
+              .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(fconns), tokens = list(what = paste0("Checking ", fconns[[n]]@name, " (", symbol, " <- `", resources[[n]], "`)")))
               if(async[[n]]) {
                 completed[[n]] <- dsIsCompleted(results[[n]])
                 if (completed[[n]]) {
-                  .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", conns[[n]]@name, " (", symbol, " <- `", resources[[n]], "`)")))
+                  .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", fconns[[n]]@name, " (", symbol, " <- `", resources[[n]], "`)")))
                   dsFetch(results[[n]])
                 }
               } else {
                 completed[[n]] <- TRUE
-                .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", conns[[n]]@name, " (", symbol, " <- `", resources[[n]], "`)")))
+                .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", fconns[[n]]@name, " (", symbol, " <- `", resources[[n]], "`)")))
                 dsFetch(results[[n]])
               }
             }, error = function(e) {
@@ -262,11 +267,11 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE) {
           }
         } else {
           # heart beat request
-          dsKeepAlive(conns[[n]])
+          dsKeepAlive(fconns[[n]])
         }
       }
       if (!all(completed)) {
-        .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Waiting... ", " (", symbol, " <- ...)")))
+        .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(fconns), tokens = list(what = paste0("Waiting... ", " (", symbol, " <- ...)")))
         Sys.sleep(.getSleepTime(checks))
         checks <- checks + 1
       }
@@ -297,57 +302,69 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE) {
 #'
 #' @examples
 #' \dontrun{
-#' # assign a G symbol
+#' # assign an expression to G
 #' datashield.assign.expr(conns, symbol = "G", expr = quote(as.numeric(D$GENDER)))
+#' 
+#' # assign the expressions that are defined in the provided named list. Connections 
+#' # are filtered by the list names.
+#' datashield.assign.expr(conns, "G",
+#'   list(server1=quote(as.numeric(D$GENDER)), server2=quote(as.numeric(D$SEX))))
 #' }
 #' @export
 datashield.assign.expr <- function(conns, symbol, expr, async=TRUE) {
   .clearLastErrors()
+  
+  # prepare resources as a named list
+  exprs <- .asNamedListOfValues(conns, expr)
+  
   if (is.list(conns)) {
+    # filter connections to assign 
+    fconns <- .filterConnectionsByName(conns, names(exprs))
+    
     results <- list()
-    async <- lapply(conns, function(conn) { ifelse(async, dsIsAsync(conn)$assignExpr, FALSE) })
-    pb <- .newProgress(total = 1 + length(conns))
+    async <- lapply(fconns, function(conn) { ifelse(async, dsIsAsync(conn)$assignExpr, FALSE) })
+    pb <- .newProgress(total = 1 + length(fconns))
     # async first
-    for (n in names(conns)) {
+    for (n in names(fconns)) {
       if(async[[n]]) {
         tryCatch({
-          results[[n]] <- dsAssignExpr(conns[[n]], symbol, expr, async=TRUE)
+          results[[n]] <- dsAssignExpr(fconns[[n]], symbol, exprs[[n]], async=TRUE)
         }, error = function(e) {
           .appendError(n, e$message)
         })
       }
     }
-    dexpr <- .deparse(expr)
     # not async (blocking calls)
-    for (n in names(conns)) {
+    for (n in names(fconns)) {
       if(!async[[n]]) {
         tryCatch({
-          .tickProgress(pb, tokens = list(what = paste0("Assigning expr. ", conns[[n]]@name, " (", symbol, " <- ", dexpr, ")")))
-          results[[n]] <- dsAssignExpr(conns[[n]], symbol, expr, async=FALSE)
+          .tickProgress(pb, tokens = list(what = paste0("Assigning expr. ", fconns[[n]]@name, " (", symbol, " <- ", .deparse(exprs[[n]]), ")")))
+          results[[n]] <- dsAssignExpr(fconns[[n]], symbol, exprs[[n]], async=FALSE)
         }, error = function(e) {
           .appendError(n, e$message)
         })
       }
     }
     # polling
-    completed <- replicate(length(conns), FALSE)
-    names(completed) <- names(conns)
+    completed <- replicate(length(fconns), FALSE)
+    names(completed) <- names(fconns)
     checks <- 1
     while (!all(completed)) {
-      for (n in names(conns)) {
+      for (n in names(fconns)) {
+        dexpr <- .deparse(exprs[[n]])
         if (!completed[[n]]) {
           if (!.hasLastErrors(n)) {
             tryCatch({
-              .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Checking ", conns[[n]]@name, " (", symbol, " <- ", dexpr, ")")))
+              .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(fconns), tokens = list(what = paste0("Checking ", fconns[[n]]@name, " (", symbol, " <- ", dexpr, ")")))
               if(async[[n]]) {
                 completed[[n]] <- dsIsCompleted(results[[n]])
                 if (completed[[n]]) {
-                  .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", conns[[n]]@name, " (", symbol, " <- ", dexpr, ")")))
+                  .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", fconns[[n]]@name, " (", symbol, " <- ", dexpr, ")")))
                   dsFetch(results[[n]])
                 }
               } else {
                 completed[[n]] <- TRUE
-                .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", conns[[n]]@name, " (", symbol, " <- ", dexpr, ")")))
+                .tickProgress(pb, tokens = list(what = paste0("Finalizing assignment ", fconns[[n]]@name, " (", symbol, " <- ", dexpr, ")")))
                 dsFetch(results[[n]])
               }
             }, error = function(e) {
@@ -359,19 +376,19 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE) {
           }
         } else {
           # heart beat request
-          dsKeepAlive(conns[[n]])
+          dsKeepAlive(fconns[[n]])
         }
       }
       if (!all(completed)) {
-        .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(conns), tokens = list(what = paste0("Waiting... ", " (", symbol, " <- ", dexpr, ")")))
+        .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(fconns), tokens = list(what = paste0("Waiting... ", " (", symbol, " <- ", ifelse(is.vector(expr), "...", .deparse(expr)), ")")))
         Sys.sleep(.getSleepTime(checks))
         checks <- checks + 1
       }
     }
-    ignore <- .tickProgress(pb, tokens = list(what = paste0("Assigned expr. (", symbol, " <- ", dexpr, ")")))
+    ignore <- .tickProgress(pb, tokens = list(what = paste0("Assigned expr. (", symbol, " <- ", ifelse(is.vector(expr), "...", .deparse(expr)), ")")))
   } else {
     tryCatch({
-      res <- dsAssignExpr(conns, symbol, expr)
+      res <- dsAssignExpr(conns, symbol, exprs[[conns@name]])
       ignore <- dsFetch(res)
     }, error = function(e) {
       .appendError(conns@name, e$message)

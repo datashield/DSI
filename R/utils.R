@@ -15,17 +15,22 @@
 #' Makes a typical logindata data frame a list of items named by the server in which they are defined.
 #' Makes a character vector of item names a list named by the connections.
 #' @keywords internal
-.asNamedListOfValues <- function(conns, value, colname) {
+.asNamedListOfValues <- function(conns, value, colname = NULL) {
   rval <- value
   if (is.data.frame(value) && !is.null(value[[colname]]) && !is.null(value$server)) {
     rval <- as.character(value[[colname]])
     names(rval) <- value$server
   } else if (is.character(value)) {
-    if (length(value) == 1) {
+    if (!is.vector(value) || length(value) == 1) {
       rval <- rep(value, length(conns))
     }
     cs <- .asNamedListOfConnections(conns)
     names(rval) <- unlist(lapply(cs, function(c) c@name))
+  } else if (is.function(value) || is.language(value)) {
+    rval <- list()
+    cs <- .asNamedListOfConnections(conns)
+    for (n in unlist(lapply(cs, function(c) c@name)))
+      rval[[n]] <- value
   }
   rval
 }
@@ -39,6 +44,15 @@
     cs[[conns@name]] <- conns
   }
   cs
+}
+
+#' @keywords internal
+.filterConnectionsByName <- function(conns, names) {
+  fconns <- list()
+  for (n in names)
+    if (!is.null(conns[[n]]))
+      fconns[[n]] <- conns[[n]]
+  fconns
 }
 
 #' Create a new progress instance with default settings.
