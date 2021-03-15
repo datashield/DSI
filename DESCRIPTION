@@ -1,7 +1,7 @@
 Package: DSI
 Type: Package
 Title: 'DataSHIELD' Interface
-Version: 1.2.0
+Version: 1.2.1
 Authors@R:
     c(person(given = "Yannick",
              family = "Marcon",
