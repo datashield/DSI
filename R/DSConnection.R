@@ -35,6 +35,8 @@ setClass("DSConnection", representation(name = "character"), contains = c("DSObj
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #'
+#' @return A character vector of table names.
+#' 
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
@@ -290,6 +292,31 @@ setGeneric("dsListSymbols",
 #' @export
 setGeneric("dsRmSymbol",
            def = function(conn, symbol) standardGeneric("dsRmSymbol"))
+
+#' Get the DataSHIELD profiles
+#'
+#' Get the list of DataSHIELD profiles that have been configured on the remote data repository.
+#'
+#' @template methods
+#' @templateVar method_name dsListProfiles
+#'
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
+#'
+#' @return A character vector of profile names.
+#'
+#' @family DSConnection generics
+#' @examples
+#' \dontrun{
+#' con <- dbConnect(DSOpal::Opal(), "server1",
+#'   "username", "password", "https://opal.example.org")
+#' dsListProfiles(con)
+#' dsDisconnect(con)
+#' }
+#' @import methods
+#' @export
+setGeneric("dsListProfiles",
+           def = function(conn) standardGeneric("dsListProfiles"),
+           valueClass = "character")
 
 #' Get the DataSHIELD methods
 #'

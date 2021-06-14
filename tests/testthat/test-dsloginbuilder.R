@@ -3,7 +3,8 @@ make.standard.logins <- function() {
   builder$append(server="server1", url="https://opal-demo.obiba.org",
                  table="datashield.CNSIM1", resource="datashield.CNSIM1r",
                  user="administrator", password="password",
-                 options="list(ssl_verifyhost=0,ssl_verifypeer=0)")
+                 options="list(ssl_verifyhost=0,ssl_verifypeer=0)",
+                 profile="default")
   builder$append(server="server2", url="dslite.server", table="CNSIM2", resource="CNSIM2r", driver="DSLiteDriver")
   builder$append(server="server3", url="https://molgenis.example.org", table="CNSIM3", resource="CNSIM3r", token="123456789", driver="MolgenisDriver")
   builder$append(server="server4", url="dslite.server", table="CNSIM4", resource="CNSIM4r", driver="DSLiteDriver")
@@ -12,7 +13,7 @@ make.standard.logins <- function() {
 
 expect.standard.logins <- function(logins) {
   expect_equal(nrow(logins), 4)
-  expect_equal(ncol(logins), 9)
+  expect_equal(ncol(logins), 10)
   expect_equal(logins$server, c("server1", "server2", "server3", "server4"))
   expect_equal(logins$url, c("https://opal-demo.obiba.org", "dslite.server", "https://molgenis.example.org", "dslite.server"))
   expect_equal(logins$table, c("datashield.CNSIM1", "CNSIM2", "CNSIM3", "CNSIM4"))
@@ -21,6 +22,7 @@ expect.standard.logins <- function(logins) {
   expect_equal(logins$user, c("administrator", "", "", ""))
   expect_equal(logins$password, c("password", "", "", ""))
   expect_equal(logins$token, c("", "", "123456789", ""))
+  expect_equal(logins$profile, c("default", "", "", ""))
   expect_equal(logins$options, c("list(ssl_verifyhost=0,ssl_verifypeer=0)", "", "", ""))
 }
 

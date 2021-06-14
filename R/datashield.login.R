@@ -14,8 +14,8 @@
 #'   'password' (the user password or the private key PEM file path),
 #'   'token' (the personal access token, ignored if 'user' is defined), 'table' (the fully qualified name of
 #'   the table in the data repository), 'resource' (the fully qualified name of
-#'   the resource reference in the data repository), 'options' (the SSL options). An additional column 'identifiers'
-#'   can be specified for identifiers mapping (if supported by data repository). See also the documentation
+#'   the resource reference in the data repository), 'profile' (an optional DataSHIELD profile name), 'options' (the SSL options). 
+#'   An additional column 'identifiers' can be specified for identifiers mapping (if supported by data repository). See also the documentation
 #'   of the examplar input table \code{logindata} for details of the login elements.
 #' @param assign A boolean which tells whether or not data should be assigned from the data repository
 #'   table to R after login into the server(s).
@@ -100,6 +100,8 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
   pwds <- as.character(logins$password)
   # tokens
   tokens <- as.character(logins$token)
+  # profiles
+  profiles <- as.character(logins$profile)
   # table fully qualified names
   tables <- as.character(logins$table)
   if (is.null(tables) || length(tables) == 0) {
@@ -164,12 +166,12 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
         cert <- userids[i]
         private <- pwds[i]
         conn.opts <- append(conn.opts, list(sslcert=cert, sslkey=private))
-        connections[[i]] <- dsConnect(drv, name=stdnames[i], url=urls[i], opts=conn.opts, restore=restoreId)
+        connections[[i]] <- dsConnect(drv, name=stdnames[i], url=urls[i], opts=conn.opts, profile=profiles[i], restore=restoreId)
       } else {
-        connections[[i]] <- dsConnect(drv, name=stdnames[i], username=userids[i], password=pwds[i], token=tokens[i], url=urls[i], opts=conn.opts, restore=restoreId)
+        connections[[i]] <- dsConnect(drv, name=stdnames[i], username=userids[i], password=pwds[i], token=tokens[i], url=urls[i], profile=profiles[i], opts=conn.opts, restore=restoreId)
       }
     } else {
-      connections[[i]] <- dsConnect(drv, name=stdnames[i], username=userids[i], password=pwds[i], token=tokens[i], url=urls[i], opts=conn.opts, restore=restoreId)
+      connections[[i]] <- dsConnect(drv, name=stdnames[i], username=userids[i], password=pwds[i], token=tokens[i], url=urls[i], profile=profiles[i], opts=conn.opts, restore=restoreId)
     }
   }
   .tickProgress(pb, tokens = list(what = "Logged in all servers"))

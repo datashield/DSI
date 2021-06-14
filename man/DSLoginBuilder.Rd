@@ -62,7 +62,8 @@ Append login information for a specific server.
   user = "",
   password = "",
   token = "",
-  options = ""
+  options = "",
+  profile = ""
 )}\if{html}{\out{</div>}}
 }
 
@@ -86,6 +87,8 @@ Append login information for a specific server.
 \item{\code{token}}{The personal access token (ignored when user credentials are not empty).}
 
 \item{\code{options}}{Any options (R code to be parsed) that could be relevant for the DS connection object.}
+
+\item{\code{profile}}{The DataSHIELD R server profile (affects the R packages available and the applied configuration). If not provided or not supported, default profile will be applied.}
 }
 \if{html}{\out{</div>}}
 }

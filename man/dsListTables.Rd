@@ -9,6 +9,9 @@ dsListTables(conn)
 \arguments{
 \item{conn}{An object that inherits from \code{\link{DSConnection-class}}.}
 }
+\value{
+A character vector of table names.
+}
 \description{
 List remote tables from the data repository. Returns the unquoted names of remote tables
 accessible through this connection.
@@ -38,6 +41,7 @@ Other DSConnection generics:
 \code{\link{dsKeepAlive}()},
 \code{\link{dsListMethods}()},
 \code{\link{dsListPackages}()},
+\code{\link{dsListProfiles}()},
 \code{\link{dsListResources}()},
 \code{\link{dsListSymbols}()},
 \code{\link{dsListWorkspaces}()},

@@ -43,6 +43,7 @@ Other DSConnection generics:
 \code{\link{dsKeepAlive}()},
 \code{\link{dsListMethods}()},
 \code{\link{dsListPackages}()},
+\code{\link{dsListProfiles}()},
 \code{\link{dsListResources}()},
 \code{\link{dsListSymbols}()},
 \code{\link{dsListTables}()},

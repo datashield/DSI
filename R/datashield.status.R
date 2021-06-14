@@ -1,4 +1,19 @@
 
+#' List of DataSHIELD profiles
+#'
+#' Get the list of all the DataSHIELD profiles from the different data repositories.
+#'
+#' @param conns \code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.
+#' @return Profiles details from all the servers.
+#' @export
+datashield.profiles <- function(conns) {
+  if (is.list(conns)) {
+    lapply(conns, function(c) { dsListProfiles(c) })
+  } else {
+    dsListMethods(conns)
+  }
+}
+
 #' List of DataSHIELD methods
 #'
 #' Get the list of all the DataSHIELD methods from the different data repositories.

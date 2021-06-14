@@ -23,8 +23,8 @@ to login to the servers where the data to analyse is stored. The expected column
 'password' (the user password or the private key PEM file path),
 'token' (the personal access token, ignored if 'user' is defined), 'table' (the fully qualified name of
 the table in the data repository), 'resource' (the fully qualified name of
-the resource reference in the data repository), 'options' (the SSL options). An additional column 'identifiers'
-can be specified for identifiers mapping (if supported by data repository). See also the documentation
+the resource reference in the data repository), 'profile' (an optional DataSHIELD profile name), 'options' (the SSL options). 
+An additional column 'identifiers' can be specified for identifiers mapping (if supported by data repository). See also the documentation
 of the examplar input table \code{logindata} for details of the login elements.}
 
 \item{assign}{A boolean which tells whether or not data should be assigned from the data repository

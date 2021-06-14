@@ -53,7 +53,8 @@ DSLoginBuilder <- R6::R6Class(
     #' @param password The user password in the user credentials.
     #' @param token The personal access token (ignored when user credentials are not empty).
     #' @param options Any options (R code to be parsed) that could be relevant for the DS connection object.
-    append = function(server, url, table="", resource="", driver = "OpalDriver", user = "", password = "", token = "", options = "") {
+    #' @param profile The DataSHIELD R server profile (affects the R packages available and the applied configuration). If not provided or not supported, default profile will be applied.
+    append = function(server, url, table="", resource="", driver = "OpalDriver", user = "", password = "", token = "", options = "", profile = "") {
       if (private$.is.empty(server)) {
         stop("The server parameter cannot be empty", call. = FALSE)
       }
@@ -76,6 +77,7 @@ DSLoginBuilder <- R6::R6Class(
                                       user=as.character(user),
                                       password=as.character(password),
                                       token=as.character(token),
+                                      profile=as.character(profile),
                                       options=as.character(options),
                                       stringsAsFactors = FALSE)
       } else {
@@ -90,6 +92,7 @@ DSLoginBuilder <- R6::R6Class(
                                           user=as.character(user),
                                           password=as.character(password),
                                           token=as.character(token),
+                                          profile=as.character(profile),
                                           options=as.character(options)))
       }
     },
@@ -158,6 +161,11 @@ DSLoginBuilder <- R6::R6Class(
         } else {
           token <- df$token
         }
+        if (!("profile" %in% cnames)) {
+          profile <- rep("", length(server))
+        } else {
+          profile <- df$profile
+        }
         if (!("options" %in% cnames)) {
           options <- rep("", length(server))
         } else {
@@ -165,7 +173,7 @@ DSLoginBuilder <- R6::R6Class(
         }
 
         data.frame(server=server, url=url, table=table, resource=resource, driver=driver,
-                   user=user, password=password, token=token,
+                   user=user, password=password, token=token, profile=profile,
                    options=options, stringsAsFactors = FALSE)
       } else {
         data.frame()
