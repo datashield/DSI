@@ -302,7 +302,7 @@ setGeneric("dsRmSymbol",
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #'
-#' @return A character vector of profile names.
+#' @return A list containing the "available" character vector of profile names and the "current" profile (in case a default one was assigned).
 #'
 #' @family DSConnection generics
 #' @examples
@@ -316,7 +316,7 @@ setGeneric("dsRmSymbol",
 #' @export
 setGeneric("dsListProfiles",
            def = function(conn) standardGeneric("dsListProfiles"),
-           valueClass = "character")
+           valueClass = "list")
 
 #' Get the DataSHIELD methods
 #'

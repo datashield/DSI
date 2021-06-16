@@ -1,16 +1,43 @@
 
 #' List of DataSHIELD profiles
 #'
-#' Get the list of all the DataSHIELD profiles from the different data repositories.
+#' Get the list of all the DataSHIELD profiles from the different data repositories: available ones
+#' and currently applied to each connection.
 #'
 #' @param conns \code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.
 #' @return Profiles details from all the servers.
 #' @export
 datashield.profiles <- function(conns) {
+  
+  as.df <- function(profiles) {
+    allProfiles <- NULL
+    for (std in names(profiles)) {
+      allProfiles <- append(allProfiles, profiles[[std]]$available)
+    }
+    allProfiles <- unique(allProfiles)
+    studies <- list()
+    for (std in names(profiles)) {
+      stdProfiles <- NULL
+      for (p in allProfiles) {
+        stdProfiles <- append(stdProfiles, p %in% profiles[[std]]$available)
+      }
+      studies[[std]] <- stdProfiles
+    }
+    df <- as.data.frame(studies)
+    row.names(df) <- allProfiles
+    rval <- list(available = df)
+    df <- as.data.frame(sapply(profiles, function(s) s$current))
+    colnames(df) <- "profile"
+    rval$current <- df
+    rval
+  }
+  
   if (is.list(conns)) {
-    lapply(conns, function(c) { dsListProfiles(c) })
-  } else {
-    dsListMethods(conns)
+    as.df(lapply(conns, function(c) { dsListProfiles(c) }))
+  } else { 
+    lconns <- list()
+    lconns[[conns@name]] <- conns
+    as.df(lapply(lconns, function(c) { dsListProfiles(c) }))
   }
 }
 

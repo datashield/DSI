@@ -13,5 +13,6 @@ datashield.profiles(conns)
 Profiles details from all the servers.
 }
 \description{
-Get the list of all the DataSHIELD profiles from the different data repositories.
+Get the list of all the DataSHIELD profiles from the different data repositories: available ones
+and currently applied to each connection.
 }

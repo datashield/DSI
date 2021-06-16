@@ -10,7 +10,7 @@ dsListProfiles(conn)
 \item{conn}{An object that inherits from \code{\link{DSConnection-class}}.}
 }
 \value{
-A character vector of profile names.
+A list containing the "available" character vector of profile names and the "current" profile (in case a default one was assigned).
 }
 \description{
 Get the list of DataSHIELD profiles that have been configured on the remote data repository.
