@@ -21,7 +21,7 @@ configuration comparision),
 * `DSResult` wraps access to the result, which can be fetched either synchronously or asynchronously 
 depending on the capabilities of the data repository server.
 
-All classes are *virtual*: they cannot be instantiated directly and instead must be subclassed. See [DSOpal](https://github.com/datashield/DSOpal) for a reference implementation of DSI based on the [Opal](https://www.obiba.org/pages/products/opal/) data warehouse. See also [DSLite](https://github.com/datashield/DSLite) for a server-less implementation of DSI for local datasets.
+All classes are *virtual*: they cannot be instantiated directly and instead must be subclassed. See [DSOpal](https://datashield.github.io/DSOpal/) for a reference implementation of DSI based on the [Opal](https://www.obiba.org/pages/products/opal/) data warehouse. See also [DSLite](https://datashield.github.io/DSLite/) for a server-less implementation of DSI for local datasets.
 
 These S4 classes and generic methods are meant **to be used for implementing connection to a DataSHIELD-aware data repository.**
 
