@@ -14,7 +14,9 @@
 \seealso{
 Useful links:
 \itemize{
-  \item \url{http://datashield.ac.uk}
+  \item \url{https://github.com/datashield/DSI/}
+  \item \url{https://datashield.github.io/DSI/}
+  \item \url{https://datashield.org/}
   \item Report bugs at \url{https://github.com/datashield/DSI/issues}
 }
 
