@@ -37,6 +37,7 @@ Collate:
     'hidden.R'
     'DSConnection.R'
     'DSDriver.R'
+    'DSI-package.R'
     'DSLoginBuilder.R'
     'DSResult.R'
     'datashield.aggregate.R'
