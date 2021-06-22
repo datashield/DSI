@@ -32,12 +32,17 @@ datashield.profiles <- function(conns) {
     rval
   }
   
+  onProfilesError <- function(e) {
+    warning("Can't list profiles (is your DS driver library up to date?), using 'default' profile.")
+    list(available = "default", current = "default")
+  }
+  
   if (is.list(conns)) {
-    as.df(lapply(conns, function(c) { dsListProfiles(c) }))
+    as.df(lapply(conns, function(c) { tryCatch(dsListProfiles(c), error = onProfilesError) }))
   } else { 
     lconns <- list()
     lconns[[conns@name]] <- conns
-    as.df(lapply(lconns, function(c) { dsListProfiles(c) }))
+    as.df(lapply(lconns, function(c) { tryCatch(dsListProfiles(c), error = onProfilesError) }))
   }
 }
 
