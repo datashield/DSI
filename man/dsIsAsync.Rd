@@ -20,8 +20,8 @@ resource assignment operation ('assignResource') and expression assignment opera
 }
 \examples{
 \dontrun{
-con <- dbConnect(DSOpal::Opal(), "server1",
-  "username", "password", "https://opal.example.org")
+con <- dsConnect(DSOpal::Opal(), "server1",
+  username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 dsIsAsync(con)
 dsDisconnect(con)
 }

@@ -15,7 +15,7 @@
 Useful links:
 \itemize{
   \item \url{http://datashield.ac.uk}
-  \item Report bugs at \url{https://github.com/datashield/DSI}
+  \item Report bugs at \url{https://github.com/datashield/DSI/issues}
 }
 
 }

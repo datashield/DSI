@@ -22,8 +22,8 @@ must satisfy the data repository's DataSHIELD configuration.
 }
 \examples{
 \dontrun{
-con <- dbConnect(DSOpal::Opal(), "server1",
-  "username", "password", "https://opal.example.org")
+con <- dsConnect(DSOpal::Opal(), "server1",
+  username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 dsAssignTable(con, "D", "test.CNSIM")
 dsAggregate(con, as.symbol("meanDS(D$WEIGHT)"))
 dsDisconnect(con)

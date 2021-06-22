@@ -16,7 +16,8 @@ NULL
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dsConnect(DSOpal::Opal(), "server1", "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1", 
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' con
 #' dsDisconnect(con)
 #' }
@@ -40,8 +41,8 @@ setClass("DSConnection", representation(name = "character"), contains = c("DSObj
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "server1",
-#'   "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsListTables(con)
 #' dsDisconnect(con)
 #' }
@@ -65,8 +66,8 @@ setGeneric("dsListTables",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "server1",
-#'   "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsHasTable(con, "test.CNSIM")
 #' dsDisconnect(con)
 #' }
@@ -89,8 +90,8 @@ setGeneric("dsHasTable",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "server1",
-#'   "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsListResources(con)
 #' dsDisconnect(con)
 #' }
@@ -114,8 +115,8 @@ setGeneric("dsListResources",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "server1",
-#'   "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsHasResource(con, "test.CNSIM")
 #' dsDisconnect(con)
 #' }
@@ -150,8 +151,8 @@ setGeneric("dsHasResource",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "server1",
-#'   "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsAssignTable(con, "D", "test.CNSIM")
 #' dsDisconnect(con)
 #' }
@@ -178,8 +179,8 @@ setGeneric("dsAssignTable",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "server1",
-#'   "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsAssignResource(con, "D", "test.CNSIM")
 #' dsDisconnect(con)
 #' }
@@ -206,8 +207,8 @@ setGeneric("dsAssignResource",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "server1",
-#'   "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsAssignExpr(con, "C", as.symbol("c(1, 2, 3)"))
 #' dsDisconnect(con)
 #' }
@@ -233,8 +234,8 @@ setGeneric("dsAssignExpr",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "server1",
-#'   "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsAssignTable(con, "D", "test.CNSIM")
 #' dsAggregate(con, as.symbol("meanDS(D$WEIGHT)"))
 #' dsDisconnect(con)
@@ -257,8 +258,8 @@ setGeneric("dsAggregate",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "server1",
-#'   "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsAssignTable(con, "D", "test.CNSIM")
 #' dsListSymbols(con)
 #' dsDisconnect(con)
@@ -282,8 +283,8 @@ setGeneric("dsListSymbols",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "server1",
-#'   "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsAssignTable(con, "D", "test.CNSIM")
 #' dsRmSymbol(con, "D")
 #' dsDisconnect(con)
@@ -307,8 +308,8 @@ setGeneric("dsRmSymbol",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "server1",
-#'   "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsListProfiles(con)
 #' dsDisconnect(con)
 #' }
@@ -333,8 +334,8 @@ setGeneric("dsListProfiles",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "server1",
-#'   "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsListMethods(con)
 #' dsDisconnect(con)
 #' }
@@ -358,8 +359,8 @@ setGeneric("dsListMethods",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "server1",
-#'   "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsListPackages(con)
 #' dsDisconnect(con)
 #' }
@@ -384,8 +385,8 @@ setGeneric("dsListPackages",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "server1",
-#'   "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsListWorkspaces(con)
 #' dsDisconnect(con)
 #' }
@@ -408,8 +409,8 @@ setGeneric("dsListWorkspaces",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "server1",
-#'   "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsSaveWorkspace(con, "foo")
 #' dsListWorkspaces(con)
 #' dsDisconnect(con)
@@ -433,8 +434,8 @@ setGeneric("dsSaveWorkspace",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "server1",
-#'   "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsSaveWorkspace(con, "foo")
 #' dsListWorkspaces(con)
 #' dsRmWorkspace(con, "foo")
@@ -462,8 +463,8 @@ setGeneric("dsRmWorkspace",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "server1",
-#'   "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsIsAsync(con)
 #' dsDisconnect(con)
 #' }
@@ -487,8 +488,8 @@ setGeneric("dsIsAsync",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "server1",
-#'   "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsKeepAlive(con)
 #' dsDisconnect(con)
 #' }
@@ -511,8 +512,8 @@ setGeneric("dsKeepAlive",
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
-#' con <- dbConnect(DSOpal::Opal(), "server1",
-#'   "username", "password", "https://opal.example.org")
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsDisconnect(con)
 #' }
 #' @import methods

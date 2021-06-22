@@ -27,8 +27,9 @@ Depends:
 Suggests: 
     testthat (>= 2.1.0)
 License: LGPL (>= 2.1)
-URL: http://datashield.ac.uk
-BugReports: https://github.com/datashield/DSI
+URL: https://github.com/datashield/DSI/,
+  https://datashield.github.io/DSI/, http://datashield.ac.uk
+BugReports: https://github.com/datashield/DSI/issues
 RoxygenNote: 7.1.1
 Encoding: UTF-8
 LazyData: true

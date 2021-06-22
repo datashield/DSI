@@ -16,8 +16,8 @@ After assignments have been performed, some symbols live in the DataSHIELD R ses
 }
 \examples{
 \dontrun{
-con <- dbConnect(DSOpal::Opal(), "server1",
-  "username", "password", "https://opal.example.org")
+con <- dsConnect(DSOpal::Opal(), "server1",
+  username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 dsAssignTable(con, "D", "test.CNSIM")
 dsListSymbols(con)
 dsDisconnect(con)

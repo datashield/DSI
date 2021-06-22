@@ -19,8 +19,8 @@ Get the list of DataSHIELD profiles that have been configured on the remote data
 }
 \examples{
 \dontrun{
-con <- dbConnect(DSOpal::Opal(), "server1",
-  "username", "password", "https://opal.example.org")
+con <- dsConnect(DSOpal::Opal(), "server1",
+  username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 dsListProfiles(con)
 dsDisconnect(con)
 }

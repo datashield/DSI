@@ -32,7 +32,8 @@
 #' @examples
 #' \dontrun{
 #' drv <- DSOpal::Opal()
-#' con <- dsConnect(drv, "username", "password", "https://opal.example.org")
+#' con <- dsConnect(drv, 
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #'
 #' rs <- dsAssign(con, "Project.TableA")
 #' is(drv, "DSObject")  ## True

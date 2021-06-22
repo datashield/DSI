@@ -19,8 +19,8 @@ Get the list of DataSHIELD workspaces, that have been saved on the remote data r
 }
 \examples{
 \dontrun{
-con <- dbConnect(DSOpal::Opal(), "server1",
-  "username", "password", "https://opal.example.org")
+con <- dsConnect(DSOpal::Opal(), "server1",
+  username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 dsListWorkspaces(con)
 dsDisconnect(con)
 }
