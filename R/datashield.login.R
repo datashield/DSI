@@ -29,6 +29,7 @@
 #'   will be the data frame row names. When specified this column can be used to perform joins between data frames.
 #' @param opts Default SSL options to be used in case it is not specified in the logins structure.
 #' @param restore The workspace name to restore (optional).
+#' @param failSafe Ignores, with a warning, the servers for which the connection cannot be established. Optional, default is FALSE. 
 #' @return object(s) of class DSConnection
 #' @export
 #' @import progress
@@ -81,7 +82,7 @@
 #'}
 #'
 datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings=FALSE, symbol="D", id.name=NULL,
-                             opts=getOption("datashield.opts", list()), restore=NULL){
+                             opts=getOption("datashield.opts", list()), restore=NULL, failSafe=FALSE){
   .clearLastErrors()
   defaultDriver <- "OpalDriver"
 
@@ -147,31 +148,47 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
   connections <- vector("list", length(stdnames))
   names(connections) <- as.character(stdnames)
   pb <- .newProgress(total = 1 + length(connections))
-  for(i in 1:length(connections)) {
+  
+  doConnection <- function(i) {
     # connection options
     conn.opts <- append(opts, eval(parse(text=as.character(options[[i]]))))
     restoreId <- restore
     if (!is.null(restore)) {
       restoreId <- paste0(stdnames[i], ":", restore)
     }
-
-    .tickProgress(pb, tokens = list(what = paste0("Login ", stdnames[i])))
     # instanciate the DSDriver
     drv <- new(drivers[i])
     # if the connection is HTTPS use ssl options else they are not required
     protocol <- strsplit(urls[i], split="://")[[1]][1]
+    conn.obj <- NULL
     if(protocol=="https") {
       # pem files or username/password or token ?
       if (grepl("\\.pem$", userids[i])) {
         cert <- userids[i]
         private <- pwds[i]
         conn.opts <- append(conn.opts, list(sslcert=cert, sslkey=private))
-        connections[[i]] <- dsConnect(drv, name=stdnames[i], url=urls[i], opts=conn.opts, profile=profiles[i], restore=restoreId)
+        conn.obj <- dsConnect(drv, name=stdnames[i], url=urls[i], opts=conn.opts, profile=profiles[i], restore=restoreId)
       } else {
-        connections[[i]] <- dsConnect(drv, name=stdnames[i], username=userids[i], password=pwds[i], token=tokens[i], url=urls[i], profile=profiles[i], opts=conn.opts, restore=restoreId)
+        conn.obj <- dsConnect(drv, name=stdnames[i], username=userids[i], password=pwds[i], token=tokens[i], url=urls[i], profile=profiles[i], opts=conn.opts, restore=restoreId)
       }
     } else {
-      connections[[i]] <- dsConnect(drv, name=stdnames[i], username=userids[i], password=pwds[i], token=tokens[i], url=urls[i], profile=profiles[i], opts=conn.opts, restore=restoreId)
+      conn.obj <- dsConnect(drv, name=stdnames[i], username=userids[i], password=pwds[i], token=tokens[i], url=urls[i], profile=profiles[i], opts=conn.opts, restore=restoreId)
+    }
+    conn.obj
+  }
+  
+  for(i in 1:length(connections)) {
+    .tickProgress(pb, tokens = list(what = paste0("Login ", stdnames[i])))
+    if (failSafe) {
+      res <- try(doConnection(i), silent = TRUE)
+      if (inherits(res, "try-error")) {
+        warning(stdnames[i], " is excluded because login connection failed", call.=FALSE, immediate.=FALSE)
+        connections[[i]] <- NULL
+      } else {
+        connections[[i]] <- res
+      }
+    } else {
+      connections[[i]] <- doConnection(i)
     }
   }
   .tickProgress(pb, tokens = list(what = "Logged in all servers"))
@@ -179,7 +196,9 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
   # sanity check: server availability and table path is valid
   excluded <- c()
   for(i in 1:length(connections)) {
-    if (!is.null(tables[i]) && nchar(tables[i])>0) {
+    if (is.null(connections[[i]])) {
+      excluded <- append(excluded, TRUE)
+    } else if (!is.null(tables[i]) && nchar(tables[i])>0) {
       res <- try(dsHasTable(connections[[i]], tables[i]), silent=TRUE)
       excluded <- append(excluded, inherits(res, "try-error"))
       if ((is.logical(res) && !res) || inherits(res, "try-error")) {
@@ -191,8 +210,11 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
       if ((is.logical(res) && !res) || inherits(res, "try-error")) {
         warning(stdnames[i], " will be excluded because resource ", resources[i], " is not accessible", call.=FALSE, immediate.=TRUE)
       }
+    } else {
+      excluded <- append(excluded, FALSE)
     }
   }
+  
   rconnections <- c()
   for (i in 1:length(connections)) {
     if (is.null(excluded) || !excluded[i]) {
