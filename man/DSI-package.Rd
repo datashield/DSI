@@ -6,10 +6,7 @@
 \alias{DSI-package}
 \title{DSI: 'DataSHIELD' Interface}
 \description{
-'DataSHIELD' is an infrastructure and series of R packages that 
-    enables the remote and 'non-disclosive' analysis of sensitive research data. 
-    This package defines the API that is to be implemented by 'DataSHIELD' compliant 
-    data repositories.
+'DataSHIELD' is an infrastructure and series of R packages that enables the remote and 'non-disclosive' analysis of sensitive research data. This package defines the API that is to be implemented by 'DataSHIELD' compliant data repositories.
 }
 \seealso{
 Useful links:
