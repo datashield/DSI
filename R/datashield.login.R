@@ -65,6 +65,9 @@
 #' myvar <- list("LAB_TSC")
 #' connections <- datashield.login(logins=logindata, assign=TRUE, variables=myvar)
 #'
+#' # Example 4: ignore with a warning message servers for which connection cannot be established
+#' connections <- datashield.login(logins=logindata, failSafe=TRUE)
+#' 
 #' # note that the asignment information can also be provided afterwards
 #' builder <- newDSLoginBuilder()
 #' builder$append(server="server1", url="https://opal-demo.obiba.org",
@@ -77,7 +80,7 @@
 #'                         table = list(server1 = "CNSIM.CNSIM1",
 #'                                      server2 = "CNSIM.CNSIM2"))
 #' datashield.assign.resource(connections, symbol = "rsrc",
-#'                            table = list(server1 = "res.CNSIM1",
+#'                            resource = list(server1 = "res.CNSIM1",
 #'                                         server2 = "res.CNSIM2"))
 #'}
 #'
