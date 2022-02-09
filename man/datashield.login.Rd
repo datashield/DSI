@@ -12,7 +12,8 @@ datashield.login(
   symbol = "D",
   id.name = NULL,
   opts = getOption("datashield.opts", list()),
-  restore = NULL
+  restore = NULL,
+  failSafe = FALSE
 )
 }
 \arguments{
@@ -45,6 +46,8 @@ will be the data frame row names. When specified this column can be used to perf
 \item{opts}{Default SSL options to be used in case it is not specified in the logins structure.}
 
 \item{restore}{The workspace name to restore (optional).}
+
+\item{failSafe}{Ignores, with a warning, the servers for which the connection cannot be established. Optional, default is FALSE.}
 }
 \value{
 object(s) of class DSConnection
