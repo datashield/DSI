@@ -236,7 +236,14 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
       # Assign resource data in parallel
       message("\nAssigning resource data...")
       results <- list()
-      async <- unlist(lapply(connections, function(conn) { dsIsAsync(conn)$assignResource }))
+      async <- c()
+      for (i in 1:length(connections)) {
+        if (excluded[i]) {
+          async <- append(async, FALSE)
+        } else {
+          async <- append(async, dsIsAsync(connections[[i]])$assignResource)
+        }
+      }
       # async first
 
       pb <- .newProgress(total = 1 + length(connections) - length(excluded[excluded == TRUE]))
@@ -278,7 +285,14 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
       # Assign table data in parallel
       message("\nAssigning table data...")
       results <- list()
-      async <- unlist(lapply(connections, function(conn) { dsIsAsync(conn)$assignTable }))
+      async <- c()
+      for (i in 1:length(connections)) {
+        if (excluded[i]) {
+          async <- append(async, FALSE)
+        } else {
+          async <- append(async, dsIsAsync(connections[[i]])$assignTable)
+        }
+      }
       # async first
 
       pb <- .newProgress(total = 1 + length(connections) - length(excluded[excluded == TRUE]))
