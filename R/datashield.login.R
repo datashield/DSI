@@ -259,15 +259,17 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
           results[[i]] <- dsAssignResource(connections[[i]], symbol, resources[i])
         }
       }
-      for (i in 1:length(stdnames)) {
-        res <- results[[i]]
-        if (!is.null(res)) {
-          if (async[i]) {
-            .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", resources[i], ")")))
-          }
-          resInfo <- dsGetInfo(res)
-          if (resInfo$status == "FAILED") {
-            warning("Resource assignment of '", resources[i], "' failed for '", stdnames[i],"': ", resInfo$error, call.=FALSE, immediate.=TRUE)
+      for (i in 1:length(connections)) {
+        if(!excluded[i]) {
+          res <- results[[i]]
+          if (!is.null(res)) {
+            if (async[i]) {
+              .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", resources[i], ")")))
+            }
+            resInfo <- dsGetInfo(res)
+            if (resInfo$status == "FAILED") {
+              warning("Resource assignment of '", resources[i], "' failed for '", stdnames[i],"': ", resInfo$error, call.=FALSE, immediate.=TRUE)
+            }
           }
         }
       }
@@ -308,15 +310,17 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
           results[[i]] <- dsAssignTable(connections[[i]], symbol, tables[i], variables=variables, missings=missings, identifiers=idmappings[i], id.name=id.name)
         }
       }
-      for (i in 1:length(stdnames)) {
-        res <- results[[i]]
-        if (!is.null(res)) {
-          if (async[i]) {
-            .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", tables[i], ")")))
-          }
-          resInfo <- dsGetInfo(res)
-          if (resInfo$status == "FAILED") {
-            warning("Data assignment of '", tables[i], "' failed for '", stdnames[i],"': ", resInfo$error, call.=FALSE, immediate.=TRUE)
+      for (i in 1:length(connections)) {
+        if(!excluded[i]) {
+          res <- results[[i]]
+          if (!is.null(res)) {
+            if (async[i]) {
+              .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", tables[i], ")")))
+            }
+            resInfo <- dsGetInfo(res)
+            if (resInfo$status == "FAILED") {
+              warning("Data assignment of '", tables[i], "' failed for '", stdnames[i],"': ", resInfo$error, call.=FALSE, immediate.=TRUE)
+            }
           }
         }
       }
