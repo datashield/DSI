@@ -4,7 +4,14 @@
 \alias{datashield.assign.expr}
 \title{Expression result assignment}
 \usage{
-datashield.assign.expr(conns, symbol, expr, async = TRUE)
+datashield.assign.expr(
+  conns,
+  symbol,
+  expr,
+  async = TRUE,
+  success = NULL,
+  error = NULL
+)
 }
 \arguments{
 \item{conns}{\code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.}
@@ -15,18 +22,36 @@ datashield.assign.expr(conns, symbol, expr, async = TRUE)
 
 \item{async}{Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
 the connections, when the connection supports that feature, with an extra overhead of requests.}
+
+\item{success}{Callback function that will be called each time an assignment is successful. 
+The expected function signature is the connection/study name. Default is NULL (no callback).}
+
+\item{error}{Callback function that will be called each time the assignment request has failed. 
+The expected function signature is the connection/study name and the error message. Default is NULL (no callback).}
 }
 \description{
 Assign the result of the execution of an expression to a R symbol in the Datashield R session.
 }
 \examples{
 \dontrun{
-# assign an expression to G
+# assign an expression to G asynchronously
 datashield.assign.expr(conns, symbol = "G", expr = quote(as.numeric(D$GENDER)))
+
+# assign an expression to G synchronously
+datashield.assign.expr(conns, symbol = "G", expr = quote(as.numeric(D$GENDER)), async = FALSE)
 
 # assign the expressions that are defined in the provided named list. 
 # Connections are filtered by the list names.
 datashield.assign.expr(conns, "G",
   list(server1=quote(as.numeric(D$GENDER)), server2=quote(as.numeric(D$SEX))))
+
+# do assignment with callback functions
+datashield.assign.expr(conns, symbol = "G", expr = quote(as.numeric(D$GENDER)),
+  success = function(server) {
+    # do something with server's success
+  },
+  error = function(server, error) {
+    # do something with server's error message
+  })
 }
 }

@@ -143,6 +143,12 @@
   }
 }
 
+#' Check if a callback parameter is a valid function
+#' @keywords internal
+.is.callback <- function(cb) {
+  !is.null(cb) && is.function(cb)
+}
+
 #' Get time to sleep depending on the numer of previous iterations
 #' @keywords internal
 .getSleepTime <- function(checks) {

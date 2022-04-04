@@ -12,7 +12,9 @@ datashield.assign.table(
   missings = FALSE,
   identifiers = NULL,
   id.name = NULL,
-  async = TRUE
+  async = TRUE,
+  success = NULL,
+  error = NULL
 )
 }
 \arguments{
@@ -40,18 +42,24 @@ will be the data frame row names. When specified this column can be used to perf
 
 \item{async}{Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
 the connections, when the connection supports that feature, with an extra overhead of requests.}
+
+\item{success}{Callback function that will be called each time an assignment is successful. 
+The expected function signature is the connection/study name. Default is NULL (no callback).}
+
+\item{error}{Callback function that will be called each time the assignment request has failed. 
+The expected function signature is the connection/study name and the error message. Default is NULL (no callback).}
 }
 \description{
 Assign a table to a R symbol in the Datashield R session.
 }
 \examples{
 \dontrun{
-# assign a list of variables from table HOP
-datashield.assign.table(conn, symbol="D", table="demo.HOP",
+# assign a list of variables from table CNSIM1
+datashield.assign.table(conn, symbol="D", table="CNSIM.CNSIM1",
   variables=list("GENDER","LAB_GLUC"))
 
-# assign all the variables matching 'LAB' from table HOP
-datashield.assign.table(conn, symbol="D", table="demo.HOP",
+# assign all the variables matching 'LAB' from table CNSIM1
+datashield.assign.table(conn, symbol="D", table="CNSIM.CNSIM1",
   variables="name().matches('LAB_')")
 
 # assign the tables that are defined in the logindata ('server' and 'table' columns are
@@ -61,6 +69,17 @@ datashield.assign.table(conns, "D", logindata)
 
 # assign the tables that are defined in the provided named list. 
 # Connections are filtered by the list names.
-datashield.assign.table(conns, "D", list(server1="datashield.CNSIM1", server2="datashield.CNSIM2"))
+datashield.assign.table(conns, "D", 
+  list(server1="CNSIM.CNSIM1", server2="CNSIM.CNSIM2"))
+
+# do assignment with callback functions
+datashield.assign.table(conns, "D", 
+  list(server1="CNSIM.CNSIM1", server2="CNSIM.CNSIM2"),
+  success = function(server) {
+    # do something with server's success
+  },
+  error = function(server, error) {
+    # do something with server's error message
+  })
 }
 }

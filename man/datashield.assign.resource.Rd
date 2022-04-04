@@ -4,7 +4,14 @@
 \alias{datashield.assign.resource}
 \title{Resource assignment}
 \usage{
-datashield.assign.resource(conns, symbol, resource, async = TRUE)
+datashield.assign.resource(
+  conns,
+  symbol,
+  resource,
+  async = TRUE,
+  success = NULL,
+  error = NULL
+)
 }
 \arguments{
 \item{conns}{\code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.}
@@ -18,14 +25,23 @@ name); or a data frame with 'server' and 'resource' columns (such as the one tha
 
 \item{async}{Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
 the connections, when the connection supports that feature, with an extra overhead of requests.}
+
+\item{success}{Callback function that will be called each time an assignment is successful. 
+The expected function signature is the connection/study name. Default is NULL (no callback).}
+
+\item{error}{Callback function that will be called each time the assignment request has failed. 
+The expected function signature is the connection/study name and the error message. Default is NULL (no callback).}
 }
 \description{
 Assign a resource object of class 'ResourceClient' to a R symbol in the Datashield R session.
 }
 \examples{
 \dontrun{
-# assign a resource HOP
-datashield.assign.resource(conn, symbol="rsrc", resource="demo.HOP")
+# assign a resource asynchronously
+datashield.assign.resource(conn, symbol="rsrc", resource="RSRC.CNSIM1")
+
+# assign a resource synchronously
+datashield.assign.resource(conn, symbol="rsrc", resource="RSRC.CNSIM1", async = FALSE)
 
 # assign the tables that are defined in the logindata ('server' and 'resource' columns are
 # expected) data frame that is used in datashield.login() function. Connections names
@@ -35,6 +51,16 @@ datashield.assign.resource(conns, "rsrc", logindata)
 # assign the resources that are defined in the provided named list. 
 # Connections are filtered by the list names.
 datashield.assign.resource(conns, "rsrc",
-  list(server1="datashield.CNSIM1", server2="datashield.CNSIM2"))
+  list(server1="RSRC.CNSIM1", server2="RSRC.CNSIM2"))
+
+# do assignment with callback functions
+datashield.assign.resource(conn, symbol="rsrc",
+  resource = list(server1="RSRC.CNSIM1", server2="RSRC.CNSIM2"),
+  success = function(server) {
+    # do something with server's success
+  },
+  error = function(server, error) {
+    # do something with server's error message
+  })
 }
 }

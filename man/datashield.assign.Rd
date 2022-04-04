@@ -2,7 +2,7 @@
 % Please edit documentation in R/datashield.assign.R
 \name{datashield.assign}
 \alias{datashield.assign}
-\title{Data assignment}
+\title{Data assignment (table or expression result)}
 \usage{
 datashield.assign(
   conns,
@@ -12,7 +12,9 @@ datashield.assign(
   missings = FALSE,
   identifiers = NULL,
   id.name = NULL,
-  async = TRUE
+  async = TRUE,
+  success = NULL,
+  error = NULL
 )
 }
 \arguments{
@@ -21,8 +23,8 @@ datashield.assign(
 \item{symbol}{Name of the R symbol.}
 
 \item{value}{Fully qualified name of a table reference in data repositories (see
- \code{\link{datashield.assign.table}} for more details) or a R expression with allowed assign
-functions calls.}
+ \code{\link{datashield.assign.table}} for more details) OR a R expression with allowed assign
+functions calls (see \code{\link{datashield.assign.expr}} for more details).}
 
 \item{variables}{List of variable names or Javascript expression that selects the variables of a table
 (ignored if value does not refere to a table). See javascript documentation:
@@ -39,18 +41,36 @@ will be the data frame row names. When specified this column can be used to perf
 
 \item{async}{Whether the result of the call should be retrieved asynchronously (TRUE means that calls are parallelized over
 the connections, when the connection supports that feature, with an extra overhead of requests).}
+
+\item{success}{Callback function that will be called each time an assignment is successful. 
+The expected function signature is the connection/study name. Default is NULL (no callback).}
+
+\item{error}{Callback function that will be called each time the assignment request has failed. 
+The expected function signature is the connection/study name and the error message. Default is NULL (no callback).}
 }
 \description{
 Assign a table or an expression result to a R symbol in the Datashield R session.
+Note that usage of usage of respectively \code{\link{datashield.assign.table}} or 
+\code{\link{datashield.assign.expr}} should be preferred for readability.
 }
 \examples{
 \dontrun{
-# assign a list of variables from table HOP
-datashield.assign(conn, symbol="D", value="demo.HOP",
+# assign a list of variables from table CNSIM1
+datashield.assign(conn, symbol="D", value="CNSIM.CNSIM1",
   variables=list("GENDER","LAB_GLUC"))
 
-# assign all the variables matching 'LAB' from table HOP
-datashield.assign(conn, symbol="D", value="demo.HOP",
+# assign all the variables matching 'LAB' from table CNSIM1
+datashield.assign(conn, symbol="D", value="CNSIM.CNSIM1",
   variables="name().matches('LAB_')")
+
+# do assignment with callback functions
+datashield.assign(conns, "D", 
+  list(server1="CNSIM.CNSIM1", server2="CNSIM.CNSIM2"),
+  success = function(server) {
+    # do something with server's success
+  },
+  error = function(server, error) {
+    # do something with server's error message
+  })
 }
 }
