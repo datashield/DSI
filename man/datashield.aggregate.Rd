@@ -4,7 +4,7 @@
 \alias{datashield.aggregate}
 \title{Data aggregation}
 \usage{
-datashield.aggregate(conns, expr, async = TRUE)
+datashield.aggregate(conns, expr, async = TRUE, success = NULL, error = NULL)
 }
 \arguments{
 \item{conns}{\code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.}
@@ -13,6 +13,12 @@ datashield.aggregate(conns, expr, async = TRUE)
 
 \item{async}{Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
 the connections, when the connection supports that feature, with an extra overhead of requests.}
+
+\item{success}{Callback function that will be called each time an aggregation result is received from a connection. 
+The expected function signature is the connection/study name and the result value. Default is NULL (no callback).}
+
+\item{error}{Callback function that will be called each time the aggregation request has failed. 
+The expected function signature is the connection/study name and the error message. Default is NUL (no callback)L.}
 }
 \value{
 The result of the aggregation
@@ -22,13 +28,27 @@ Aggregates the expression result using the specified aggregation method in the c
 }
 \examples{
 \dontrun{
-# call aggregate function on server side
-datashield.aggregate(conns, expr = quote(someFunction(D, 123)))
+# call aggregate function on server side asynchronously
+# i.e. each study connection will process the request in parallel
+result <- datashield.aggregate(conns, expr = quote(someFunction(D, 123)))
+
+# call aggregate function on server side synchronously, i.e. each study 
+# connection will be called, one after the other, in a blocking way 
+result <- datashield.aggregate(conns, expr = quote(someFunction(D, 123)), async = FALSE)
 
 # call aggregate functions that are defined in the provided named list. 
 # Connections are filtered by the list names.
-datashield.aggregate(conns,
+result <- datashield.aggregate(conns,
   list(server1=quote(someFunction(D, 123)), server2=quote(someFunction(G, 456))))
+
+# call aggregate function with callback functions
+result <- datashield.aggregate(conns, expr = quote(someFunction(D, 123)),
+  success = function(server, res) {
+    # do something with server's result value
+  },
+  error = function(server, error) {
+    # do something with server's error message
+  })
 }
 
 }

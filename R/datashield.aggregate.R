@@ -6,27 +6,49 @@
 #' @param expr Expression to evaluate.
 #' @param async Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
 #'   the connections, when the connection supports that feature, with an extra overhead of requests.
+#' @param success Callback function that will be called each time an aggregation result is received from a connection. 
+#'   The expected function signature is the connection/study name and the result value. Default is NULL (no callback).
+#' @param error Callback function that will be called each time the aggregation request has failed. 
+#'   The expected function signature is the connection/study name and the error message. Default is NUL (no callback)L.
 #'
 #' @return The result of the aggregation
 #'
 #' @examples
 #'\dontrun{
-#' # call aggregate function on server side
-#' datashield.aggregate(conns, expr = quote(someFunction(D, 123)))
+#' # call aggregate function on server side asynchronously
+#' # i.e. each study connection will process the request in parallel
+#' result <- datashield.aggregate(conns, expr = quote(someFunction(D, 123)))
+#'
+#' # call aggregate function on server side synchronously, i.e. each study 
+#' # connection will be called, one after the other, in a blocking way 
+#' result <- datashield.aggregate(conns, expr = quote(someFunction(D, 123)), async = FALSE)
 #' 
 #' # call aggregate functions that are defined in the provided named list. 
 #' # Connections are filtered by the list names.
-#' datashield.aggregate(conns,
+#' result <- datashield.aggregate(conns,
 #'   list(server1=quote(someFunction(D, 123)), server2=quote(someFunction(G, 456))))
+#' 
+#' # call aggregate function with callback functions
+#' result <- datashield.aggregate(conns, expr = quote(someFunction(D, 123)),
+#'   success = function(server, res) {
+#'     # do something with server's result value
+#'   },
+#'   error = function(server, error) {
+#'     # do something with server's error message
+#'   })
 #' }
 #'
 #' @export
-datashield.aggregate <- function(conns, expr, async=TRUE) {
+datashield.aggregate <- function(conns, expr, async=TRUE, success=NULL, error=NULL) {
   .clearLastErrors()
   rval <- NULL
   
   # prepare expressions as a named list
   exprs <- .asNamedListOfValues(conns, expr)
+  
+  is.callback <- function(cb) {
+    !is.null(cb) && is.function(cb)
+  }
   
   if (is.list(conns)) {
     # filter connections to aggregate 
@@ -53,6 +75,9 @@ datashield.aggregate <- function(conns, expr, async=TRUE) {
           results[[n]] <- dsAggregate(fconns[[n]], exprs[[n]], async=FALSE)
         }, error = function(e) {
           .appendError(n, e$message)
+          if (is.callback(error)) {
+            error(n, e)
+          }
         })
       }
     }
@@ -74,11 +99,17 @@ datashield.aggregate <- function(conns, expr, async=TRUE) {
                 if (completed[[n]]) {
                   .tickProgress(pb, tokens = list(what = paste0("Getting aggregate ", fconns[[n]]@name, " (", dexpr, ")")))
                   rval[[n]] <- dsFetch(results[[n]])  
+                  if (is.callback(success)) {
+                    success(n, rval[[n]])
+                  }
                 }
               } else {
                 completed[[n]] <- TRUE
                 .tickProgress(pb, tokens = list(what = paste0("Getting aggregate ", fconns[[n]]@name, " (", dexpr, ")")))
-                rval[[n]] <- dsFetch(results[[n]])
+                rval[[n]] <- dsFetch(results[[n]])  
+                if (is.callback(success)) {
+                  success(n, rval[[n]])
+                }
               }
             } else {
               completed[[n]] <- TRUE
@@ -88,6 +119,9 @@ datashield.aggregate <- function(conns, expr, async=TRUE) {
             .appendError(n, e$message)
             completed[[n]] <- TRUE
             rval[[n]] <- NULL
+            if (is.callback(error)) {
+              error(n, e)
+            }
           })
         } else {
           # heart beat request
@@ -108,7 +142,13 @@ datashield.aggregate <- function(conns, expr, async=TRUE) {
     }, error = function(e) {
       .appendError(conns@name, e$message)
       NULL
+      if (is.callback(error)) {
+        error(conns@name, e)
+      }
     })
+    if (is.callback(success) && !.hasLastErrors(conns@name)) {
+      success(conns@name, rval)
+    }
   }
   .checkLastErrors()
   rval
