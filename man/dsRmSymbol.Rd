@@ -45,6 +45,7 @@ Other DSConnection generics:
 \code{\link{dsListSymbols}()},
 \code{\link{dsListTables}()},
 \code{\link{dsListWorkspaces}()},
+\code{\link{dsRestoreWorkspace}()},
 \code{\link{dsRmWorkspace}()},
 \code{\link{dsSaveWorkspace}()}
 }

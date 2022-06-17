@@ -420,6 +420,31 @@ setGeneric("dsListWorkspaces",
 setGeneric("dsSaveWorkspace",
            def = function(conn, name) standardGeneric("dsSaveWorkspace"))
 
+#' Restore a saved DataSHIELD R session (a workspace) into the current DataSHIELD R session
+#'
+#' Restore a saved DataSHIELD R session from the remote data repository. When restoring a workspace, 
+#' any existing symbol or file with same name will be overridden.
+#'
+#' @template methods
+#' @templateVar method_name dsRestoreWorkspace
+#'
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
+#' @param name Name of the workspace
+#'
+#' @family DSConnection generics
+#' @examples
+#' \dontrun{
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
+#' dsListWorkspaces(con)
+#' dsRestoreWorkspace(con, "foo")
+#' dsDisconnect(con)
+#' }
+#' @import methods
+#' @export
+setGeneric("dsRestoreWorkspace",
+           def = function(conn, name) standardGeneric("dsRestoreWorkspace"))
+
 #' Remove a DataSHIELD workspace
 #'
 #' Remove a DataSHIELD workspace from the remote data repository. Ignore if no
