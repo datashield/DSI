@@ -22,6 +22,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -34,25 +36,19 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">DSI</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.6.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/datashield/DSI/">
+  <a href="https://github.com/datashield/DSI/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -69,15 +65,15 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="datashield-interface" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#datashield-interface" class="anchor"></a>DataSHIELD Interface</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="datashield-interface">DataSHIELD Interface<a class="anchor" aria-label="anchor" href="#datashield-interface"></a>
+</h1></div>
 
-<p>The DataSHIELD Interface (DSI) defines a set of <a href="http://adv-r.had.co.nz/S4.html">S4 classes and generic methods</a> that can be implemented for accessing a data repository supporting the DataSHIELD infrastructure: controlled R commands to be executed on the server side are garanteeing that non disclosive information is returned to client side.</p>
-<p>Learn more about <a href="https://www.datashield.org/">DataSHIELD</a>.</p>
-<div id="class-structure" class="section level2">
-<h2 class="hasAnchor">
-<a href="#class-structure" class="anchor"></a>Class Structure</h2>
+<p>The DataSHIELD Interface (DSI) defines a set of <a href="http://adv-r.had.co.nz/S4.html" class="external-link">S4 classes and generic methods</a> that can be implemented for accessing a data repository supporting the DataSHIELD infrastructure: controlled R commands to be executed on the server side are garanteeing that non disclosive information is returned to client side.</p>
+<p>Learn more about <a href="https://www.datashield.org/" class="external-link">DataSHIELD</a>.</p>
+<div class="section level2">
+<h2 id="class-structure">Class Structure<a class="anchor" aria-label="anchor" href="#class-structure"></a>
+</h2>
 <p>The DSI classes are:</p>
 <ul>
 <li>
@@ -89,12 +85,12 @@
 <li>
 <code>DSResult</code> wraps access to the result, which can be fetched either synchronously or asynchronously depending on the capabilities of the data repository server.</li>
 </ul>
-<p>All classes are <em>virtual</em>: they cannot be instantiated directly and instead must be subclassed. See <a href="https://datashield.github.io/DSOpal/">DSOpal</a> for a reference implementation of DSI based on the <a href="https://www.obiba.org/pages/products/opal/">Opal</a> data warehouse. See also <a href="https://datashield.github.io/DSLite/">DSLite</a> for a server-less implementation of DSI for local datasets.</p>
+<p>All classes are <em>virtual</em>: they cannot be instantiated directly and instead must be subclassed. See <a href="https://datashield.github.io/DSOpal/" class="external-link">DSOpal</a> for a reference implementation of DSI based on the <a href="https://www.obiba.org/pages/products/opal/" class="external-link">Opal</a> data warehouse. See also <a href="https://datashield.github.io/DSLite/" class="external-link">DSLite</a> for a server-less implementation of DSI for local datasets.</p>
 <p>These S4 classes and generic methods are meant <strong>to be used for implementing connection to a DataSHIELD-aware data repository.</strong></p>
 </div>
-<div id="higher-level-functions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#higher-level-functions" class="anchor"></a>Higher Level Functions</h2>
+<div class="section level2">
+<h2 id="higher-level-functions">Higher Level Functions<a class="anchor" aria-label="anchor" href="#higher-level-functions"></a>
+</h2>
 <p>In addition to these S4 classes, DSI provides functions to handle a list of remote data repository servers:</p>
 <ul>
 <li>
@@ -108,7 +104,7 @@
 <li>Other data management functions are provided by the <code>DSConnection</code> objects:
 <ul>
 <li>
-<code>datashield.workspaces</code>, <code>datashield.workspace_save</code> and <code>datashield.workspace_rm</code> allow to manage R images of the remote DataSHIELD sessions (to speed up data analysis sessions),</li>
+<code>datashield.workspaces</code>, <code>datashield.workspace_save</code>, <code>datashield.workspace_restore</code> and <code>datashield.workspace_rm</code> allow to manage R images of the remote DataSHIELD sessions (to speed up data analysis sessions),</li>
 <li>
 <code>datashield.symbols</code> and <code>datashield.symbol_rm</code> offer a minimalistic management of the R symbols living in the remote DataSHIELD sessions,</li>
 <li>
@@ -124,13 +120,13 @@
 </ul>
 <p>These <code>datashield.*</code> functions are meant <strong>to be used by DataSHIELD packages developers and users.</strong></p>
 </div>
-<div id="options" class="section level2">
-<h2 class="hasAnchor">
-<a href="#options" class="anchor"></a>Options</h2>
+<div class="section level2">
+<h2 id="options">Options<a class="anchor" aria-label="anchor" href="#options"></a>
+</h2>
 <p>Some options can be set to modify the behavior of the DSI:</p>
 <ul>
 <li>
-<code>datashield.env</code> is the R environment in which the <code>DSConnection</code> object list is to be looking for. Default value is the Global Environment: <code><a href="https://rdrr.io/r/base/environment.html">globalenv()</a></code>.</li>
+<code>datashield.env</code> is the R environment in which the <code>DSConnection</code> object list is to be looking for. Default value is the Global Environment: <code><a href="https://rdrr.io/r/base/environment.html" class="external-link">globalenv()</a></code>.</li>
 <li>
 <code>datashield.progress</code> is a logical to enable the visibility of the progress bars. Default value is <code>TRUE</code>.</li>
 <li>
@@ -156,47 +152,57 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=DSI">https://​cloud.r-project.org/​package=DSI</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/datashield/DSI/">https://​github.com/​datashield/​DSI/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/datashield/DSI/issues">https://​github.com/​datashield/​DSI/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=DSI" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/datashield/DSI/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/datashield/DSI/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
 <li><small>LGPL (&gt;= 2.1)</small></li>
 </ul>
 </div>
-<div class="developers">
-<h2>Developers</h2>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li>Yannick Marcon <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-0138-2023" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html#citation">Citing DSI</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=DSI"><img src="https://www.r-pkg.org/badges/version/DSI" alt="CRAN_Status_Badge"></a></li>
+<li>Yannick Marcon <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0003-0138-2023" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://cran.r-project.org/package=DSI" class="external-link"><img src="https://www.r-pkg.org/badges/version/DSI" alt="CRAN_Status_Badge"></a></li>
+</ul>
 </div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Yannick Marcon.</p>
+  <p></p>
+<p>Developed by Yannick Marcon.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -204,6 +210,8 @@
 
   
 
+
+  
 
   </body>
 </html>
