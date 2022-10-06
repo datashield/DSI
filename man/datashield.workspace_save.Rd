@@ -13,5 +13,5 @@ datashield.workspace_save(conns, ws)
 }
 \description{
 Save the current state of the DataSHIELD R session in a workspace with the provided name in each data repository.
-The workspace can be restored on the next \code{\link{datashield.login}}.
+The workspace can be restored on the next \code{\link{datashield.login}} or with \code{\link{datashield.workspace_restore}}.
 }

@@ -19,15 +19,15 @@ See also \link{newDSLoginBuilder}.
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
-\item \href{#method-new}{\code{DSLoginBuilder$new()}}
-\item \href{#method-append}{\code{DSLoginBuilder$append()}}
-\item \href{#method-build}{\code{DSLoginBuilder$build()}}
-\item \href{#method-clone}{\code{DSLoginBuilder$clone()}}
+\item \href{#method-DSLoginBuilder-new}{\code{DSLoginBuilder$new()}}
+\item \href{#method-DSLoginBuilder-append}{\code{DSLoginBuilder$append()}}
+\item \href{#method-DSLoginBuilder-build}{\code{DSLoginBuilder$build()}}
+\item \href{#method-DSLoginBuilder-clone}{\code{DSLoginBuilder$clone()}}
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-new"></a>}}
-\if{latex}{\out{\hypertarget{method-new}{}}}
+\if{html}{\out{<a id="method-DSLoginBuilder-new"></a>}}
+\if{latex}{\out{\hypertarget{method-DSLoginBuilder-new}{}}}
 \subsection{Method \code{new()}}{
 Create a new DSLoginBuilder instance.
 \subsection{Usage}{
@@ -48,8 +48,8 @@ A DSLoginBuilder object.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-append"></a>}}
-\if{latex}{\out{\hypertarget{method-append}{}}}
+\if{html}{\out{<a id="method-DSLoginBuilder-append"></a>}}
+\if{latex}{\out{\hypertarget{method-DSLoginBuilder-append}{}}}
 \subsection{Method \code{append()}}{
 Append login information for a specific server.
 \subsection{Usage}{
@@ -94,8 +94,8 @@ Append login information for a specific server.
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-build"></a>}}
-\if{latex}{\out{\hypertarget{method-build}{}}}
+\if{html}{\out{<a id="method-DSLoginBuilder-build"></a>}}
+\if{latex}{\out{\hypertarget{method-DSLoginBuilder-build}{}}}
 \subsection{Method \code{build()}}{
 Build the DSLoginBuilder instance.
 \subsection{Usage}{
@@ -107,8 +107,8 @@ The DataSHIELD logindata data.frame
 }
 }
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-clone"></a>}}
-\if{latex}{\out{\hypertarget{method-clone}{}}}
+\if{html}{\out{<a id="method-DSLoginBuilder-clone"></a>}}
+\if{latex}{\out{\hypertarget{method-DSLoginBuilder-clone}{}}}
 \subsection{Method \code{clone()}}{
 The objects of this class are cloneable with this method.
 \subsection{Usage}{
