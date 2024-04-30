@@ -514,11 +514,14 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE, success=NULL
       }
     })
   }
-  if(error_action == "print"){
-    cat("There are some DataSHIELD errors\n\n")
-    return(datashield.errors())
-  } else if(error_action == "store"){
-   .checkLastErrors()
+  if(exists(".datashield.last_errors", envir = globalenv())){
+    if(error_action == "print"){
+      cat("There are some DataSHIELD errors\n\n")
+      return(datashield.errors())
+    } else if(error_action == "store"){
+      .checkLastErrors()
+    }
   }
+
   invisible(NULL)
 }
