@@ -46,10 +46,10 @@
 #'   })
 #' }
 #' @export
-datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FALSE, identifiers=NULL, id.name=NULL, async=TRUE, success=NULL, error=NULL, error_action = "print") {
+datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FALSE, identifiers=NULL, id.name=NULL, async=TRUE, success=NULL, error=NULL) {
   .clearLastErrors()
   if(is.language(value) || is.function(value)) {
-    datashield.assign.expr(conns, symbol, value, async, success, error, error_action)
+    datashield.assign.expr(conns, symbol, value, async, success, error)
   } else {
     datashield.assign.table(conns, symbol, value, variables, missings, identifiers, id.name, async, success, error)
   }
@@ -112,7 +112,7 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #'   })
 #' }
 #' @export
-datashield.assign.table <- function(conns, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, id.name=NULL, async=TRUE, success=NULL, error=NULL, error_action = error_action) {
+datashield.assign.table <- function(conns, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, id.name=NULL, async=TRUE, success=NULL, error=NULL, error_action = getOption("datashield.return_errors", TRUE)) {
   .clearLastErrors()
   if (is.null(table) || length(table) == 0) {
     stop("Not a valid table name", call.=FALSE)
@@ -216,7 +216,13 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
       }
     })
   }
-  .checkLastErrors()
+  if(return_errors == TRUE){
+    cli_text()
+    cli_alert_warning("Error: There are some DataSHIELD errors ")
+    datashield.errors()
+  } else if(return_errors == FALSE){
+    .checkLastErrors()
+  }
   invisible(NULL)
 }
 
@@ -266,7 +272,7 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
 #'   })
 #' }
 #' @export
-datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, success=NULL, error=NULL, error_action = error_action) {
+datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, success=NULL, error=NULL, return_errors = getOption("datashield.return_errors", TRUE)) {
   .clearLastErrors()
   if (is.null(resource) || length(resource) == 0) {
     stop("Not a valid resource name", call.=FALSE)
@@ -370,7 +376,13 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, succ
       }
     })
   }
-  .checkLastErrors()
+  if(return_errors == TRUE){
+    cli_text()
+    cli_alert_warning("Error: There are some DataSHIELD errors ")
+    datashield.errors()
+  } else if(return_errors == FALSE){
+    .checkLastErrors()
+  }
   invisible(NULL)
 }
 
@@ -411,7 +423,7 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, succ
 #'   })
 #' }
 #' @export
-datashield.assign.expr <- function(conns, symbol, expr, async=TRUE, success=NULL, error=NULL, error_action = error_action) {
+datashield.assign.expr <- function(conns, symbol, expr, async=TRUE, success=NULL, error=NULL, return_errors = getOption("datashield.return_errors", TRUE)) {
   .clearLastErrors()
 
   # prepare expressions as a named list
@@ -514,14 +526,13 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE, success=NULL
       }
     })
   }
-  if(exists(".datashield.last_errors", envir = globalenv())){
-    if(error_action == "print"){
-      cat("There are some DataSHIELD errors\n\n")
-      return(datashield.errors())
-    } else if(error_action == "store"){
+    if(return_errors == TRUE){
+      cli_text()
+      cli_alert_warning("Error: There are some DataSHIELD errors ")
+      datashield.errors()
+    } else if(return_errors == FALSE){
       .checkLastErrors()
     }
-  }
 
   invisible(NULL)
 }
