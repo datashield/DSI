@@ -80,7 +80,8 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #'   The expected function signature is the connection/study name. Default is NULL (no callback).
 #' @param error Callback function that will be called each time the assignment request has failed.
 #'   The expected function signature is the connection/study name and the error message. Default is NULL (no callback).
-#'
+#' @param return_errors Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.
+#' @importFrom cli cli_text cli_alert_warning
 #' @examples
 #' \dontrun{
 #' # assign a list of variables from table CNSIM1
@@ -112,7 +113,7 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #'   })
 #' }
 #' @export
-datashield.assign.table <- function(conns, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, id.name=NULL, async=TRUE, success=NULL, error=NULL, error_action = getOption("datashield.return_errors", TRUE)) {
+datashield.assign.table <- function(conns, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, id.name=NULL, async=TRUE, success=NULL, error=NULL, return_errors = getOption("datashield.return_errors", TRUE)) {
   .clearLastErrors()
   if (is.null(table) || length(table) == 0) {
     stop("Not a valid table name", call.=FALSE)
@@ -242,7 +243,8 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
 #'   The expected function signature is the connection/study name. Default is NULL (no callback).
 #' @param error Callback function that will be called each time the assignment request has failed.
 #'   The expected function signature is the connection/study name and the error message. Default is NULL (no callback).
-#'
+#' @param return_errors Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.
+#'@importFrom cli cli_text cli_alert_warning
 #' @examples
 #' \dontrun{
 #' # assign a resource asynchronously
@@ -399,7 +401,8 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, succ
 #'   The expected function signature is the connection/study name. Default is NULL (no callback).
 #' @param error Callback function that will be called each time the assignment request has failed.
 #'   The expected function signature is the connection/study name and the error message. Default is NULL (no callback).
-#'
+#' @param return_errors Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.
+#' @importFrom cli cli_text cli_alert_warning
 #' @examples
 #' \dontrun{
 #' # assign an expression to G asynchronously
