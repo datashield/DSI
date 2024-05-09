@@ -1,7 +1,12 @@
-#' List R last errors
+#' datashield.errors
 #'
-#' Get the R last errors available after the datashield.assign or datashield.aggregate calls in the Datashield R session.
+#' Retrieve and display the last errors occurred in a DataSHIELD session.
 #'
+#' This function retrieves the last errors occurred in a DataSHIELD session
+#' and displays them in a formatted manner using bullet points.
+#'
+#' @return NULL if no errors are found, otherwise prints the errors.
+#' @importFrom cli cli_bullets
 #' @export
 datashield.errors <- function() {
   env <- getOption("datashield.env", globalenv())
@@ -14,8 +19,25 @@ datashield.errors <- function() {
   }
 }
 
+#' Format Errors
+#'
+#' Format errors into a character vector with specified prefix.
+#'
+#' This function formats a list of errors into a character vector with each
+#' error message prefixed by a cross.
+#'
+#' @param errors A list of errors to be formatted.
+#' @return A character vector containing formatted error messages.
+#' @importFrom dplyr %>%
+#' @importFrom purrr imap_chr
+#' @noRd
 .format_errors <- function(errors){
   errors <- errors %>% imap_chr(~paste0(.y, ": ", .x, "\n"))
   names(errors) <- rep("x", length(errors))
   return(errors)
 }
+  
+  
+  
+
+
