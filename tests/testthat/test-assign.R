@@ -1,10 +1,5 @@
 library(DSLite)
-library(dplyr)
-library(dsBaseClient)
 library(testthat)
-library(purrr)
-library(cli)
-library(dsTidyverse)
 
 options(datashield.env = environment())
 data("mtcars")
