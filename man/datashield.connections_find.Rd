@@ -23,7 +23,7 @@ suggests user to use the \link{datashield.connections_default} function.
 }
 \seealso{
 Other Connections management: 
-\code{\link{datashield.connections_default}()},
-\code{\link{datashield.connections}()}
+\code{\link{datashield.connections}()},
+\code{\link{datashield.connections_default}()}
 }
 \concept{Connections management}

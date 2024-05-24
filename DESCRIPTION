@@ -1,7 +1,7 @@
 Package: DSI
 Type: Package
 Title: 'DataSHIELD' Interface
-Version: 1.5.0
+Version: 1.5.1
 Authors@R:
     c(person(given = "Yannick",
              family = "Marcon",
@@ -20,7 +20,7 @@ Description: 'DataSHIELD' is an infrastructure and series of R packages that
     This package defines the API that is to be implemented by 'DataSHIELD' compliant 
     data repositories.
 Depends:
-    R (>= 3.1),
+    R (>= 4.3),
     methods,
     progress,
     R6
@@ -30,7 +30,7 @@ License: LGPL (>= 2.1)
 URL: https://github.com/datashield/DSI/,
   https://datashield.github.io/DSI/, https://datashield.org/
 BugReports: https://github.com/datashield/DSI/issues
-RoxygenNote: 7.2.1
+RoxygenNote: 7.3.1
 Encoding: UTF-8
 Collate: 
     'DSObject.R'
