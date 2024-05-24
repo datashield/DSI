@@ -44,7 +44,7 @@ on any set of DSConnections and any subset of those DSConnections.
 }
 \seealso{
 Other Connections management: 
-\code{\link{datashield.connections_find}()},
-\code{\link{datashield.connections}()}
+\code{\link{datashield.connections}()},
+\code{\link{datashield.connections_find}()}
 }
 \concept{Connections management}
