@@ -14,8 +14,6 @@ dsRmWorkspace(conn, name)
 \description{
 Remove a DataSHIELD workspace from the remote data repository. Ignore if no
 such workspace exists.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsRmWorkspace")}
 }
 \examples{
 \dontrun{

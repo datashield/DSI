@@ -13,8 +13,6 @@ dsSaveWorkspace(conn, name)
 }
 \description{
 Save the DataSHIELD R session in a workspace on the remote data repository.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsSaveWorkspace")}
 }
 \examples{
 \dontrun{

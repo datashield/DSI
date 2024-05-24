@@ -13,8 +13,6 @@ dsKeepAlive(conn)
 As the DataSHIELD sessions are working in parallel, this function helps at keeping
 idle connections alive while others are working. Any communication failure must
 be silently processed.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsKeepAlive")}
 }
 \examples{
 \dontrun{

@@ -15,8 +15,6 @@ A character vector of table names.
 \description{
 List remote tables from the data repository. Returns the unquoted names of remote tables
 accessible through this connection.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsListTables")}
 }
 \examples{
 \dontrun{

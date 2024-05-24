@@ -17,8 +17,6 @@ Get whether the result from a previous assignment or aggregation operation was
 completed, either with a successful status or a failed one. This call must not
 wait for the completion, immediate response is expected. Once the result is
 identified as being completed, the raw result the operation can be get directly.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsIsCompleted")}
 }
 \examples{
 \dontrun{

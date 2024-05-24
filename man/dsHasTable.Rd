@@ -14,8 +14,6 @@ dsHasTable(conn, table)
 \description{
 Check if a remote table exists in the data repository. Returns a logical indicating the existence of a
 remote table accessible through this connection.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsHasTable")}
 }
 \examples{
 \dontrun{

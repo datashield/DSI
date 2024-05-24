@@ -34,7 +34,6 @@ RoxygenNote: 7.3.1
 Encoding: UTF-8
 Collate: 
     'DSObject.R'
-    'hidden.R'
     'DSConnection.R'
     'DSDriver.R'
     'DSI-package.R'
@@ -50,5 +49,4 @@ Collate:
     'datashield.status.R'
     'datashield.symbol.R'
     'datashield.workspace.R'
-    'rd.R'
     'utils.R'

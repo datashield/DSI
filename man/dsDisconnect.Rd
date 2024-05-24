@@ -14,8 +14,6 @@ dsDisconnect(conn, save = NULL)
 \description{
 This closes the connection, discards all pending work, and frees
 resources (e.g., memory, sockets).
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsDisconnect")}
 }
 \examples{
 \dontrun{

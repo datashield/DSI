@@ -1,6 +1,3 @@
-#' @include hidden.R
-NULL
-
 #' DSResult class
 #'
 #' This virtual class describes the result and state of execution of
@@ -17,7 +14,6 @@ NULL
 #' @docType class
 #' @family DS classes
 #' @family DSResult generics
-#' @import methods
 #' @export
 #' @include DSObject.R
 setClass("DSResult", contains = c("DSObject", "VIRTUAL"))
@@ -28,9 +24,6 @@ setClass("DSResult", contains = c("DSObject", "VIRTUAL"))
 #' completed, either with a successful status or a failed one. This call must not
 #' wait for the completion, immediate response is expected. Once the result is
 #' identified as being completed, the raw result the operation can be get directly.
-#'
-#' @template methods
-#' @templateVar method_name dsIsCompleted
 #'
 #' @param res An object inheriting from \code{\link{DSResult-class}}.
 #' @return A logical
@@ -50,7 +43,6 @@ setClass("DSResult", contains = c("DSObject", "VIRTUAL"))
 #' length <- dsFetch(res)
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsIsCompleted",
            def = function(res) standardGeneric("dsIsCompleted"))
@@ -60,9 +52,6 @@ setGeneric("dsIsCompleted",
 #' Wait for the result to be available and fetch the result from a previous assignment or aggregation operation that may have been
 #' run asynchronously, in which case it is a one-shot call. When the assignment or aggregation operation was not asynchronous,
 #' the result is wrapped in the object and can be fetched multiple times.
-#'
-#' @template methods
-#' @templateVar method_name dsFetch
 #'
 #' @param res An object inheriting from \code{\link{DSResult-class}}.
 #'
@@ -76,7 +65,6 @@ setGeneric("dsIsCompleted",
 #' length <- dsFetch(res)
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsFetch",
            def = function(res) standardGeneric("dsFetch"))

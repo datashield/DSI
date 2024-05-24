@@ -14,8 +14,6 @@ dsRestoreWorkspace(conn, name)
 \description{
 Restore a saved DataSHIELD R session from the remote data repository. When restoring a workspace, 
 any existing symbol or file with same name will be overridden.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsRestoreWorkspace")}
 }
 \examples{
 \dontrun{

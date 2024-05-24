@@ -8,7 +8,6 @@
 #' @name DSDriver-class
 #' @family DS classes
 #' @family DSDriver generics
-#' @import methods
 #' @export
 #' @include DSObject.R
 setClass("DSDriver", contains = c("DSObject", "VIRTUAL"))
@@ -21,9 +20,6 @@ setClass("DSDriver", contains = c("DSObject", "VIRTUAL"))
 #' objects.
 #' The authentication mechanism is left unspecified, so check the
 #' documentation of individual drivers for details.
-#'
-#' @template methods
-#' @templateVar method_name dsConnect
 #'
 #' @param drv an object that inherits from \code{\link{DSDriver-class}}.
 #' @param name Name of the connection, which must be unique among all the DataSHIELD connections.
@@ -41,7 +37,6 @@ setClass("DSDriver", contains = c("DSObject", "VIRTUAL"))
 #' dsListTables(con)
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsConnect",
            def = function(drv, name, restore = NULL, ...) standardGeneric("dsConnect"),

@@ -14,8 +14,6 @@ dsHasResource(conn, resource)
 \description{
 Check if a remote resource reference exists in the data repository. Returns a logical indicating the existence of a
 remote resource accessible through this connection.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsHasResource")}
 }
 \examples{
 \dontrun{

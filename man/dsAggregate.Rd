@@ -17,8 +17,6 @@ the connections, when the connection supports that feature, with an extra overhe
 \description{
 Aggregate some data from the DataSHIELD R session using a valid R expression. The aggregation expression
 must satisfy the data repository's DataSHIELD configuration.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsAggregate")}
 }
 \examples{
 \dontrun{

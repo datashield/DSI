@@ -42,7 +42,6 @@
 #'
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 #' @name DSObject-class
 setClass("DSObject", "VIRTUAL")
@@ -73,7 +72,6 @@ setClass("DSObject", "VIRTUAL")
 #' @family DSConnection generics
 #' @family DSResult generics
 #' @return a named list
-#' @import methods
 #' @export
 setGeneric("dsGetInfo",
            def = function(dsObj, ...) standardGeneric("dsGetInfo"),

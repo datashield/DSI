@@ -13,8 +13,6 @@ dsRmSymbol(conn, symbol)
 }
 \description{
 After removal, the data identified by the symbol will not be accessible in the DataSHIELD R session on the server side.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsRmSymbol")}
 }
 \examples{
 \dontrun{
