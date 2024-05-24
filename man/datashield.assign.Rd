@@ -42,15 +42,15 @@ will be the data frame row names. When specified this column can be used to perf
 \item{async}{Whether the result of the call should be retrieved asynchronously (TRUE means that calls are parallelized over
 the connections, when the connection supports that feature, with an extra overhead of requests).}
 
-\item{success}{Callback function that will be called each time an assignment is successful. 
+\item{success}{Callback function that will be called each time an assignment is successful.
 The expected function signature is the connection/study name. Default is NULL (no callback).}
 
-\item{error}{Callback function that will be called each time the assignment request has failed. 
+\item{error}{Callback function that will be called each time the assignment request has failed.
 The expected function signature is the connection/study name and the error message. Default is NULL (no callback).}
 }
 \description{
 Assign a table or an expression result to a R symbol in the Datashield R session.
-Note that usage of usage of respectively \code{\link{datashield.assign.table}} or 
+Note that usage of usage of respectively \code{\link{datashield.assign.table}} or
 \code{\link{datashield.assign.expr}} should be preferred for readability.
 }
 \examples{
@@ -64,7 +64,7 @@ datashield.assign(conn, symbol="D", value="CNSIM.CNSIM1",
   variables="name().matches('LAB_')")
 
 # do assignment with callback functions
-datashield.assign(conns, "D", 
+datashield.assign(conns, "D",
   list(server1="CNSIM.CNSIM1", server2="CNSIM.CNSIM2"),
   success = function(server) {
     # do something with server's success

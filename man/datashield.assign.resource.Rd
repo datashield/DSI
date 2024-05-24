@@ -10,7 +10,8 @@ datashield.assign.resource(
   resource,
   async = TRUE,
   success = NULL,
-  error = NULL
+  error = NULL,
+  return_errors = getOption("datashield.return_errors", TRUE)
 )
 }
 \arguments{
@@ -26,11 +27,13 @@ name); or a data frame with 'server' and 'resource' columns (such as the one tha
 \item{async}{Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
 the connections, when the connection supports that feature, with an extra overhead of requests.}
 
-\item{success}{Callback function that will be called each time an assignment is successful. 
+\item{success}{Callback function that will be called each time an assignment is successful.
 The expected function signature is the connection/study name. Default is NULL (no callback).}
 
-\item{error}{Callback function that will be called each time the assignment request has failed. 
+\item{error}{Callback function that will be called each time the assignment request has failed.
 The expected function signature is the connection/study name and the error message. Default is NULL (no callback).}
+
+\item{return_errors}{Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.}
 }
 \description{
 Assign a resource object of class 'ResourceClient' to a R symbol in the Datashield R session.
@@ -48,7 +51,7 @@ datashield.assign.resource(conn, symbol="rsrc", resource="RSRC.CNSIM1", async = 
 # and server names must match.
 datashield.assign.resource(conns, "rsrc", logindata)
 
-# assign the resources that are defined in the provided named list. 
+# assign the resources that are defined in the provided named list.
 # Connections are filtered by the list names.
 datashield.assign.resource(conns, "rsrc",
   list(server1="RSRC.CNSIM1", server2="RSRC.CNSIM2"))
