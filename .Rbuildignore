@@ -32,3 +32,4 @@ inst\/doc\/DSI\.b..$
 ^LICENSE.md
 ^LICENSE\.md$
 ^pkgdown$
+^CRAN-SUBMISSION$
