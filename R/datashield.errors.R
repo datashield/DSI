@@ -8,12 +8,17 @@
 #' @return NULL if no errors are found, otherwise prints the errors.
 #' @importFrom cli cli_bullets
 #' @export
-datashield.errors <- function() {
+datashield.errors <- function(type = "message") {
   env <- getOption("datashield.env", globalenv())
   if (exists(".datashield.last_errors", envir = env)) {
     errors <- get(".datashield.last_errors", envir = env)
     neat <- .format_errors(errors)
-    cli_bullets(neat)
+    if(type == "assign") {
+      return(neat) 
+    } else if(type == "message"){
+      cli_bullets(neat) 
+    }
+      
   } else {
     NULL
   }
@@ -30,8 +35,11 @@ datashield.errors <- function() {
 #' @return A character vector containing formatted error messages.
 #' @importFrom dplyr %>%
 #' @importFrom purrr imap_chr
+#' @importFrom stringr str_replace_all
 #' @noRd
 .format_errors <- function(errors){
+  errors <- errors %>% map(~str_replace_all(.x, "\\{", "("))
+  errors <- errors %>% map(~str_replace_all(.x, "\\}", ")"))
   errors <- errors %>% imap_chr(~paste0(.y, ": ", .x, "\n"))
   names(errors) <- rep("x", length(errors))
   return(errors)
