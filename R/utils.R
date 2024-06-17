@@ -118,9 +118,9 @@
 .checkLastErrors <- function(env=getOption("datashield.env", globalenv())) {
   if (exists(".datashield.last_errors", envir = env)) {
     if (getOption("datashield.errors.stop", TRUE)) {
-      stop("There are some DataSHIELD errors, list them with datashield.errors()", call. = FALSE)
+      cli_abort("There are some DataSHIELD errors, list them with datashield.errors()", call = NULL)
     } else {
-      warning("There are some DataSHIELD errors, list them with datashield.errors()", call. = FALSE)
+      cli_alert_warning("There are some DataSHIELD errors, list them with datashield.errors()", call. = FALSE)
     }
   }
 }
