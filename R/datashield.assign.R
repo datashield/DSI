@@ -81,7 +81,7 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #' @param error Callback function that will be called each time the assignment request has failed.
 #'   The expected function signature is the connection/study name and the error message. Default is NULL (no callback).
 #' @param return_errors Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.
-#' @importFrom cli cli_text cli_alert_warning
+#' @importFrom cli cli_abort
 #' @examples
 #' \dontrun{
 #' # assign a list of variables from table CNSIM1
@@ -242,7 +242,7 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
 #' @param error Callback function that will be called each time the assignment request has failed.
 #'   The expected function signature is the connection/study name and the error message. Default is NULL (no callback).
 #' @param return_errors Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.
-#'@importFrom cli cli_text cli_alert_warning
+#' @importFrom cli cli_abort
 #' @examples
 #' \dontrun{
 #' # assign a resource asynchronously
@@ -398,7 +398,7 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, succ
 #' @param error Callback function that will be called each time the assignment request has failed.
 #'   The expected function signature is the connection/study name and the error message. Default is NULL (no callback).
 #' @param return_errors Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.
-#' @importFrom cli cli_text cli_alert_warning
+#' @importFrom cli cli_abort
 #' @examples
 #' \dontrun{
 #' # assign an expression to G asynchronously

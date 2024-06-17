@@ -1,4 +1,3 @@
-devtools::load_all()
 library(DSLite)
 library(testthat)
 library(dplyr)

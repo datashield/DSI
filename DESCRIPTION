@@ -24,9 +24,11 @@ Depends:
     methods,
     progress,
     R6,
+Imports: 
     cli, 
     dplyr, 
-    purrr
+    purrr, 
+    stringr
 Suggests: 
     testthat (>= 2.1.0),
     DSLite

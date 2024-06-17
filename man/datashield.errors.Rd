@@ -4,7 +4,12 @@
 \alias{datashield.errors}
 \title{datashield.errors}
 \usage{
-datashield.errors()
+datashield.errors(type = "message")
+}
+\arguments{
+\item{type}{Specify format for return message. If type == "message", a formatted message is 
+returned. If type == "assign" a named vector is returned which will be formatted and returned 
+within datashield.assign.}
 }
 \value{
 NULL if no errors are found, otherwise prints the errors.

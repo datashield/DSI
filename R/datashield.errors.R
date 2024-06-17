@@ -5,6 +5,9 @@
 #' This function retrieves the last errors occurred in a DataSHIELD session
 #' and displays them in a formatted manner using bullet points.
 #'
+#' @param type Specify format for return message. If type == "message", a formatted message is 
+#' returned. If type == "assign" a named vector is returned which will be formatted and returned 
+#' within datashield.assign.
 #' @return NULL if no errors are found, otherwise prints the errors.
 #' @importFrom cli cli_bullets
 #' @export
@@ -44,9 +47,16 @@ datashield.errors <- function(type = "message") {
   return(errors)
 }
 
-.remove_curly_brackets <- function(errors){
+#' Remove Curly Brackets from Strings
+#'
+#' This function replaces all curly brackets in the input strings with parentheses.
+#'
+#' @param errors A list of strings that may contain curly brackets.
+#' @return A list of strings with curly brackets replaced by parentheses.
+#' @importFrom purrr map
+#' @importFrom stringr str_replace_all
+.remove_curly_brackets <- function(errors) {
   errors <- errors %>% map(~str_replace_all(.x, "\\{", "("))
   errors <- errors %>% map(~str_replace_all(.x, "\\}", ")"))
   return(errors)
 }
-  
