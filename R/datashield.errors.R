@@ -38,14 +38,15 @@ datashield.errors <- function(type = "message") {
 #' @importFrom stringr str_replace_all
 #' @noRd
 .format_errors <- function(errors){
-  errors <- errors %>% map(~str_replace_all(.x, "\\{", "("))
-  errors <- errors %>% map(~str_replace_all(.x, "\\}", ")"))
-  errors <- errors %>% imap_chr(~paste0(.y, ": ", .x, "\n"))
+  no_brackets <- .remove_curly_brackets(errors)
+  errors <- unlist(no_brackets)
   names(errors) <- rep("x", length(errors))
   return(errors)
 }
-  
-  
-  
 
-
+.remove_curly_brackets <- function(errors){
+  errors <- errors %>% map(~str_replace_all(.x, "\\{", "("))
+  errors <- errors %>% map(~str_replace_all(.x, "\\}", ")"))
+  return(errors)
+}
+  
