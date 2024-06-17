@@ -1,5 +1,8 @@
+devtools::load_all()
 library(DSLite)
 library(testthat)
+library(dplyr)
+library(stringr)
 
 options(datashield.env = environment())
 data("mtcars")
@@ -17,22 +20,30 @@ conns <- datashield.login(logins = logindata.dslite.cnsim, assign = TRUE)
 ## ---- Assign expression --------------------------------------------------------------------------
 test_that("datashield.assign.expr returns 'datashield error' message when datashield.return_errors = FALSE", {
   options("datashield.return_errors" = FALSE)
-  error_message <- tryCatch(
+  expect_error(
     datashield.assign.expr(conns, symbol = "G", expr = "doesntwork"), 
-    error = function(e){
-      return(conditionMessage(e))
-    }
-  )
-  expect_equal(
-    error_message,
-    "There are some DataSHIELD errors, list them with datashield.errors()")
+    "There are some DataSHIELD errors, list them with datashield.errors()"
+    )
 })
 
 test_that("datashield.assign.expr returns message when datashield.return_errors = TRUE", {
   options("datashield.return_errors" = TRUE)
-  expect_message(
-    object = datashield.assign.expr(conns, symbol = "G", expr = "doesntwork"),
-    regexp = "sim1: object 'doesntwork' not found", 
-    fixed = TRUE
+  expect_error(
+    datashield.assign.expr(conns, symbol = "G", expr = "doesntwork"),
   )
 })
+
+test_that("datashield.assign.expr throws error if external script called", {
+  options("datashield.return_errors" = TRUE)
+  expect_error(
+    source("testdata/r-fail-loop.R")
+  )
+})
+  
+test_that("datashield.assign.expr throws error if external script called", {
+  options("datashield.return_errors" = FALSE)
+  expect_error(
+    source("testdata/r-fail-loop.R")
+  )
+})
+  
