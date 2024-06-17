@@ -218,9 +218,7 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
     })
   }
   if(return_errors == TRUE){
-    cli_text()
-    cli_alert_warning("Error: There are some DataSHIELD errors ")
-    datashield.errors()
+    cli_abort(c("There are DataSHIELD errors: ", datashield.errors(type = "assign")), call = NULL)
   } else if(return_errors == FALSE){
     .checkLastErrors()
   }
@@ -379,9 +377,7 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, succ
     })
   }
   if(return_errors == TRUE){
-    cli_text()
-    cli_alert_warning("Error: There are some DataSHIELD errors ")
-    datashield.errors()
+    cli_abort(c("There are DataSHIELD errors: ", datashield.errors(type = "assign")), call = NULL)
   } else if(return_errors == FALSE){
     .checkLastErrors()
   }
@@ -530,9 +526,7 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE, success=NULL
     })
   }
     if(return_errors == TRUE){
-      cli_text()
-      cli_alert_warning("Error: There are some DataSHIELD errors ")
-      datashield.errors()
+      cli_abort(c("There are DataSHIELD errors: ", datashield.errors(type = "assign")), call = NULL)
     } else if(return_errors == FALSE){
       .checkLastErrors()
     }
