@@ -45,4 +45,15 @@ test_that("datashield.assign.expr throws error if external script called", {
     source("testdata/r-fail-loop.R")
   )
 })
-  
+
+test_that("datashield.assign.expr doesn't return errors if there aren't any", {
+  cally <- call("absDS", 10)
+  options("datashield.return_errors" = FALSE)
+  expect_silent(
+    datashield.assign.expr(conns, symbol = "new_obj", expr = cally) 
+  )
+  options("datashield.return_errors" = TRUE)
+  expect_silent(
+    datashield.assign.expr(conns, symbol = "new_obj", expr = cally) 
+  )
+})
