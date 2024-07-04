@@ -25,13 +25,11 @@ Depends:
     progress,
     R6,
 Imports: 
-    cli, 
-    dplyr, 
-    purrr, 
-    stringr
+    cli
 Suggests: 
     testthat (>= 2.1.0),
-    DSLite
+    DSLite, 
+    dplyr
 License: LGPL (>= 2.1)
 URL: https://github.com/datashield/DSI/,
   https://datashield.github.io/DSI/, https://datashield.org/

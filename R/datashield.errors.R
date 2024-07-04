@@ -36,9 +36,6 @@ datashield.errors <- function(type = "message") {
 #'
 #' @param errors A list of errors to be formatted.
 #' @return A character vector containing formatted error messages.
-#' @importFrom dplyr %>%
-#' @importFrom purrr imap_chr
-#' @importFrom stringr str_replace_all
 #' @noRd
 .format_errors <- function(errors){
   no_brackets <- .remove_curly_brackets(errors)
@@ -68,10 +65,8 @@ datashield.errors <- function(type = "message") {
 #'
 #' @param errors A list of strings that may contain curly brackets.
 #' @return A list of strings with curly brackets replaced by parentheses.
-#' @importFrom purrr map
-#' @importFrom stringr str_replace_all
 .remove_curly_brackets <- function(errors) {
-  errors <- errors %>% map(~str_replace_all(.x, "\\{", "("))
-  errors <- errors %>% map(~str_replace_all(.x, "\\}", ")"))
+  errors <- lapply(errors, function(x) gsub("\\{", "(", x))
+  errors <- errors <- lapply(errors, function(x) gsub("\\{", ")", x))
   return(errors)
 }
