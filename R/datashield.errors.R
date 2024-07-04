@@ -43,8 +43,23 @@ datashield.errors <- function(type = "message") {
 .format_errors <- function(errors){
   no_brackets <- .remove_curly_brackets(errors)
   errors <- unlist(no_brackets)
+  cohorts <- .format_cohort_colour(errors)
+  errors <- paste0(cohorts, errors, "\f")
   names(errors) <- rep("x", length(errors))
   return(errors)
+}
+
+#' Format Cohort Names with Color
+#'
+#' This function formats cohort names with ANSI escape codes to make the text bold and yellow.
+#'
+#' @param errors A named character vector where the names represent cohort names and the values are error messages.
+#' @return A character vector with formatted cohort names.
+#' @noRd
+.format_cohort_colour <- function(errors){
+  cohorts <- names(errors)
+  formatted <- paste0("\033[1m\033[33m", cohorts, "\033[39m", ": ")
+  return(formatted)
 }
 
 #' Remove Curly Brackets from Strings
