@@ -16,8 +16,6 @@ A data.frame with columns: name, type ('aggregate' or 'assign'), class ('functio
 }
 \description{
 Get the list of DataSHIELD methods that have been configured on the remote data repository.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsListMethods")}
 }
 \examples{
 \dontrun{

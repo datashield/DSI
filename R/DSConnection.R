@@ -1,6 +1,3 @@
-#' @include hidden.R
-NULL
-
 #' DSConnection class
 #'
 #' This virtual class encapsulates the connection to a DataSHIELD-aware data repository,
@@ -21,7 +18,7 @@ NULL
 #' con
 #' dsDisconnect(con)
 #' }
-#' @import methods
+#' 
 #' @export
 #' @include DSObject.R
 setClass("DSConnection", representation(name = "character"), contains = c("DSObject", "VIRTUAL"))
@@ -30,9 +27,6 @@ setClass("DSConnection", representation(name = "character"), contains = c("DSObj
 #'
 #' List remote tables from the data repository. Returns the unquoted names of remote tables
 #' accessible through this connection.
-#'
-#' @template methods
-#' @templateVar method_name dsListTables
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #'
@@ -46,7 +40,7 @@ setClass("DSConnection", representation(name = "character"), contains = c("DSObj
 #' dsListTables(con)
 #' dsDisconnect(con)
 #' }
-#' @import methods
+#' @importFrom methods .valueClassTest
 #' @export
 setGeneric("dsListTables",
            def = function(conn) standardGeneric("dsListTables"),
@@ -56,9 +50,6 @@ setGeneric("dsListTables",
 #'
 #' Check if a remote table exists in the data repository. Returns a logical indicating the existence of a
 #' remote table accessible through this connection.
-#'
-#' @template methods
-#' @templateVar method_name dsHasTable
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param table the table fully qualified name
@@ -71,7 +62,6 @@ setGeneric("dsListTables",
 #' dsHasTable(con, "test.CNSIM")
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsHasTable",
            def = function(conn, table) standardGeneric("dsHasTable"),
@@ -81,9 +71,6 @@ setGeneric("dsHasTable",
 #'
 #' List remote resources from the data repository. Returns the unquoted names of remote resources
 #' accessible through this connection.
-#'
-#' @template methods
-#' @templateVar method_name dsListResources
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #'
@@ -95,7 +82,6 @@ setGeneric("dsHasTable",
 #' dsListResources(con)
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsListResources",
            def = function(conn) standardGeneric("dsListResources"),
@@ -105,9 +91,6 @@ setGeneric("dsListResources",
 #'
 #' Check if a remote resource reference exists in the data repository. Returns a logical indicating the existence of a
 #' remote resource accessible through this connection.
-#'
-#' @template methods
-#' @templateVar method_name dsHasResource
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param resource the resource fully qualified name
@@ -120,7 +103,6 @@ setGeneric("dsListResources",
 #' dsHasResource(con, "test.CNSIM")
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsHasResource",
            def = function(conn, resource) standardGeneric("dsHasResource"),
@@ -130,9 +112,6 @@ setGeneric("dsHasResource",
 #'
 #' Assign a data table from the data repository to a symbol in the DataSHIELD R session.
 #' The table to be assigned must exist (i.e. proper permissions apply) for the DataSHIELD user.
-#'
-#' @template methods
-#' @templateVar method_name dsAssignTable
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param symbol Name of the R symbol.
@@ -156,7 +135,6 @@ setGeneric("dsHasResource",
 #' dsAssignTable(con, "D", "test.CNSIM")
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsAssignTable",
            def = function(conn, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, id.name=NULL, async=TRUE) standardGeneric("dsAssignTable"),
@@ -166,9 +144,6 @@ setGeneric("dsAssignTable",
 #'
 #' Assign a resource object of class 'ResourceClient' from the data repository to a symbol in the DataSHIELD R session.
 #' The resource reference to be assigned must exist (i.e. proper permissions apply) for the DataSHIELD user.
-#'
-#' @template methods
-#' @templateVar method_name dsAssignResource
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param symbol Name of the R symbol.
@@ -184,7 +159,6 @@ setGeneric("dsAssignTable",
 #' dsAssignResource(con, "D", "test.CNSIM")
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsAssignResource",
            def = function(conn, symbol, resource, async=TRUE) standardGeneric("dsAssignResource"),
@@ -194,9 +168,6 @@ setGeneric("dsAssignResource",
 #'
 #' Assign the result of the evaluation of an expression to a symbol the DataSHIELD R session
 #' The assignment expression must satisfy the data repository's DataSHIELD configuration.
-#'
-#' @template methods
-#' @templateVar method_name dsAssignExpr
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param symbol Name of the R symbol.
@@ -212,7 +183,6 @@ setGeneric("dsAssignResource",
 #' dsAssignExpr(con, "C", as.symbol("c(1, 2, 3)"))
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsAssignExpr",
            def = function(conn, symbol, expr, async=TRUE) standardGeneric("dsAssignExpr"),
@@ -222,9 +192,6 @@ setGeneric("dsAssignExpr",
 #'
 #' Aggregate some data from the DataSHIELD R session using a valid R expression. The aggregation expression
 #' must satisfy the data repository's DataSHIELD configuration.
-#'
-#' @template methods
-#' @templateVar method_name dsAggregate
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param expr Expression to evaluate.
@@ -240,7 +207,6 @@ setGeneric("dsAssignExpr",
 #' dsAggregate(con, as.symbol("meanDS(D$WEIGHT)"))
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsAggregate",
            def = function(conn, expr, async=TRUE) standardGeneric("dsAggregate"),
@@ -249,9 +215,6 @@ setGeneric("dsAggregate",
 #' List symbols
 #'
 #' After assignments have been performed, some symbols live in the DataSHIELD R session on the server side.
-#'
-#' @template methods
-#' @templateVar method_name dsListSymbols
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #'
@@ -264,7 +227,6 @@ setGeneric("dsAggregate",
 #' dsListSymbols(con)
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsListSymbols",
            def = function(conn) standardGeneric("dsListSymbols"),
@@ -273,9 +235,6 @@ setGeneric("dsListSymbols",
 #' Remove a symbol
 #'
 #' After removal, the data identified by the symbol will not be accessible in the DataSHIELD R session on the server side.
-#'
-#' @template methods
-#' @templateVar method_name dsRmSymbol
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param symbol Name of the R symbol.
@@ -289,7 +248,6 @@ setGeneric("dsListSymbols",
 #' dsRmSymbol(con, "D")
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsRmSymbol",
            def = function(conn, symbol) standardGeneric("dsRmSymbol"))
@@ -297,9 +255,6 @@ setGeneric("dsRmSymbol",
 #' Get the DataSHIELD profiles
 #'
 #' Get the list of DataSHIELD profiles that have been configured on the remote data repository.
-#'
-#' @template methods
-#' @templateVar method_name dsListProfiles
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #'
@@ -313,7 +268,6 @@ setGeneric("dsRmSymbol",
 #' dsListProfiles(con)
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsListProfiles",
            def = function(conn) standardGeneric("dsListProfiles"),
@@ -322,9 +276,6 @@ setGeneric("dsListProfiles",
 #' Get the DataSHIELD methods
 #'
 #' Get the list of DataSHIELD methods that have been configured on the remote data repository.
-#'
-#' @template methods
-#' @templateVar method_name dsListMethods
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param type Type of the method: "aggregate" (default) or "assign".
@@ -339,7 +290,6 @@ setGeneric("dsListProfiles",
 #' dsListMethods(con)
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsListMethods",
            def = function(conn, type = "aggregate") standardGeneric("dsListMethods"),
@@ -348,9 +298,6 @@ setGeneric("dsListMethods",
 #' Get the DataSHIELD packages
 #'
 #' Get the list of DataSHIELD packages with their version, that have been configured on the remote data repository.
-#'
-#' @template methods
-#' @templateVar method_name dsListPackages
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #'
@@ -364,7 +311,6 @@ setGeneric("dsListMethods",
 #' dsListPackages(con)
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsListPackages",
            def = function(conn) standardGeneric("dsListPackages"),
@@ -374,9 +320,6 @@ setGeneric("dsListPackages",
 #' Get the DataSHIELD workspaces
 #'
 #' Get the list of DataSHIELD workspaces, that have been saved on the remote data repository.
-#'
-#' @template methods
-#' @templateVar method_name dsListWorkspaces
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #'
@@ -390,7 +333,6 @@ setGeneric("dsListPackages",
 #' dsListWorkspaces(con)
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsListWorkspaces",
            def = function(conn) standardGeneric("dsListWorkspaces"),
@@ -399,9 +341,6 @@ setGeneric("dsListWorkspaces",
 #' Save the DataSHIELD R session in a workspace
 #'
 #' Save the DataSHIELD R session in a workspace on the remote data repository.
-#'
-#' @template methods
-#' @templateVar method_name dsSaveWorkspace
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param name Name of the workspace
@@ -415,7 +354,6 @@ setGeneric("dsListWorkspaces",
 #' dsListWorkspaces(con)
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsSaveWorkspace",
            def = function(conn, name) standardGeneric("dsSaveWorkspace"))
@@ -424,9 +362,6 @@ setGeneric("dsSaveWorkspace",
 #'
 #' Restore a saved DataSHIELD R session from the remote data repository. When restoring a workspace, 
 #' any existing symbol or file with same name will be overridden.
-#'
-#' @template methods
-#' @templateVar method_name dsRestoreWorkspace
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param name Name of the workspace
@@ -440,7 +375,6 @@ setGeneric("dsSaveWorkspace",
 #' dsRestoreWorkspace(con, "foo")
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsRestoreWorkspace",
            def = function(conn, name) standardGeneric("dsRestoreWorkspace"))
@@ -449,9 +383,6 @@ setGeneric("dsRestoreWorkspace",
 #'
 #' Remove a DataSHIELD workspace from the remote data repository. Ignore if no
 #' such workspace exists.
-#'
-#' @template methods
-#' @templateVar method_name dsRmWorkspace
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param name Name of the workspace
@@ -467,7 +398,6 @@ setGeneric("dsRestoreWorkspace",
 #' dsListWorkspaces(con)
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsRmWorkspace",
            def = function(conn, name) standardGeneric("dsRmWorkspace"))
@@ -480,9 +410,6 @@ setGeneric("dsRmWorkspace",
 #' aggregation operation ('aggregate'), table assignment operation ('assignTable'),
 #' resource assignment operation ('assignResource') and expression assignment operation ('assignExpr').
 #'
-#' @template methods
-#' @templateVar method_name dsIsAsync
-#'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #'
 #' @family DSConnection generics
@@ -493,7 +420,6 @@ setGeneric("dsRmWorkspace",
 #' dsIsAsync(con)
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsIsAsync",
            def = function(conn) standardGeneric("dsIsAsync"),
@@ -505,9 +431,6 @@ setGeneric("dsIsAsync",
 #' idle connections alive while others are working. Any communication failure must
 #' be silently processed.
 #'
-#' @template methods
-#' @templateVar method_name dsKeepAlive
-#'
 #' @param conn An object inheriting from \code{\link{DSConnection-class}}.
 #'
 #' @family DSConnection generics
@@ -518,7 +441,6 @@ setGeneric("dsIsAsync",
 #' dsKeepAlive(con)
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsKeepAlive",
            def = function(conn) standardGeneric("dsKeepAlive"))
@@ -527,9 +449,6 @@ setGeneric("dsKeepAlive",
 #'
 #' This closes the connection, discards all pending work, and frees
 #' resources (e.g., memory, sockets).
-#'
-#' @template methods
-#' @templateVar method_name dsDisconnect
 #'
 #' @param conn An object inheriting from \code{\link{DSConnection-class}}.
 #' @param save Save DataSHIELD session in data repository with provided identifier string.
@@ -541,7 +460,6 @@ setGeneric("dsKeepAlive",
 #'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
 #' dsDisconnect(con)
 #' }
-#' @import methods
 #' @export
 setGeneric("dsDisconnect",
            def = function(conn, save = NULL) standardGeneric("dsDisconnect"))

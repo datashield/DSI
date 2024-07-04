@@ -166,6 +166,7 @@ datashield.connections_find <- function(env=getOption("datashield.env", globalen
 
 #' Check if provided object is a S4 class instance and if this class inherits from \code{\link{DSConnection-class}}.
 #' @keywords internal
+#' @importFrom methods getClass
 .isDSConnection <- function(obj) {
   if (isS4(obj)) {
     cls <- getClass(class(obj)[[1]])

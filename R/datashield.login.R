@@ -33,6 +33,7 @@
 #' @return object(s) of class DSConnection
 #' @export
 #' @import progress
+#' @importFrom methods new
 #' @examples
 #'\dontrun{
 #'

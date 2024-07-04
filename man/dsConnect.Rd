@@ -24,8 +24,6 @@ may invoke this function repeatedly assigning its output to different
 objects.
 The authentication mechanism is left unspecified, so check the
 documentation of individual drivers for details.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsConnect")}
 }
 \examples{
 \dontrun{

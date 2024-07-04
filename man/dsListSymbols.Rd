@@ -11,8 +11,6 @@ dsListSymbols(conn)
 }
 \description{
 After assignments have been performed, some symbols live in the DataSHIELD R session on the server side.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsListSymbols")}
 }
 \examples{
 \dontrun{

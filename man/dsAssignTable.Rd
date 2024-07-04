@@ -40,8 +40,6 @@ the connections, when the connection supports that feature, with an extra overhe
 \description{
 Assign a data table from the data repository to a symbol in the DataSHIELD R session.
 The table to be assigned must exist (i.e. proper permissions apply) for the DataSHIELD user.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsAssignTable")}
 }
 \examples{
 \dontrun{

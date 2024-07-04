@@ -15,8 +15,6 @@ the raw result can be accessed asynchronously, allowing parallelization of DataS
 over multpile servers. The returned named list of logicals will specify if asynchronicity is supported for:
 aggregation operation ('aggregate'), table assignment operation ('assignTable'),
 resource assignment operation ('assignResource') and expression assignment operation ('assignExpr').
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsIsAsync")}
 }
 \examples{
 \dontrun{

@@ -19,8 +19,6 @@ the connections, when the connection supports that feature, with an extra overhe
 \description{
 Assign the result of the evaluation of an expression to a symbol the DataSHIELD R session
 The assignment expression must satisfy the data repository's DataSHIELD configuration.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsAssignExpr")}
 }
 \examples{
 \dontrun{

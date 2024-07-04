@@ -12,8 +12,6 @@ dsListResources(conn)
 \description{
 List remote resources from the data repository. Returns the unquoted names of remote resources
 accessible through this connection.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsListResources")}
 }
 \examples{
 \dontrun{

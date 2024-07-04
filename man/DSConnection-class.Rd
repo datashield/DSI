@@ -21,6 +21,7 @@ con <- dsConnect(DSOpal::Opal(), "server1",
 con
 dsDisconnect(con)
 }
+
 }
 \seealso{
 Other DS classes: 

@@ -19,8 +19,6 @@ the connections, when the connection supports that feature, with an extra overhe
 \description{
 Assign a resource object of class 'ResourceClient' from the data repository to a symbol in the DataSHIELD R session.
 The resource reference to be assigned must exist (i.e. proper permissions apply) for the DataSHIELD user.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsAssignResource")}
 }
 \examples{
 \dontrun{

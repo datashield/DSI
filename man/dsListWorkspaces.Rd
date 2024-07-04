@@ -14,8 +14,6 @@ A data.frame with columns: name, lastAccessDate, size.
 }
 \description{
 Get the list of DataSHIELD workspaces, that have been saved on the remote data repository.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsListWorkspaces")}
 }
 \examples{
 \dontrun{

@@ -14,8 +14,6 @@ A data.frame with columns: name, version.
 }
 \description{
 Get the list of DataSHIELD packages with their version, that have been configured on the remote data repository.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsListPackages")}
 }
 \examples{
 \dontrun{

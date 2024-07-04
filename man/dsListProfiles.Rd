@@ -14,8 +14,6 @@ A list containing the "available" character vector of profile names and the "cur
 }
 \description{
 Get the list of DataSHIELD profiles that have been configured on the remote data repository.
-
-\Sexpr[results=rd,stage=render]{DSI:::methods_as_rd("dsListProfiles")}
 }
 \examples{
 \dontrun{
