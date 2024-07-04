@@ -1,7 +1,7 @@
 library(DSLite)
 library(testthat)
+library(cli)
 library(dplyr)
-library(stringr)
 
 options(datashield.env = environment())
 data("mtcars")
@@ -11,6 +11,7 @@ logindata.dslite.cnsim <- logindata.dslite.cnsim %>%
   mutate(table = "mtcars")
 dslite.server$config(defaultDSConfiguration(include = c("dsBase", "dsTidyverse", "dsDanger")))
 dslite.server$assignMethod("selectDS", "selectDS")
+dslite.server$assignMethod("absDS", "abs")
 dslite.server$aggregateMethod("exists", "base::exists")
 dslite.server$aggregateMethod("classDS", "dsBase::classDS")
 dslite.server$aggregateMethod("lsDS", "dsBase::lsDS")
@@ -29,20 +30,22 @@ test_that("datashield.assign.expr returns message when datashield.return_errors 
   options("datashield.return_errors" = TRUE)
   expect_error(
     datashield.assign.expr(conns, symbol = "G", expr = "doesntwork"),
-  )
+    regexp = "There are some DataSHIELD errors.*sim1.*object 'doesntwork' not found.*sim2.*object 'doesntwork' not found.*sim3.*object 'doesntwork' not found"
+)
 })
 
 test_that("datashield.assign.expr throws error if external script called", {
   options("datashield.return_errors" = TRUE)
   expect_error(
-    source("testdata/r-fail-loop.R")
+    source("testdata/r-fail-loop.R"),
   )
 })
   
 test_that("datashield.assign.expr throws error if external script called", {
   options("datashield.return_errors" = FALSE)
   expect_error(
-    source("testdata/r-fail-loop.R")
+    source("testdata/r-fail-loop.R"), 
+    "There are some DataSHIELD errors, list them with datashield.errors()"
   )
 })
 
