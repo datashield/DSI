@@ -67,6 +67,6 @@ datashield.errors <- function(type = "message") {
 #' @return A list of strings with curly brackets replaced by parentheses.
 .remove_curly_brackets <- function(errors) {
   errors <- lapply(errors, function(x) gsub("\\{", "(", x))
-  errors <- errors <- lapply(errors, function(x) gsub("\\{", ")", x))
+  errors <- errors <- lapply(errors, function(x) gsub("\\}", ")", x))
   return(errors)
 }
