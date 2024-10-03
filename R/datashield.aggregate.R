@@ -10,7 +10,7 @@
 #'   The expected function signature is the connection/study name and the result value. Default is NULL (no callback).
 #' @param error Callback function that will be called each time the aggregation request has failed. 
 #'   The expected function signature is the connection/study name and the error message. Default is NULL (no callback).
-#'
+#' @param return_errors Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.
 #' @return The result of the aggregation
 #'
 #' @examples

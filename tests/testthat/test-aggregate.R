@@ -2,6 +2,7 @@ library(DSLite)
 library(testthat)
 library(cli)
 library(dplyr)
+library(dsBase)
 
 options(datashield.env = environment())
 data("mtcars")
