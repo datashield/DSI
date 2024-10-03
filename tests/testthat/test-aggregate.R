@@ -17,46 +17,46 @@ dslite.server$aggregateMethod("classDS", "dsBase::classDS")
 dslite.server$aggregateMethod("lsDS", "dsBase::lsDS")
 conns <- datashield.login(logins = logindata.dslite.cnsim, assign = TRUE)
 
-## ---- Assign expression --------------------------------------------------------------------------
+# ---- Aggregate expression --------------------------------------------------------------------------
 test_that("datashield.assign.expr returns 'datashield error' message when datashield.return_errors = FALSE", {
   options("datashield.return_errors" = FALSE)
   expect_error(
-    datashield.assign.expr(conns, symbol = "G", expr = "doesntwork"), 
-    "There are some DataSHIELD errors, list them with datashield.errors()"
-    )
-})
-
-test_that("datashield.assign.expr returns message when datashield.return_errors = TRUE", {
-  options("datashield.return_errors" = TRUE)
-  expect_error(
-    datashield.assign.expr(conns, symbol = "G", expr = "doesntwork"),
-    regexp = "There are some DataSHIELD errors.*sim1.*object 'doesntwork' not found.*sim2.*object 'doesntwork' not found.*sim3.*object 'doesntwork' not found"
-)
-})
-
-test_that("datashield.assign.expr throws error if external script called", {
-  options("datashield.return_errors" = TRUE)
-  expect_error(
-    source("testdata/r-fail-assign-loop.R"),
-  )
-})
-  
-test_that("datashield.assign.expr throws error if external script called", {
-  options("datashield.return_errors" = FALSE)
-  expect_error(
-    source("testdata/r-fail-assign-loop.R"), 
+    datashield.aggregate(conns, call("classDS", "doesntexist")),  
     "There are some DataSHIELD errors, list them with datashield.errors()"
   )
 })
 
-test_that("datashield.assign.expr doesn't return errors if there aren't any", {
-  cally <- call("absDS", 10)
+test_that("datashield.assign.expr returns error message when datashield.return_errors = TRUE", {
+  options("datashield.return_errors" = TRUE)
+  expect_error(
+    datashield.aggregate(conns, call("classDS", "doesntexist")),  
+    "object 'doesntexist' not found"
+  )
+})
+
+test_that("datashield.aggregate throws error if external script called", {
+  options("datashield.return_errors" = TRUE)
+  expect_error(
+    source("testdata/r-fail-aggregate-loop.R"),
+  )
+})
+
+test_that("datashield.aggregate throws error if external script called", {
+  options("datashield.return_errors" = FALSE)
+  expect_error(
+    source("testdata/r-fail-aggregate-loop.R"),
+    "There are some DataSHIELD errors, list them with datashield.errors()"
+  )
+})
+
+test_that("datashield.aggregate doesn't return errors if there aren't any", {
+  cally <- call("classDS", "mtcars")
   options("datashield.return_errors" = FALSE)
   expect_silent(
-    datashield.assign.expr(conns, symbol = "new_obj", expr = cally) 
+    datashield.aggregate(conns, cally)
   )
   options("datashield.return_errors" = TRUE)
   expect_silent(
-    datashield.assign.expr(conns, symbol = "new_obj", expr = cally) 
+    datashield.aggregate(conns, cally)
   )
 })
