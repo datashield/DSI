@@ -28,8 +28,6 @@ Imports:
     cli
 Suggests: 
     testthat (>= 2.1.0),
-    DSLite, 
-    dsBase,
     dplyr
 License: LGPL (>= 2.1)
 URL: https://github.com/datashield/DSI/,
