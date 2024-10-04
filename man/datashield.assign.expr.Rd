@@ -10,7 +10,8 @@ datashield.assign.expr(
   expr,
   async = TRUE,
   success = NULL,
-  error = NULL
+  error = NULL,
+  return_errors = getOption("datashield.return_errors", TRUE)
 )
 }
 \arguments{
@@ -23,11 +24,13 @@ datashield.assign.expr(
 \item{async}{Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
 the connections, when the connection supports that feature, with an extra overhead of requests.}
 
-\item{success}{Callback function that will be called each time an assignment is successful. 
+\item{success}{Callback function that will be called each time an assignment is successful.
 The expected function signature is the connection/study name. Default is NULL (no callback).}
 
-\item{error}{Callback function that will be called each time the assignment request has failed. 
+\item{error}{Callback function that will be called each time the assignment request has failed.
 The expected function signature is the connection/study name and the error message. Default is NULL (no callback).}
+
+\item{return_errors}{Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.}
 }
 \description{
 Assign the result of the execution of an expression to a R symbol in the Datashield R session.
@@ -40,7 +43,7 @@ datashield.assign.expr(conns, symbol = "G", expr = quote(as.numeric(D$GENDER)))
 # assign an expression to G synchronously
 datashield.assign.expr(conns, symbol = "G", expr = quote(as.numeric(D$GENDER)), async = FALSE)
 
-# assign the expressions that are defined in the provided named list. 
+# assign the expressions that are defined in the provided named list.
 # Connections are filtered by the list names.
 datashield.assign.expr(conns, "G",
   list(server1=quote(as.numeric(D$GENDER)), server2=quote(as.numeric(D$SEX))))

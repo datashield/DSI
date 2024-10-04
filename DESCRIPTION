@@ -23,7 +23,9 @@ Depends:
     R (>= 4.3),
     methods,
     progress,
-    R6
+    R6,
+Imports: 
+    cli
 Suggests: 
     testthat (>= 2.1.0)
 License: LGPL (>= 2.1)

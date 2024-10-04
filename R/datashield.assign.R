@@ -1,9 +1,9 @@
 #' Data assignment (table or expression result)
 #'
 #' Assign a table or an expression result to a R symbol in the Datashield R session.
-#' Note that usage of usage of respectively \code{\link{datashield.assign.table}} or 
+#' Note that usage of usage of respectively \code{\link{datashield.assign.table}} or
 #' \code{\link{datashield.assign.expr}} should be preferred for readability.
-#' 
+#'
 #' @param conns \code{\link{DSConnection-class}} object or a list of \code{\link{DSConnection-class}}s.
 #' @param symbol Name of the R symbol.
 #' @param value Fully qualified name of a table reference in data repositories (see
@@ -20,9 +20,9 @@
 #'   will be the data frame row names. When specified this column can be used to perform joins between data frames.
 #' @param async Whether the result of the call should be retrieved asynchronously (TRUE means that calls are parallelized over
 #'   the connections, when the connection supports that feature, with an extra overhead of requests).
-#' @param success Callback function that will be called each time an assignment is successful. 
+#' @param success Callback function that will be called each time an assignment is successful.
 #'   The expected function signature is the connection/study name. Default is NULL (no callback).
-#' @param error Callback function that will be called each time the assignment request has failed. 
+#' @param error Callback function that will be called each time the assignment request has failed.
 #'   The expected function signature is the connection/study name and the error message. Default is NULL (no callback).
 #'
 #' @examples
@@ -36,7 +36,7 @@
 #'   variables="name().matches('LAB_')")
 #'
 #' # do assignment with callback functions
-#' datashield.assign(conns, "D", 
+#' datashield.assign(conns, "D",
 #'   list(server1="CNSIM.CNSIM1", server2="CNSIM.CNSIM2"),
 #'   success = function(server) {
 #'     # do something with server's success
@@ -76,11 +76,12 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #'   will be the data frame row names. When specified this column can be used to perform joins between data frames.
 #' @param async Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
 #'   the connections, when the connection supports that feature, with an extra overhead of requests.
-#' @param success Callback function that will be called each time an assignment is successful. 
+#' @param success Callback function that will be called each time an assignment is successful.
 #'   The expected function signature is the connection/study name. Default is NULL (no callback).
-#' @param error Callback function that will be called each time the assignment request has failed. 
+#' @param error Callback function that will be called each time the assignment request has failed.
 #'   The expected function signature is the connection/study name and the error message. Default is NULL (no callback).
-#'
+#' @param return_errors Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.
+#' @importFrom cli cli_abort
 #' @examples
 #' \dontrun{
 #' # assign a list of variables from table CNSIM1
@@ -92,17 +93,17 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #'   variables="name().matches('LAB_')")
 #'
 #' # assign the tables that are defined in the logindata ('server' and 'table' columns are
-#' # expected) data frame that is used in datashield.login() function. Connections 
+#' # expected) data frame that is used in datashield.login() function. Connections
 #' # are filtered by the list names.
 #' datashield.assign.table(conns, "D", logindata)
 #'
-#' # assign the tables that are defined in the provided named list. 
+#' # assign the tables that are defined in the provided named list.
 #' # Connections are filtered by the list names.
-#' datashield.assign.table(conns, "D", 
+#' datashield.assign.table(conns, "D",
 #'   list(server1="CNSIM.CNSIM1", server2="CNSIM.CNSIM2"))
-#' 
+#'
 #' # do assignment with callback functions
-#' datashield.assign.table(conns, "D", 
+#' datashield.assign.table(conns, "D",
 #'   list(server1="CNSIM.CNSIM1", server2="CNSIM.CNSIM2"),
 #'   success = function(server) {
 #'     # do something with server's success
@@ -112,7 +113,7 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #'   })
 #' }
 #' @export
-datashield.assign.table <- function(conns, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, id.name=NULL, async=TRUE, success=NULL, error=NULL) {
+datashield.assign.table <- function(conns, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, id.name=NULL, async=TRUE, success=NULL, error=NULL, return_errors = getOption("datashield.return_errors", TRUE)) {
   .clearLastErrors()
   if (is.null(table) || length(table) == 0) {
     stop("Not a valid table name", call.=FALSE)
@@ -122,9 +123,9 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
   tables <- .asNamedListOfTables(conns, table)
 
   if (is.list(conns)) {
-    # filter connections to assign 
+    # filter connections to assign
     fconns <- .filterConnectionsByName(conns, names(tables))
-    
+
     results <- list()
     async <- lapply(fconns, function(conn) { ifelse(async, dsIsAsync(conn)$assignTable, FALSE) })
     pb <- .newProgress(total = 1 + length(fconns))
@@ -134,9 +135,9 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
         tryCatch({
           results[[n]] <- dsAssignTable(fconns[[n]], symbol, tables[[n]], variables, missings, identifiers, id.name, async=TRUE)
         }, error = function(e) {
-          .appendError(n, e$message)
+          .appendError(n, conditionMessage(e))
           if (.is.callback(error)) {
-            error(n, e$message)
+            error(n, conditionMessage(e))
           }
         })
       }
@@ -148,9 +149,9 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
           .tickProgress(pb, tokens = list(what = paste0("Assigning ", fconns[[n]]@name, " (", symbol, " <- `", tables[[n]], "`)")))
           results[[n]] <- dsAssignTable(fconns[[n]], symbol, tables[[n]], variables, missings, identifiers, id.name, async=FALSE)
         }, error = function(e) {
-          .appendError(n, e$message)
+          .appendError(n, conditionMessage(e))
           if (.is.callback(error)) {
-            error(n, e$message)
+            error(n, conditionMessage(e))
           }
         })
       }
@@ -180,10 +181,10 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
                 success(n)
               }
             }, error = function(e) {
-              .appendError(n, e$message)
+              .appendError(n, conditionMessage(e))
               completed[[n]] <- TRUE
               if (.is.callback(error)) {
-                error(n, e$message)
+                error(n, conditionMessage(e))
               }
             })
           } else {
@@ -210,13 +211,20 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
         success(conns@name)
       }
     }, error = function(e) {
-      .appendError(conns@name, e$message)
+      .appendError(conns@name, conditionMessage(e))
       if (.is.callback(error)) {
-        error(conns@name, e$message)
+        error(conns@name, conditionMessage(e))
       }
     })
   }
-  .checkLastErrors()
+  if(return_errors == TRUE){
+    returned_errors <- datashield.errors(type = "assign")
+    if(!is.null(returned_errors)) {
+      cli_abort(c("There are some DataSHIELD errors: ", returned_errors), call = NULL)  
+    }
+  } else if(return_errors == FALSE){
+    .checkLastErrors()
+  }
   invisible(NULL)
 }
 
@@ -232,11 +240,12 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
 #'   \code{\link{datashield.login}})
 #' @param async Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
 #'   the connections, when the connection supports that feature, with an extra overhead of requests.
-#' @param success Callback function that will be called each time an assignment is successful. 
+#' @param success Callback function that will be called each time an assignment is successful.
 #'   The expected function signature is the connection/study name. Default is NULL (no callback).
-#' @param error Callback function that will be called each time the assignment request has failed. 
+#' @param error Callback function that will be called each time the assignment request has failed.
 #'   The expected function signature is the connection/study name and the error message. Default is NULL (no callback).
-#'
+#' @param return_errors Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.
+#' @importFrom cli cli_abort
 #' @examples
 #' \dontrun{
 #' # assign a resource asynchronously
@@ -244,17 +253,17 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
 #'
 #' # assign a resource synchronously
 #' datashield.assign.resource(conn, symbol="rsrc", resource="RSRC.CNSIM1", async = FALSE)
-#' 
+#'
 #' # assign the tables that are defined in the logindata ('server' and 'resource' columns are
 #' # expected) data frame that is used in datashield.login() function. Connections names
 #' # and server names must match.
 #' datashield.assign.resource(conns, "rsrc", logindata)
 #'
-#' # assign the resources that are defined in the provided named list. 
+#' # assign the resources that are defined in the provided named list.
 #' # Connections are filtered by the list names.
 #' datashield.assign.resource(conns, "rsrc",
 #'   list(server1="RSRC.CNSIM1", server2="RSRC.CNSIM2"))
-#' 
+#'
 #' # do assignment with callback functions
 #' datashield.assign.resource(conn, symbol="rsrc",
 #'   resource = list(server1="RSRC.CNSIM1", server2="RSRC.CNSIM2"),
@@ -266,7 +275,7 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
 #'   })
 #' }
 #' @export
-datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, success=NULL, error=NULL) {
+datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, success=NULL, error=NULL, return_errors = getOption("datashield.return_errors", TRUE)) {
   .clearLastErrors()
   if (is.null(resource) || length(resource) == 0) {
     stop("Not a valid resource name", call.=FALSE)
@@ -276,9 +285,9 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, succ
   resources <- .asNamedListOfResources(conns, resource)
 
   if (is.list(conns)) {
-    # filter connections to assign 
+    # filter connections to assign
     fconns <- .filterConnectionsByName(conns, names(resources))
-    
+
     results <- list()
     async <- lapply(fconns, function(conn) { ifelse(async, dsIsAsync(conn)$assignResource, FALSE) })
     pb <- .newProgress(total = 1 + length(fconns))
@@ -288,9 +297,9 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, succ
         tryCatch({
           results[[n]] <- dsAssignResource(fconns[[n]], symbol, resources[[n]], async=TRUE)
         }, error = function(e) {
-          .appendError(n, e$message)
+          .appendError(n, conditionMessage(e))
           if (.is.callback(error)) {
-            error(n, e$message)
+            error(n, conditionMessage(e))
           }
         })
       }
@@ -302,9 +311,9 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, succ
           .tickProgress(pb, tokens = list(what = paste0("Assigning ", fconns[[n]]@name, " (", symbol, " <- `", resources[[n]], "`)")))
           results[[n]] <- dsAssignResource(fconns[[n]], symbol, resources[[n]], async=FALSE)
         }, error = function(e) {
-          .appendError(n, e$message)
+          .appendError(n, conditionMessage(e))
           if (.is.callback(error)) {
-            error(n, e$message)
+            error(n, conditionMessage(e))
           }
         })
       }
@@ -334,10 +343,10 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, succ
                 success(n)
               }
             }, error = function(e) {
-              .appendError(n, e$message)
+              .appendError(n, conditionMessage(e))
               completed[[n]] <- TRUE
               if (.is.callback(error)) {
-                error(n, e$message)
+                error(n, conditionMessage(e))
               }
             })
           } else {
@@ -364,13 +373,20 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, succ
         success(conns@name)
       }
     }, error = function(e) {
-      .appendError(conns@name, e$message)
+      .appendError(conns@name, conditionMessage(e))
       if (.is.callback(error)) {
-        error(conns@name, e$message)
+        error(conns@name, conditionMessage(e))
       }
     })
   }
-  .checkLastErrors()
+  if(return_errors == TRUE){
+    returned_errors <- datashield.errors(type = "assign")
+    if(!is.null(returned_errors)) {
+      cli_abort(c("There are some DataSHIELD errors: ", returned_errors), call = NULL)  
+    }
+  } else if(return_errors == FALSE){
+    .checkLastErrors()
+  }
   invisible(NULL)
 }
 
@@ -383,24 +399,25 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, succ
 #' @param expr R expression with allowed assign functions calls.
 #' @param async Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
 #'   the connections, when the connection supports that feature, with an extra overhead of requests.
-#' @param success Callback function that will be called each time an assignment is successful. 
+#' @param success Callback function that will be called each time an assignment is successful.
 #'   The expected function signature is the connection/study name. Default is NULL (no callback).
-#' @param error Callback function that will be called each time the assignment request has failed. 
+#' @param error Callback function that will be called each time the assignment request has failed.
 #'   The expected function signature is the connection/study name and the error message. Default is NULL (no callback).
-#'
+#' @param return_errors Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.
+#' @importFrom cli cli_abort
 #' @examples
 #' \dontrun{
 #' # assign an expression to G asynchronously
 #' datashield.assign.expr(conns, symbol = "G", expr = quote(as.numeric(D$GENDER)))
-#' 
+#'
 #' # assign an expression to G synchronously
 #' datashield.assign.expr(conns, symbol = "G", expr = quote(as.numeric(D$GENDER)), async = FALSE)
-#' 
-#' # assign the expressions that are defined in the provided named list. 
+#'
+#' # assign the expressions that are defined in the provided named list.
 #' # Connections are filtered by the list names.
 #' datashield.assign.expr(conns, "G",
 #'   list(server1=quote(as.numeric(D$GENDER)), server2=quote(as.numeric(D$SEX))))
-#' 
+#'
 #' # do assignment with callback functions
 #' datashield.assign.expr(conns, symbol = "G", expr = quote(as.numeric(D$GENDER)),
 #'   success = function(server) {
@@ -411,16 +428,16 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, succ
 #'   })
 #' }
 #' @export
-datashield.assign.expr <- function(conns, symbol, expr, async=TRUE, success=NULL, error=NULL) {
+datashield.assign.expr <- function(conns, symbol, expr, async=TRUE, success=NULL, error=NULL, return_errors = getOption("datashield.return_errors", TRUE)) {
   .clearLastErrors()
-  
+
   # prepare expressions as a named list
   exprs <- .asNamedListOfValues(conns, expr)
-  
+
   if (is.list(conns)) {
-    # filter connections to assign 
+    # filter connections to assign
     fconns <- .filterConnectionsByName(conns, names(exprs))
-    
+
     results <- list()
     async <- lapply(fconns, function(conn) { ifelse(async, dsIsAsync(conn)$assignExpr, FALSE) })
     pb <- .newProgress(total = 1 + length(fconns))
@@ -430,9 +447,9 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE, success=NULL
         tryCatch({
           results[[n]] <- dsAssignExpr(fconns[[n]], symbol, exprs[[n]], async=TRUE)
         }, error = function(e) {
-          .appendError(n, e$message)
+          .appendError(n, conditionMessage(e))
           if (.is.callback(error)) {
-            error(n, e$message)
+            error(n, conditionMessage(e))
           }
         })
       }
@@ -444,9 +461,10 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE, success=NULL
           .tickProgress(pb, tokens = list(what = paste0("Assigning expr. ", fconns[[n]]@name, " (", symbol, " <- ", .deparse(exprs[[n]]), ")")))
           results[[n]] <- dsAssignExpr(fconns[[n]], symbol, exprs[[n]], async=FALSE)
         }, error = function(e) {
-          .appendError(n, e$message)
+          .appendError(n, conditionMessage(e))
+          # .appendError(n, conditionMessage(e))
           if (.is.callback(error)) {
-            error(n, e$message)
+            error(n, conditionMessage(e))
           }
         })
       }
@@ -477,10 +495,10 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE, success=NULL
                 success(n)
               }
             }, error = function(e) {
-              .appendError(n, e$message)
+              .appendError(n, conditionMessage(e))
               completed[[n]] <- TRUE
               if (.is.callback(error)) {
-                error(n, e$message)
+                error(n, conditionMessage(e))
               }
             })
           } else {
@@ -506,12 +524,19 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE, success=NULL
         success(conns@name)
       }
     }, error = function(e) {
-      .appendError(conns@name, e$message)
+      .appendError(conns@name, conditionMessage(e))
       if (.is.callback(error)) {
-        error(conns@name, e$message)
+        error(conns@name, conditionMessage(e))
       }
     })
   }
-  .checkLastErrors()
+  if(return_errors == TRUE){
+    returned_errors <- datashield.errors(type = "assign")
+    if(!is.null(returned_errors)) {
+      cli_abort(c("There are some DataSHIELD errors: ", returned_errors), call = NULL)  
+    }
+  } else if(return_errors == FALSE){
+    .checkLastErrors()
+  }
   invisible(NULL)
 }

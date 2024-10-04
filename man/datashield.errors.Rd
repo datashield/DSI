@@ -2,10 +2,22 @@
 % Please edit documentation in R/datashield.errors.R
 \name{datashield.errors}
 \alias{datashield.errors}
-\title{List R last errors}
+\title{datashield.errors}
 \usage{
-datashield.errors()
+datashield.errors(type = "message")
+}
+\arguments{
+\item{type}{Specify format for return message. If type == "message", a formatted message is 
+returned. If type == "assign" a named vector is returned which will be formatted and returned 
+within datashield.assign.}
+}
+\value{
+NULL if no errors are found, otherwise prints the errors.
 }
 \description{
-Get the R last errors available after the datashield.assign or datashield.aggregate calls in the Datashield R session.
+Retrieve and display the last errors occurred in a DataSHIELD session.
+}
+\details{
+This function retrieves the last errors occurred in a DataSHIELD session
+and displays them in a formatted manner using bullet points.
 }

@@ -10,7 +10,7 @@
 #'   The expected function signature is the connection/study name and the result value. Default is NULL (no callback).
 #' @param error Callback function that will be called each time the aggregation request has failed. 
 #'   The expected function signature is the connection/study name and the error message. Default is NULL (no callback).
-#'
+#' @param return_errors Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.
 #' @return The result of the aggregation
 #'
 #' @examples
@@ -39,7 +39,7 @@
 #' }
 #'
 #' @export
-datashield.aggregate <- function(conns, expr, async=TRUE, success=NULL, error=NULL) {
+datashield.aggregate <- function(conns, expr, async=TRUE, success=NULL, error=NULL, return_errors = getOption("datashield.return_errors", TRUE)) {
   .clearLastErrors()
   rval <- NULL
   
@@ -59,9 +59,9 @@ datashield.aggregate <- function(conns, expr, async=TRUE, success=NULL, error=NU
         tryCatch({
           results[[n]] <- dsAggregate(fconns[[n]], exprs[[n]], async=TRUE)
         }, error = function(e) {
-          .appendError(n, e$message)
+          .appendError(n, conditionMessage(e))
           if (.is.callback(error)) {
-            error(n, e$message)
+            error(n, conditionMessage(e))
           }
         })
       }
@@ -73,9 +73,9 @@ datashield.aggregate <- function(conns, expr, async=TRUE, success=NULL, error=NU
           .tickProgress(pb, tokens = list(what = paste0("Aggregating ", fconns[[n]]@name, " (", .deparse(exprs[[n]]), ")")))
           results[[n]] <- dsAggregate(fconns[[n]], exprs[[n]], async=FALSE)
         }, error = function(e) {
-          .appendError(n, e$message)
+          .appendError(n, conditionMessage(e))
           if (.is.callback(error)) {
-            error(n, e$message)
+            error(n, conditionMessage(e))
           }
         })
       }
@@ -115,11 +115,11 @@ datashield.aggregate <- function(conns, expr, async=TRUE, success=NULL, error=NU
               rval[[n]] <- NULL
             }
           }, error = function(e) {
-            .appendError(n, e$message)
+            .appendError(n, conditionMessage(e))
             completed[[n]] <- TRUE
             rval[[n]] <- NULL
             if (.is.callback(error)) {
-              error(n, e$message)
+              error(n, conditionMessage(e))
             }
           })
         } else {
@@ -139,9 +139,9 @@ datashield.aggregate <- function(conns, expr, async=TRUE, success=NULL, error=NU
       res <- dsAggregate(conns, exprs[[conns@name]])
       dsFetch(res)
     }, error = function(e) {
-      .appendError(conns@name, e$message)
+      .appendError(conns@name, conditionMessage(e))
       if (.is.callback(error)) {
-        error(conns@name, e$message)
+        error(conns@name, conditionMessage(e))
       }
       NULL
     })
@@ -149,6 +149,14 @@ datashield.aggregate <- function(conns, expr, async=TRUE, success=NULL, error=NU
       success(conns@name, rval)
     }
   }
-  .checkLastErrors()
+  if(return_errors == TRUE){
+    returned_errors <- datashield.errors(type = "assign")
+    if(!is.null(returned_errors)) {
+      cli_abort(c("There are some DataSHIELD errors: ", returned_errors), call = NULL)  
+    }
+  } else if(return_errors == FALSE){
+    .checkLastErrors()
+  }
+  invisible(NULL)
   rval
 }
