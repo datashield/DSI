@@ -27,8 +27,7 @@ Depends:
 Imports: 
     cli
 Suggests: 
-    testthat (>= 2.1.0),
-    dplyr
+    testthat (>= 2.1.0)
 License: LGPL (>= 2.1)
 URL: https://github.com/datashield/DSI/,
   https://datashield.github.io/DSI/, https://datashield.org/
