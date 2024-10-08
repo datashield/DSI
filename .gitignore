@@ -9,3 +9,4 @@ figure
 inst/doc
 vignettes/*.R
 .DS_Store
+cran-comments.md
