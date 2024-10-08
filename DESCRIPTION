@@ -1,7 +1,7 @@
 Package: DSI
 Type: Package
 Title: 'DataSHIELD' Interface
-Version: 1.6.0
+Version: 1.7.0
 Authors@R:
     c(person(given = "Yannick",
              family = "Marcon",
@@ -12,6 +12,10 @@ Authors@R:
              family = "Gaye",
              role = "ctb",
              comment = c(ORCID = "0000-0002-1180-2792")),
+      person(given = "Tim",
+             family = "Cadman",
+             role = "ctb",
+             comment = c(ORCID = "0000-0002-7682-5645")),
       person(given = "Paul",
              family = "Burton",
              role = "ctb"))
