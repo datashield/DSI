@@ -24,6 +24,7 @@ Useful links:
 Other contributors:
 \itemize{
   \item Amadou Gaye (\href{https://orcid.org/0000-0002-1180-2792}{ORCID}) [contributor]
+  \item Tim Cadman (\href{https://orcid.org/0000-0002-7682-5645}{ORCID}) [contributor]
   \item Paul Burton [contributor]
 }
 
