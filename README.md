@@ -7,7 +7,7 @@ that can be implemented for accessing a data repository supporting the DataSHIEL
 R commands to be executed on the server side are garanteeing that non disclosive information is returned 
 to client side.
 
-Learn more about [DataSHIELD](https://www.datashield.org/).
+Learn more about [DataSHIELD](https://datashield.org/).
 
 ## Class Structure
 
