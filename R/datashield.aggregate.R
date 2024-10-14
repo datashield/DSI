@@ -150,7 +150,7 @@ datashield.aggregate <- function(conns, expr, async=TRUE, success=NULL, error=NU
     }
   }
   if(return_errors == TRUE){
-    returned_errors <- datashield.errors(type = "assign")
+    returned_errors <- datashield.errorMessages(type = "assign")
     if(!is.null(returned_errors)) {
       cli_abort(c("There are some DataSHIELD errors: ", returned_errors), call = NULL)  
     }
