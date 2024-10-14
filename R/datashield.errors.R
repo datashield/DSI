@@ -30,7 +30,7 @@ datashield.errors <- function() {
   msg <- c(
     "Errors can now be automatically printed, rather than requiring a call to 
   `datashield.errors()`.",
-    "To enable this behavior, run `options('datashield.return_errors' = FALSE)`"
+    "To enable this behavior, run `options('datashield.return_errors' = TRUE)`"
   )
   names(msg) <- c("i", ">")
   return(msg)
