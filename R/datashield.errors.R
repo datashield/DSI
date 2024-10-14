@@ -13,6 +13,19 @@ datashield.errors <- function() {
   }
 }
 
+#' Create message informing of new functionality
+#'
+#' This function generates a message that informs the user about the 
+#' updated behavior regarding the automatic printing of DataSHIELD errors.
+#' It also instructs users on how to disable automatic error printing by setting 
+#' the `datashield.return_errors` option to `FALSE`.
+#' @return A named character vector containing the error message. The names of 
+#' the elements are "i" and ">" for informational and instructional parts 
+#' of the message, respectively.
+#' @examples
+#' # Generate a new errors message
+#' .new_errors_message()
+#' @noRd
 .new_errors_message <- function() {
   msg <- c(
     "Errors can now be automatically printed, rather than requiring a call to 
@@ -24,6 +37,21 @@ datashield.errors <- function() {
 }
 
 inform_env <- new.env()
+#' Display Informational Messages Once Per Session
+#'
+#' This function ensures that an informational message is displayed only once 
+#' per session. It uses an internal environment to track which messages have 
+#' been shown. 
+#'
+#' @param msg A character vector containing the message to display. It is passed 
+#' to `cli_bullets()` for formatted output.
+#' @param id A unique identifier for the message. Defaults to the message text 
+#' itself. This identifier is used to track whether the message has been 
+#' displayed.
+#' @return The function returns `NULL` invisibly if the message has already been 
+#' shown. Otherwise, it prints the message and marks it as displayed.
+#' @importFrom cli cli_bullets cli_inform
+#' @noRd
 .inform_once <- function(msg, id = msg) {
   if (exists(id, envir = inform_env, inherits = FALSE)) {
     return(invisible(NULL))
