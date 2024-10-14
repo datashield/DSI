@@ -149,7 +149,7 @@ datashield.aggregate <- function(conns, expr, async=TRUE, success=NULL, error=NU
       success(conns@name, rval)
     }
   }
-  .handle_errors()
+  .handle_errors(return_errors)
   invisible(NULL)
   rval
 }

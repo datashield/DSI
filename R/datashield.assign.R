@@ -217,7 +217,7 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
       }
     })
   }
-  .handle_errors()
+  .handle_errors(return_errors)
   invisible(NULL)
 }
 
@@ -372,7 +372,7 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, succ
       }
     })
   }
-  .handle_errors()
+  .handle_errors(return_errors)
   invisible(NULL)
 }
 
@@ -516,6 +516,6 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE, success=NULL
       }
     })
   }
-  .handle_errors()
+  .handle_errors(return_errors)
   invisible(NULL)
 }
