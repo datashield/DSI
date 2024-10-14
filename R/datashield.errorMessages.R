@@ -13,7 +13,7 @@ datashield.errorMessages <- function() {
   if (exists(".datashield.last_errors", envir = env)) {
     errors <- get(".datashield.last_errors", envir = env)
     neat <- .format_errors(errors)
-      return(cli_bullets(neat)) 
+      return(neat) 
     } else {
     NULL
   }
