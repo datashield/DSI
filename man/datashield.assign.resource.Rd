@@ -11,7 +11,7 @@ datashield.assign.resource(
   async = TRUE,
   success = NULL,
   error = NULL,
-  return_errors = getOption("datashield.return_errors", TRUE)
+  return_errors = getOption("datashield.return_errors", FALSE)
 )
 }
 \arguments{
