@@ -113,7 +113,7 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #'   })
 #' }
 #' @export
-datashield.assign.table <- function(conns, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, id.name=NULL, async=TRUE, success=NULL, error=NULL, return_errors = getOption("datashield.return_errors", TRUE)) {
+datashield.assign.table <- function(conns, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, id.name=NULL, async=TRUE, success=NULL, error=NULL, return_errors = getOption("datashield.return_errors", FALSE)) {
   .clearLastErrors()
   if (is.null(table) || length(table) == 0) {
     stop("Not a valid table name", call.=FALSE)
@@ -217,14 +217,7 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
       }
     })
   }
-  if(return_errors == TRUE){
-    returned_errors <- datashield.errorMessages(type = "assign")
-    if(!is.null(returned_errors)) {
-      cli_abort(c("There are some DataSHIELD errors: ", returned_errors), call = NULL)  
-    }
-  } else if(return_errors == FALSE){
-    .checkLastErrors()
-  }
+  .handle_errors()
   invisible(NULL)
 }
 
@@ -275,7 +268,7 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
 #'   })
 #' }
 #' @export
-datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, success=NULL, error=NULL, return_errors = getOption("datashield.return_errors", TRUE)) {
+datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, success=NULL, error=NULL, return_errors = getOption("datashield.return_errors", FALSE)) {
   .clearLastErrors()
   if (is.null(resource) || length(resource) == 0) {
     stop("Not a valid resource name", call.=FALSE)
@@ -379,14 +372,7 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, succ
       }
     })
   }
-  if(return_errors == TRUE){
-    returned_errors <- datashield.errorMessages(type = "assign")
-    if(!is.null(returned_errors)) {
-      cli_abort(c("There are some DataSHIELD errors: ", returned_errors), call = NULL)  
-    }
-  } else if(return_errors == FALSE){
-    .checkLastErrors()
-  }
+  .handle_errors()
   invisible(NULL)
 }
 
@@ -428,7 +414,7 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, succ
 #'   })
 #' }
 #' @export
-datashield.assign.expr <- function(conns, symbol, expr, async=TRUE, success=NULL, error=NULL, return_errors = getOption("datashield.return_errors", TRUE)) {
+datashield.assign.expr <- function(conns, symbol, expr, async=TRUE, success=NULL, error=NULL, return_errors = getOption("datashield.return_errors", FALSE)) {
   .clearLastErrors()
 
   # prepare expressions as a named list
@@ -530,13 +516,30 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE, success=NULL
       }
     })
   }
+  .handle_errors()
+  invisible(NULL)
+}
+
+#' Handle DataSHIELD Errors Based on Return Option
+#'
+#' This function checks for DataSHIELD errors and handles them based on the 
+#' `return_errors` flag. If `return_errors` is `TRUE`, the function retrieves 
+#' and displays any error messages using `cli_abort()`. If `return_errors` 
+#' is `FALSE`, it triggers a check of the last errors using `.checkLastErrors()`.
+#' @param return_errors A logical value indicating whether to return error 
+#' messages. If `TRUE`, DataSHIELD errors are retrieved and shown via 
+#' `cli_abort()`. If `FALSE`, the function will call `.checkLastErrors()` 
+#' to handle the errors.
+#' @return This function does not return a value. It either raises an error 
+#' with `cli_abort()` or calls `.checkLastErrors()`.
+#' @noRd
+.handle_errors <- function(return_errors) {
   if(return_errors == TRUE){
-    returned_errors <- datashield.errorMessages(type = "assign")
+    returned_errors <- datashield.errorMessages()
     if(!is.null(returned_errors)) {
       cli_abort(c("There are some DataSHIELD errors: ", returned_errors), call = NULL)  
     }
   } else if(return_errors == FALSE){
     .checkLastErrors()
   }
-  invisible(NULL)
 }
