@@ -44,6 +44,7 @@ Collate:
     'datashield.aggregate.R'
     'datashield.assign.R'
     'datashield.connections.R'
+    'datashield.errorMessages.R'
     'datashield.errors.R'
     'datashield.list.R'
     'datashield.login.R'
