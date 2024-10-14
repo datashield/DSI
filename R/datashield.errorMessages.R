@@ -5,24 +5,16 @@
 #' This function retrieves the last errors occurred in a DataSHIELD session
 #' and displays them in a formatted manner using bullet points.
 #'
-#' @param type Specify format for return message. If type == "message", a formatted message is 
-#' returned. If type == "assign" a named vector is returned which will be formatted and returned 
-#' within datashield.assign.
 #' @return NULL if no errors are found, otherwise prints the errors.
 #' @importFrom cli cli_bullets
 #' @export
-datashield.errorMessages <- function(type = "message") {
+datashield.errorMessages <- function() {
   env <- getOption("datashield.env", globalenv())
   if (exists(".datashield.last_errors", envir = env)) {
     errors <- get(".datashield.last_errors", envir = env)
     neat <- .format_errors(errors)
-    if(type == "assign") {
-      return(neat) 
-    } else if(type == "message"){
-      cli_bullets(neat) 
-    }
-      
-  } else {
+      return(cli_bullets(neat)) 
+    } else {
     NULL
   }
 }
