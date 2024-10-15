@@ -1,13 +1,28 @@
-#' List R last errors
+#' datashield.errors
 #'
-#' Get the R last errors available after the datashield.assign or datashield.aggregate calls in the Datashield R session.
+#' Retrieve and display the last errors occurred in a DataSHIELD session.
 #'
+#' This function retrieves the last errors occurred in a DataSHIELD session
+#' and displays them in a formatted manner using bullet points.
+#'
+#' @param type Specify format for return message. If type == "message", a formatted message is 
+#' returned. If type == "assign" a named vector is returned which will be formatted and returned 
+#' within datashield.assign.
+#' @return NULL if no errors are found, otherwise prints the errors.
+#' @importFrom cli cli_bullets
 #' @export
 datashield.errors <- function() {
   on.exit(.inform_once(.new_errors_message(), "error_id"))
   env <- getOption("datashield.env", globalenv())
   if (exists(".datashield.last_errors", envir = env)) {
-    get(".datashield.last_errors", envir = env)
+    errors <- get(".datashield.last_errors", envir = env)
+    neat <- .format_errors(errors)
+    if(type == "assign") {
+      return(neat) 
+    } else if(type == "message"){
+      cli_bullets(neat) 
+    }
+      
   } else {
     NULL
   }
@@ -60,4 +75,3 @@ inform_env <- new.env()
   cli::cli_bullets(msg)
   cli::cli_inform(cli::col_silver("This message is displayed once per session."))
   cat("\n")
-}
