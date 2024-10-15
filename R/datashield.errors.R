@@ -4,13 +4,13 @@
 #'
 #' @export
 datashield.errors <- function() {
-  .inform_once(.new_errors_message(), "error_id")
   env <- getOption("datashield.env", globalenv())
   if (exists(".datashield.last_errors", envir = env)) {
-    get(".datashield.last_errors", envir = env)
+    print(get(".datashield.last_errors", envir = env))
   } else {
     NULL
   }
+  .inform_once(.new_errors_message(), "error_id")
 }
 
 #' Create message informing of new functionality
@@ -29,10 +29,10 @@ datashield.errors <- function() {
 .new_errors_message <- function() {
   msg <- c(
     "Errors can now be automatically printed, rather than requiring a call to 
-  `datashield.errors()`.",
-    "To enable this behavior, run `options('datashield.return_errors' = TRUE)`"
+    datashield.errors().",
+    "To enable this behavior, run \033[1m\033[33moptions(datashield.return_errors = TRUE)\033[39m"
   )
-  names(msg) <- c("i", ">")
+  names(msg) <- c("i", "i")
   return(msg)
 }
 
@@ -57,7 +57,6 @@ inform_env <- new.env()
     return(invisible(NULL))
   }
   inform_env[[id]] <- TRUE
-  cli_bullets(msg)
+  cli::cli_bullets(msg)
   cli::cli_inform(cli::col_silver("This message is displayed once per session."))
-  cat("\n")
 }
