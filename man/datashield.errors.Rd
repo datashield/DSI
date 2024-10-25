@@ -4,7 +4,7 @@
 \alias{datashield.errors}
 \title{datashield.errors}
 \usage{
-datashield.errors(type = "message")
+datashield.errors()
 }
 \arguments{
 \item{type}{Specify format for return message. If type == "message", a formatted message is 
