@@ -15,14 +15,7 @@ datashield.errors <- function() {
   on.exit(.inform_once(.new_errors_message(), "error_id"))
   env <- getOption("datashield.env", globalenv())
   if (exists(".datashield.last_errors", envir = env)) {
-    errors <- get(".datashield.last_errors", envir = env)
-    neat <- .format_errors(errors)
-    if(type == "assign") {
-      return(neat) 
-    } else if(type == "message"){
-      cli_bullets(neat) 
-    }
-      
+    get(".datashield.last_errors", envir = env)
   } else {
     NULL
   }
