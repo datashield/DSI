@@ -75,3 +75,4 @@ inform_env <- new.env()
   cli::cli_bullets(msg)
   cli::cli_inform(cli::col_silver("This message is displayed once per session."))
   cat("\n")
+}
