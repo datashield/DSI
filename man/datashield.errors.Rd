@@ -6,18 +6,9 @@
 \usage{
 datashield.errors()
 }
-\arguments{
-\item{type}{Specify format for return message. If type == "message", a formatted message is 
-returned. If type == "assign" a named vector is returned which will be formatted and returned 
-within datashield.assign.}
-}
 \value{
-NULL if no errors are found, otherwise prints the errors.
+NULL if no errors are found, otherwise a list containing the errors for each server.
 }
 \description{
 Retrieve and display the last errors occurred in a DataSHIELD session.
-}
-\details{
-This function retrieves the last errors occurred in a DataSHIELD session
-and displays them in a formatted manner using bullet points.
 }

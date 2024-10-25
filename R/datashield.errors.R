@@ -2,14 +2,7 @@
 #'
 #' Retrieve and display the last errors occurred in a DataSHIELD session.
 #'
-#' This function retrieves the last errors occurred in a DataSHIELD session
-#' and displays them in a formatted manner using bullet points.
-#'
-#' @param type Specify format for return message. If type == "message", a formatted message is 
-#' returned. If type == "assign" a named vector is returned which will be formatted and returned 
-#' within datashield.assign.
-#' @return NULL if no errors are found, otherwise prints the errors.
-#' @importFrom cli cli_bullets
+#' @return NULL if no errors are found, otherwise a list containing the errors for each server.
 #' @export
 datashield.errors <- function() {
   on.exit(.inform_once(.new_errors_message(), "error_id"))
