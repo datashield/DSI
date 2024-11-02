@@ -10,7 +10,7 @@ datashield.aggregate(
   async = TRUE,
   success = NULL,
   error = NULL,
-  return_errors = getOption("datashield.return_errors", FALSE)
+  errors.print = getOption("datashield.errors.print", FALSE)
 )
 }
 \arguments{
@@ -27,7 +27,7 @@ The expected function signature is the connection/study name and the result valu
 \item{error}{Callback function that will be called each time the aggregation request has failed. 
 The expected function signature is the connection/study name and the error message. Default is NULL (no callback).}
 
-\item{return_errors}{Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.}
+\item{errors.print}{Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.}
 }
 \value{
 The result of the aggregation

@@ -19,7 +19,7 @@ datashield.errors <- function() {
 #' This function generates a message that informs the user about the 
 #' updated behavior regarding the automatic printing of DataSHIELD errors.
 #' It also instructs users on how to disable automatic error printing by setting 
-#' the `datashield.return_errors` option to `FALSE`.
+#' the `datashield.errors.print` option to `FALSE`.
 #' @return A named character vector containing the error message. The names of 
 #' the elements are "i" and ">" for informational and instructional parts 
 #' of the message, respectively.
@@ -31,7 +31,7 @@ datashield.errors <- function() {
   msg <- c(
     "Errors can now be automatically printed, rather than requiring a call to 
     datashield.errors().",
-    "To enable this behavior, run \033[1m\033[33moptions(datashield.return_errors = TRUE)\033[39m"
+    "To enable this behavior, run \033[1m\033[33moptions(datashield.errors.print = TRUE)\033[39m"
   )
   names(msg) <- c("i", "i")
   return(msg)

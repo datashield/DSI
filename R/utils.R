@@ -187,23 +187,23 @@
 #' Handle DataSHIELD Errors Based on Return Option
 #'
 #' This function checks for DataSHIELD errors and handles them based on the 
-#' `return_errors` flag. If `return_errors` is `TRUE`, the function retrieves 
-#' and displays any error messages using `cli_abort()`. If `return_errors` 
+#' `errors.print` flag. If `errors.print` is `TRUE`, the function retrieves 
+#' and displays any error messages using `cli_abort()`. If `errors.print` 
 #' is `FALSE`, it triggers a check of the last errors using `.checkLastErrors()`.
-#' @param return_errors A logical value indicating whether to return error 
+#' @param errors.print A logical value indicating whether to return error 
 #' messages. If `TRUE`, DataSHIELD errors are retrieved and shown via 
 #' `cli_abort()`. If `FALSE`, the function will call `.checkLastErrors()` 
 #' to handle the errors.
 #' @return This function does not return a value. It either raises an error 
 #' with `cli_abort()` or calls `.checkLastErrors()`.
 #' @noRd
-.handle_errors <- function(return_errors) {
-  if(return_errors == TRUE){
+.handle_errors <- function(errors.print) {
+  if(errors.print == TRUE){
     returned_errors <- datashield.errorMessages()
     if(!is.null(returned_errors)) {
       cli_abort(c("There are some DataSHIELD errors: ", returned_errors), call = NULL)  
     }
-  } else if(return_errors == FALSE){
+  } else if(errors.print == FALSE){
     .checkLastErrors()
   }
 }

@@ -80,7 +80,7 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #'   The expected function signature is the connection/study name. Default is NULL (no callback).
 #' @param error Callback function that will be called each time the assignment request has failed.
 #'   The expected function signature is the connection/study name and the error message. Default is NULL (no callback).
-#' @param return_errors Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.
+#' @param errors.print Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.
 #' @importFrom cli cli_abort
 #' @examples
 #' \dontrun{
@@ -113,7 +113,7 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #'   })
 #' }
 #' @export
-datashield.assign.table <- function(conns, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, id.name=NULL, async=TRUE, success=NULL, error=NULL, return_errors = getOption("datashield.return_errors", FALSE)) {
+datashield.assign.table <- function(conns, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, id.name=NULL, async=TRUE, success=NULL, error=NULL, errors.print = getOption("datashield.errors.print", FALSE)) {
   .clearLastErrors()
   if (is.null(table) || length(table) == 0) {
     stop("Not a valid table name", call.=FALSE)
@@ -217,7 +217,7 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
       }
     })
   }
-  .handle_errors(return_errors)
+  .handle_errors(errors.print)
   invisible(NULL)
 }
 
@@ -237,7 +237,7 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
 #'   The expected function signature is the connection/study name. Default is NULL (no callback).
 #' @param error Callback function that will be called each time the assignment request has failed.
 #'   The expected function signature is the connection/study name and the error message. Default is NULL (no callback).
-#' @param return_errors Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.
+#' @param errors.print Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.
 #' @importFrom cli cli_abort
 #' @examples
 #' \dontrun{
@@ -268,7 +268,7 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
 #'   })
 #' }
 #' @export
-datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, success=NULL, error=NULL, return_errors = getOption("datashield.return_errors", FALSE)) {
+datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, success=NULL, error=NULL, errors.print = getOption("datashield.errors.print", FALSE)) {
   .clearLastErrors()
   if (is.null(resource) || length(resource) == 0) {
     stop("Not a valid resource name", call.=FALSE)
@@ -372,7 +372,7 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, succ
       }
     })
   }
-  .handle_errors(return_errors)
+  .handle_errors(errors.print)
   invisible(NULL)
 }
 
@@ -389,7 +389,7 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, succ
 #'   The expected function signature is the connection/study name. Default is NULL (no callback).
 #' @param error Callback function that will be called each time the assignment request has failed.
 #'   The expected function signature is the connection/study name and the error message. Default is NULL (no callback).
-#' @param return_errors Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.
+#' @param errors.print Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.
 #' @importFrom cli cli_abort
 #' @examples
 #' \dontrun{
@@ -414,7 +414,7 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, succ
 #'   })
 #' }
 #' @export
-datashield.assign.expr <- function(conns, symbol, expr, async=TRUE, success=NULL, error=NULL, return_errors = getOption("datashield.return_errors", FALSE)) {
+datashield.assign.expr <- function(conns, symbol, expr, async=TRUE, success=NULL, error=NULL, errors.print = getOption("datashield.errors.print", FALSE)) {
   .clearLastErrors()
 
   # prepare expressions as a named list
@@ -516,6 +516,6 @@ datashield.assign.expr <- function(conns, symbol, expr, async=TRUE, success=NULL
       }
     })
   }
-  .handle_errors(return_errors)
+  .handle_errors(errors.print)
   invisible(NULL)
 }

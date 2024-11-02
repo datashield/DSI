@@ -57,6 +57,7 @@ Some options can be set to modify the behavior of the DSI:
 * `datashield.progress` is a logical to enable the visibility of the progress bars. Default value is `TRUE`.
 * `datashield.progress.clear` is a logical to make the progress bar disappear after it has been completed. Default value is `FALSE`.
 * `datashield.errors.stop` is a logical to alter error handling behavior: if `TRUE` an error is raised when at least one server has failed, otherwise a warning message is issued. Default value is `TRUE`.
+* `datashield.errors.print` is a logical for controlling the error print in the console: if `TRUE` the errors are automatically printed in rich text, otherwise subsequent call to `datashield.errors()` is required to get the details of the errors. Default value is `FALSE`.
 * `datashield.polling.sleep.0` time in seconds to wait before checking async calls completion, before ~1 second. Default value 50 milliseconds.
 * `datashield.polling.sleep.1` base time in seconds to wait before checking async calls completion, after ~1 second. Default value is 1 second.
 * `datashield.polling.sleep.10` time in seconds to wait before checking async calls completion, after ~10 seconds. Default value is x2 the base time (2 seconds).
