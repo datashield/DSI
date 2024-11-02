@@ -10,7 +10,7 @@
 #'   The expected function signature is the connection/study name and the result value. Default is NULL (no callback).
 #' @param error Callback function that will be called each time the aggregation request has failed. 
 #'   The expected function signature is the connection/study name and the error message. Default is NULL (no callback).
-#' @param return_errors Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.
+#' @param errors.print Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.
 #' @return The result of the aggregation
 #'
 #' @examples
@@ -39,7 +39,7 @@
 #' }
 #'
 #' @export
-datashield.aggregate <- function(conns, expr, async=TRUE, success=NULL, error=NULL, return_errors = getOption("datashield.return_errors", TRUE)) {
+datashield.aggregate <- function(conns, expr, async=TRUE, success=NULL, error=NULL, errors.print = getOption("datashield.errors.print", FALSE)) {
   .clearLastErrors()
   rval <- NULL
   
@@ -149,14 +149,7 @@ datashield.aggregate <- function(conns, expr, async=TRUE, success=NULL, error=NU
       success(conns@name, rval)
     }
   }
-  if(return_errors == TRUE){
-    returned_errors <- datashield.errors(type = "assign")
-    if(!is.null(returned_errors)) {
-      cli_abort(c("There are some DataSHIELD errors: ", returned_errors), call = NULL)  
-    }
-  } else if(return_errors == FALSE){
-    .checkLastErrors()
-  }
+  .handle_errors(errors.print)
   invisible(NULL)
   rval
 }

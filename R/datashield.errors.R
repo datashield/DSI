@@ -2,71 +2,63 @@
 #'
 #' Retrieve and display the last errors occurred in a DataSHIELD session.
 #'
-#' This function retrieves the last errors occurred in a DataSHIELD session
-#' and displays them in a formatted manner using bullet points.
-#'
-#' @param type Specify format for return message. If type == "message", a formatted message is 
-#' returned. If type == "assign" a named vector is returned which will be formatted and returned 
-#' within datashield.assign.
-#' @return NULL if no errors are found, otherwise prints the errors.
-#' @importFrom cli cli_bullets
+#' @return NULL if no errors are found, otherwise a list containing the errors for each server.
 #' @export
-datashield.errors <- function(type = "message") {
+datashield.errors <- function() {
+  on.exit(.inform_once(.new_errors_message(), "error_id"))
   env <- getOption("datashield.env", globalenv())
   if (exists(".datashield.last_errors", envir = env)) {
-    errors <- get(".datashield.last_errors", envir = env)
-    neat <- .format_errors(errors)
-    if(type == "assign") {
-      return(neat) 
-    } else if(type == "message"){
-      cli_bullets(neat) 
-    }
-      
+    get(".datashield.last_errors", envir = env)
   } else {
     NULL
   }
 }
 
-#' Format Errors
+#' Create message informing of new functionality
 #'
-#' Format errors into a character vector with specified prefix.
-#'
-#' This function formats a list of errors into a character vector with each
-#' error message prefixed by a cross.
-#'
-#' @param errors A list of errors to be formatted.
-#' @return A character vector containing formatted error messages.
+#' This function generates a message that informs the user about the 
+#' updated behavior regarding the automatic printing of DataSHIELD errors.
+#' It also instructs users on how to disable automatic error printing by setting 
+#' the `datashield.errors.print` option to `FALSE`.
+#' @return A named character vector containing the error message. The names of 
+#' the elements are "i" and ">" for informational and instructional parts 
+#' of the message, respectively.
+#' @examples
+#' # Generate a new errors message
+#' .new_errors_message()
 #' @noRd
-.format_errors <- function(errors){
-  no_brackets <- .remove_curly_brackets(errors)
-  errors <- unlist(no_brackets)
-  cohorts <- .format_cohort_colour(errors)
-  errors <- paste0(cohorts, errors, "\f")
-  names(errors) <- rep("x", length(errors))
-  return(errors)
+.new_errors_message <- function() {
+  msg <- c(
+    "Errors can now be automatically printed, rather than requiring a call to 
+    datashield.errors().",
+    "To enable this behavior, run \033[1m\033[33moptions(datashield.errors.print = TRUE)\033[39m"
+  )
+  names(msg) <- c("i", "i")
+  return(msg)
 }
 
-#' Format Cohort Names with Color
+inform_env <- new.env()
+#' Display Informational Messages Once Per Session
 #'
-#' This function formats cohort names with ANSI escape codes to make the text bold and yellow.
+#' This function ensures that an informational message is displayed only once 
+#' per session. It uses an internal environment to track which messages have 
+#' been shown. 
 #'
-#' @param errors A named character vector where the names represent cohort names and the values are error messages.
-#' @return A character vector with formatted cohort names.
+#' @param msg A character vector containing the message to display. It is passed 
+#' to `cli_bullets()` for formatted output.
+#' @param id A unique identifier for the message. Defaults to the message text 
+#' itself. This identifier is used to track whether the message has been 
+#' displayed.
+#' @return The function returns `NULL` invisibly if the message has already been 
+#' shown. Otherwise, it prints the message and marks it as displayed.
+#' @importFrom cli cli_bullets cli_inform
 #' @noRd
-.format_cohort_colour <- function(errors){
-  cohorts <- names(errors)
-  formatted <- paste0("\033[1m\033[33m", cohorts, "\033[39m", ": ")
-  return(formatted)
-}
-
-#' Remove Curly Brackets from Strings
-#'
-#' This function replaces all curly brackets in the input strings with parentheses.
-#'
-#' @param errors A list of strings that may contain curly brackets.
-#' @return A list of strings with curly brackets replaced by parentheses.
-.remove_curly_brackets <- function(errors) {
-  errors <- lapply(errors, function(x) gsub("\\{", "(", x))
-  errors <- errors <- lapply(errors, function(x) gsub("\\}", ")", x))
-  return(errors)
+.inform_once <- function(msg, id = msg) {
+  if (exists(id, envir = inform_env, inherits = FALSE)) {
+    return(invisible(NULL))
+  }
+  inform_env[[id]] <- TRUE
+  cli::cli_bullets(msg)
+  cli::cli_inform(cli::col_silver("This message is displayed once per session."))
+  cat("\n")
 }

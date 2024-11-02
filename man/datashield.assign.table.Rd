@@ -15,7 +15,7 @@ datashield.assign.table(
   async = TRUE,
   success = NULL,
   error = NULL,
-  return_errors = getOption("datashield.return_errors", TRUE)
+  errors.print = getOption("datashield.errors.print", FALSE)
 )
 }
 \arguments{
@@ -50,7 +50,7 @@ The expected function signature is the connection/study name. Default is NULL (n
 \item{error}{Callback function that will be called each time the assignment request has failed.
 The expected function signature is the connection/study name and the error message. Default is NULL (no callback).}
 
-\item{return_errors}{Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.}
+\item{errors.print}{Boolean, whether to print datashield errors in the console or return a message indicating that they can be retrieved using `datashield.errors`.}
 }
 \description{
 Assign a table to a R symbol in the Datashield R session.
