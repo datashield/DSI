@@ -34,3 +34,4 @@ inst\/doc\/DSI\.b..$
 ^pkgdown$
 ^.DS_Store$
 ^CRAN-SUBMISSION$
+^\.github$
