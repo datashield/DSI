@@ -45,6 +45,7 @@ Collate:
     'DSI-package.R'
     'DSLoginBuilder.R'
     'DSResult.R'
+    'DSSession.R'
     'datashield.aggregate.R'
     'datashield.assign.R'
     'datashield.connections.R'

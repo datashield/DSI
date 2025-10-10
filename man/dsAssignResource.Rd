@@ -16,6 +16,9 @@ dsAssignResource(conn, symbol, resource, async = TRUE)
 \item{async}{Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
 the connections, when the connection supports that feature, with an extra overhead of requests.}
 }
+\value{
+An object of class \code{\link{DSResult-class}} representing the result of the assignment operation.
+}
 \description{
 Assign a resource object of class 'ResourceClient' from the data repository to a symbol in the DataSHIELD R session.
 The resource reference to be assigned must exist (i.e. proper permissions apply) for the DataSHIELD user.
@@ -37,6 +40,7 @@ Other DSConnection generics:
 \code{\link{dsDisconnect}()},
 \code{\link{dsGetInfo}()},
 \code{\link{dsHasResource}()},
+\code{\link{dsHasSession}()},
 \code{\link{dsHasTable}()},
 \code{\link{dsIsAsync}()},
 \code{\link{dsKeepAlive}()},
@@ -50,6 +54,7 @@ Other DSConnection generics:
 \code{\link{dsRestoreWorkspace}()},
 \code{\link{dsRmSymbol}()},
 \code{\link{dsRmWorkspace}()},
-\code{\link{dsSaveWorkspace}()}
+\code{\link{dsSaveWorkspace}()},
+\code{\link{dsSession}()}
 }
 \concept{DSConnection generics}

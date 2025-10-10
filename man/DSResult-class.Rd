@@ -21,7 +21,8 @@ DS generics.
 Other DS classes: 
 \code{\link{DSConnection-class}},
 \code{\link{DSDriver-class}},
-\code{\link{DSObject-class}}
+\code{\link{DSObject-class}},
+\code{\link{DSSession-class}}
 
 Other DSResult generics: 
 \code{\link{dsFetch}()},

@@ -14,6 +14,9 @@ dsAggregate(conn, expr, async = TRUE)
 \item{async}{Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
 the connections, when the connection supports that feature, with an extra overhead of requests.}
 }
+\value{
+An object of class \code{\link{DSResult-class}} representing the result of the aggregation operation.
+}
 \description{
 Aggregate some data from the DataSHIELD R session using a valid R expression. The aggregation expression
 must satisfy the data repository's DataSHIELD configuration.
@@ -36,6 +39,7 @@ Other DSConnection generics:
 \code{\link{dsDisconnect}()},
 \code{\link{dsGetInfo}()},
 \code{\link{dsHasResource}()},
+\code{\link{dsHasSession}()},
 \code{\link{dsHasTable}()},
 \code{\link{dsIsAsync}()},
 \code{\link{dsKeepAlive}()},
@@ -49,6 +53,7 @@ Other DSConnection generics:
 \code{\link{dsRestoreWorkspace}()},
 \code{\link{dsRmSymbol}()},
 \code{\link{dsRmWorkspace}()},
-\code{\link{dsSaveWorkspace}()}
+\code{\link{dsSaveWorkspace}()},
+\code{\link{dsSession}()}
 }
 \concept{DSConnection generics}

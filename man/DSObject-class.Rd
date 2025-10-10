@@ -53,6 +53,7 @@ dsDisconnect(con)
 Other DS classes: 
 \code{\link{DSConnection-class}},
 \code{\link{DSDriver-class}},
-\code{\link{DSResult-class}}
+\code{\link{DSResult-class}},
+\code{\link{DSSession-class}}
 }
 \concept{DS classes}

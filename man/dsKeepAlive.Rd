@@ -32,6 +32,7 @@ Other DSConnection generics:
 \code{\link{dsDisconnect}()},
 \code{\link{dsGetInfo}()},
 \code{\link{dsHasResource}()},
+\code{\link{dsHasSession}()},
 \code{\link{dsHasTable}()},
 \code{\link{dsIsAsync}()},
 \code{\link{dsListMethods}()},
@@ -44,6 +45,7 @@ Other DSConnection generics:
 \code{\link{dsRestoreWorkspace}()},
 \code{\link{dsRmSymbol}()},
 \code{\link{dsRmWorkspace}()},
-\code{\link{dsSaveWorkspace}()}
+\code{\link{dsSaveWorkspace}()},
+\code{\link{dsSession}()}
 }
 \concept{DSConnection generics}

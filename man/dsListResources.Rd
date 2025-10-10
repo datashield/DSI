@@ -9,6 +9,9 @@ dsListResources(conn)
 \arguments{
 \item{conn}{An object that inherits from \code{\link{DSConnection-class}}.}
 }
+\value{
+A character vector of resource names.
+}
 \description{
 List remote resources from the data repository. Returns the unquoted names of remote resources
 accessible through this connection.
@@ -31,6 +34,7 @@ Other DSConnection generics:
 \code{\link{dsDisconnect}()},
 \code{\link{dsGetInfo}()},
 \code{\link{dsHasResource}()},
+\code{\link{dsHasSession}()},
 \code{\link{dsHasTable}()},
 \code{\link{dsIsAsync}()},
 \code{\link{dsKeepAlive}()},
@@ -43,6 +47,7 @@ Other DSConnection generics:
 \code{\link{dsRestoreWorkspace}()},
 \code{\link{dsRmSymbol}()},
 \code{\link{dsRmWorkspace}()},
-\code{\link{dsSaveWorkspace}()}
+\code{\link{dsSaveWorkspace}()},
+\code{\link{dsSession}()}
 }
 \concept{DSConnection generics}

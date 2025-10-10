@@ -9,11 +9,14 @@ dsIsAsync(conn)
 \arguments{
 \item{conn}{An object that inherits from \code{\link{DSConnection-class}}.}
 }
+\value{
+A named list of logicals indicating if asynchronicity is supported for session, aggregation and assignment operations.
+}
 \description{
 When a \code{\link{DSResult-class}} object is returned on aggregation or assignment operation,
 the raw result can be accessed asynchronously, allowing parallelization of DataSHIELD calls
 over multpile servers. The returned named list of logicals will specify if asynchronicity is supported for:
-aggregation operation ('aggregate'), table assignment operation ('assignTable'),
+session operation ('session'), aggregation operation ('aggregate'), table assignment operation ('assignTable'),
 resource assignment operation ('assignResource') and expression assignment operation ('assignExpr').
 }
 \examples{
@@ -34,6 +37,7 @@ Other DSConnection generics:
 \code{\link{dsDisconnect}()},
 \code{\link{dsGetInfo}()},
 \code{\link{dsHasResource}()},
+\code{\link{dsHasSession}()},
 \code{\link{dsHasTable}()},
 \code{\link{dsKeepAlive}()},
 \code{\link{dsListMethods}()},
@@ -46,6 +50,7 @@ Other DSConnection generics:
 \code{\link{dsRestoreWorkspace}()},
 \code{\link{dsRmSymbol}()},
 \code{\link{dsRmWorkspace}()},
-\code{\link{dsSaveWorkspace}()}
+\code{\link{dsSaveWorkspace}()},
+\code{\link{dsSession}()}
 }
 \concept{DSConnection generics}
