@@ -40,6 +40,7 @@
 #'
 #' @export
 datashield.aggregate <- function(conns, expr, async=TRUE, success=NULL, error=NULL, errors.print = getOption("datashield.errors.print", FALSE)) {
+  datashield.sessions(conns)
   .clearLastErrors()
   rval <- NULL
   

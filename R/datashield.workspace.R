@@ -42,6 +42,7 @@ datashield.workspaces <- function(conns) {
 #' @param ws The workspace name
 #' @export
 datashield.workspace_save <- function(conns, ws) {
+  datashield.sessions(conns)
   if (is.list(conns)) {
     ignore <- lapply(conns, function(c) datashield.workspace_save(c, ws))
   } else {
@@ -60,6 +61,7 @@ datashield.workspace_save <- function(conns, ws) {
 #' @param ws The workspace name
 #' @export
 datashield.workspace_restore <- function(conns, ws) {
+  datashield.sessions(conns)
   if (is.list(conns)) {
     ignore <- lapply(conns, function(c) datashield.workspace_restore(c, ws))
   } else {

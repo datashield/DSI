@@ -54,6 +54,7 @@ Collate:
     'datashield.list.R'
     'datashield.login.R'
     'datashield.logout.R'
+    'datashield.sessions.R'
     'datashield.status.R'
     'datashield.symbol.R'
     'datashield.workspace.R'

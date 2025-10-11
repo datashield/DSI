@@ -114,6 +114,7 @@ datashield.assign <- function(conns, symbol, value, variables=NULL, missings=FAL
 #' }
 #' @export
 datashield.assign.table <- function(conns, symbol, table, variables=NULL, missings=FALSE, identifiers=NULL, id.name=NULL, async=TRUE, success=NULL, error=NULL, errors.print = getOption("datashield.errors.print", FALSE)) {
+  datashield.sessions(conns)
   .clearLastErrors()
   if (is.null(table) || length(table) == 0) {
     stop("Not a valid table name", call.=FALSE)
@@ -415,6 +416,7 @@ datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, succ
 #' }
 #' @export
 datashield.assign.expr <- function(conns, symbol, expr, async=TRUE, success=NULL, error=NULL, errors.print = getOption("datashield.errors.print", FALSE)) {
+  datashield.sessions(conns)
   .clearLastErrors()
 
   # prepare expressions as a named list
