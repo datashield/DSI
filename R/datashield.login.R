@@ -156,10 +156,6 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
   doConnection <- function(i) {
     # connection options
     conn.opts <- append(opts, eval(parse(text=as.character(options[[i]]))))
-    restoreId <- restore
-    if (!is.null(restore)) {
-      restoreId <- paste0(stdnames[i], ":", restore)
-    }
     # instanciate the DSDriver
     drv <- new(drivers[i])
     # if the connection is HTTPS use ssl options else they are not required
@@ -171,12 +167,12 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
         cert <- userids[i]
         private <- pwds[i]
         conn.opts <- append(conn.opts, list(sslcert=cert, sslkey=private))
-        conn.obj <- dsConnect(drv, name=stdnames[i], url=urls[i], opts=conn.opts, profile=profiles[i], restore=restoreId)
+        conn.obj <- dsConnect(drv, name=stdnames[i], url=urls[i], opts=conn.opts, profile=profiles[i])
       } else {
-        conn.obj <- dsConnect(drv, name=stdnames[i], username=userids[i], password=pwds[i], token=tokens[i], url=urls[i], profile=profiles[i], opts=conn.opts, restore=restoreId)
+        conn.obj <- dsConnect(drv, name=stdnames[i], username=userids[i], password=pwds[i], token=tokens[i], url=urls[i], profile=profiles[i], opts=conn.opts)
       }
     } else {
-      conn.obj <- dsConnect(drv, name=stdnames[i], username=userids[i], password=pwds[i], token=tokens[i], url=urls[i], profile=profiles[i], opts=conn.opts, restore=restoreId)
+      conn.obj <- dsConnect(drv, name=stdnames[i], username=userids[i], password=pwds[i], token=tokens[i], url=urls[i], profile=profiles[i], opts=conn.opts)
     }
     conn.obj
   }
@@ -227,135 +223,30 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
       rconnections <- append(rconnections, x)
     }
   }
+  
+  # if restore is not null, restore the workspaces
+  if (!is.null(restore) && length(rconnections) > 0) {
+    datashield.workspace_restore(rconnections, restore)
+  }
 
   # if argument 'assign' is true assign data/resources to the data repository server(s) you logged in to.
   if(assign && length(rconnections) > 0) {
-
+    #warning("Assignment of table/resources at login time is deprecated. Use datashield.assign functions instead.", call.=FALSE, immediate.=TRUE)
     isNotEmpty <- Vectorize(function(x) { !(is.null(x) || is.na(x) || length(x) == 0 || nchar(x) == 0) })
-
-    assignResources <- function() {
-      # Assign resource data in parallel
-      message("\nAssigning resource data...")
-      results <- list()
-      async <- c()
-      for (i in 1:length(connections)) {
-        if (excluded[i]) {
-          async <- append(async, FALSE)
-        } else {
-          async <- append(async, dsIsAsync(connections[[i]])$assignResource)
-        }
-      }
-      # async first
-
-      pb <- .newProgress(total = 1 + length(connections) - length(excluded[excluded == TRUE]))
-      for (i in 1:length(connections)) {
-        if(!excluded[i] && async[i]) {
-          results[[i]] <- dsAssignResource(connections[[i]], symbol, resources[i])
-        }
-      }
-      # not async (blocking calls)
-      for (i in 1:length(connections)) {
-        if(!excluded[i] && !async[i]) {
-          .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", resources[i], ")")))
-          results[[i]] <- dsAssignResource(connections[[i]], symbol, resources[i])
-        }
-      }
-      for (i in 1:length(connections)) {
-        if(!excluded[i]) {
-          res <- results[[i]]
-          if (!is.null(res)) {
-            if (async[i]) {
-              .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", resources[i], ")")))
-            }
-            resInfo <- dsGetInfo(res)
-            if (resInfo$status == "FAILED") {
-              warning("Resource assignment of '", resources[i], "' failed for '", stdnames[i],"': ", resInfo$error, call.=FALSE, immediate.=TRUE)
-            }
-          }
-        }
-      }
-      .tickProgress(pb, tokens = list(what = "Assigned all resources"))
-    }
-
-    assignTables <- function() {
-      if(is.null(variables)) {
-        # if the user does not specify variables (default behaviour)
-        # display a message telling the user that the whole dataset
-        # will be assigned since he did not specify variables
-        message("\n  No variables have been specified. \n  All the variables in the table \n  (the whole dataset) will be assigned to R!")
-      }
-
-      # Assign table data in parallel
-      message("\nAssigning table data...")
-      results <- list()
-      async <- c()
-      for (i in 1:length(connections)) {
-        if (excluded[i]) {
-          async <- append(async, FALSE)
-        } else {
-          async <- append(async, dsIsAsync(connections[[i]])$assignTable)
-        }
-      }
-      # async first
-
-      pb <- .newProgress(total = 1 + length(connections) - length(excluded[excluded == TRUE]))
-      for (i in 1:length(connections)) {
-        if(!excluded[i] && async[i]) {
-          results[[i]] <- dsAssignTable(connections[[i]], symbol, tables[i], variables=variables, missings=missings, identifiers=idmappings[i], id.name=id.name)
-        }
-      }
-      # not async (blocking calls)
-      for (i in 1:length(connections)) {
-        if(!excluded[i] && !async[i]) {
-          .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", tables[i], ")")))
-          results[[i]] <- dsAssignTable(connections[[i]], symbol, tables[i], variables=variables, missings=missings, identifiers=idmappings[i], id.name=id.name)
-        }
-      }
-      for (i in 1:length(connections)) {
-        if(!excluded[i]) {
-          res <- results[[i]]
-          if (!is.null(res)) {
-            if (async[i]) {
-              .tickProgress(pb, tokens = list(what = paste0("Assigning ", stdnames[i], " (", tables[i], ")")))
-            }
-            resInfo <- dsGetInfo(res)
-            if (resInfo$status == "FAILED") {
-              warning("Data assignment of '", tables[i], "' failed for '", stdnames[i],"': ", resInfo$error, call.=FALSE, immediate.=TRUE)
-            }
-          }
-        }
-      }
-      .tickProgress(pb, tokens = list(what = "Assigned all tables"))
-
-      # Get column names in parallel
-      # Ensure the colnames aggregation is available
-      aggs <- datashield.method_status(rconnections, type="aggregate")
-      hasColnames <- aggs[aggs$name == "colnames",]
-      if (nrow(hasColnames)>0) {
-        message("\nVariables assigned:")
-        lapply(names(rconnections), function(n) {
-          if (hasColnames[[n]]) {
-            varnames <- dsFetch(dsAggregate(rconnections[[n]], paste0('colnames(', symbol,')'), async = FALSE))
-            if(length(varnames[[1]]) > 0) {
-              message(n, " -- ", paste(unlist(varnames), collapse=", "))
-            } else {
-              message(n, " -- No variables assigned. Please check login details for this study and verify that the variables are available!")
-            }
-          } else {
-            message(n, " -- ? (colnames() aggregation method not available)")
-          }
-        })
-      }
-    }
-
     if (all(isNotEmpty(resources))) {
-      assignResources()
+      tryCatch({
+        datashield.assign.resource(rconnections, symbol = symbol, resource = logins)
+      }, error = function(e) {
+        warning("Resource assignmnt failed", call.=FALSE, immediate.=TRUE)
+      })
     }
-
     if (all(isNotEmpty(tables))) {
-      assignTables()
+      tryCatch({
+        datashield.assign.table(rconnections, symbol = symbol, table = logins, variables = variables, missings = missings, id.name = id.name)  
+      }, error = function(e) {
+        warning("Resource assignmnt failed", call.=FALSE, immediate.=TRUE)
+      })
     }
-
   }
 
   .clearCache()
