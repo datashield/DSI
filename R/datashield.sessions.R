@@ -73,12 +73,13 @@ datashield.sessions <- function(conns, async=TRUE, success=NULL, error=NULL, err
     names(completed) <- names(fconns)
     checks <- 1
     while (!all(completed)) {
+      messages <- c()
       for (n in names(fconns)) {
         if (!completed[[n]]) {
           if (!.hasLastErrors(n)) {
             tryCatch({
-              msg <- dsStateMessage(sessions[[n]])
-              .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(fconns), tokens = list(what = paste0(fconns[[n]]@name, ": ", msg)))
+              msg <- paste0(fconns[[n]]@name, ": ", dsStateMessage(sessions[[n]]))
+              messages <- append(messages, msg)
               if(async[[n]]) {
                 completed[[n]] <- dsIsReady(sessions[[n]])
                 if (completed[[n]]) {
@@ -107,7 +108,7 @@ datashield.sessions <- function(conns, async=TRUE, success=NULL, error=NULL, err
         }
       }
       if (!all(completed)) {
-        .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(fconns), tokens = list(what = paste0("Waiting for R sessions to be ready...")))
+        .updateProgress(pb, step = length(subset(completed, completed == TRUE)), total = length(fconns), tokens = list(what = paste(messages, collapse = ", ")))
         Sys.sleep(.getSleepTime(checks))
         checks <- checks + 1
       }
