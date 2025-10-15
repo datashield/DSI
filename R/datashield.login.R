@@ -237,14 +237,14 @@ datashield.login <- function(logins=NULL, assign=FALSE, variables=NULL, missings
       tryCatch({
         datashield.assign.resource(rconnections, symbol = symbol, resource = logins)
       }, error = function(e) {
-        warning("Resource assignmnt failed", call.=FALSE, immediate.=TRUE)
+        warning("Resource assignment failed", call.=FALSE, immediate.=TRUE)
       })
     }
     if (all(isNotEmpty(tables))) {
       tryCatch({
         datashield.assign.table(rconnections, symbol = symbol, table = logins, variables = variables, missings = missings, id.name = id.name)  
       }, error = function(e) {
-        warning("Resource assignmnt failed", call.=FALSE, immediate.=TRUE)
+        warning("Resource assignment failed", call.=FALSE, immediate.=TRUE)
       })
     }
   }
