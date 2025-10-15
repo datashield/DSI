@@ -32,8 +32,8 @@ datashield.sessions <- function(conns, async=TRUE, success=NULL, error=NULL, err
   .clearLastErrors()
 
   if (is.list(conns)) {
-    # filter conns not having connection
-    fconns <- Filter(function(conn) { !dsHasSession(conn) }, conns)
+    # filter conns supporting session API and not having connection
+    fconns <- Filter(function(conn) { !is.null(dsIsAsync(conn)$session) && !dsHasSession(conn) }, conns)
     if (length(fconns) == 0) {
       return(invisible(NULL))
     }
@@ -114,7 +114,7 @@ datashield.sessions <- function(conns, async=TRUE, success=NULL, error=NULL, err
       }
     }
     ignore <- .tickProgress(pb, tokens = list(what = paste0("All R sessions ready")))
-  } else {
+  } else if (!is.null(dsIsAsync(conns)$session)) {
     tryCatch({
       if (!dsHasSession(conns)) {
         dsSession(conns, async = FALSE)
