@@ -270,6 +270,7 @@ datashield.assign.table <- function(conns, symbol, table, variables=NULL, missin
 #' }
 #' @export
 datashield.assign.resource <- function(conns, symbol, resource, async=TRUE, success=NULL, error=NULL, errors.print = getOption("datashield.errors.print", FALSE)) {
+  datashield.sessions(conns)
   .clearLastErrors()
   if (is.null(resource) || length(resource) == 0) {
     stop("Not a valid resource name", call.=FALSE)
