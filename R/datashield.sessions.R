@@ -39,13 +39,13 @@ datashield.sessions <- function(conns, async=TRUE, success=NULL, error=NULL, err
     }
     
     sessions <- list()
-    async <- lapply(fconns, function(conn) { ifelse(async, dsIsAsync(conn)$session, FALSE) })
+    asyncs <- lapply(fconns, function(conn) { ifelse(async, dsIsAsync(conn)$session, FALSE) })
     pb <- .newProgress(total = 1 + length(fconns))
     # async first
     for (n in names(fconns)) {
-      if(async[[n]]) {
+      if(asyncs[[n]]) {
         tryCatch({
-          sessions[[n]] <- dsSession(fconns[[n]], async=TRUE)
+          sessions[[n]] <- dsSession(fconns[[n]], async=async)
         }, error = function(e) {
           .appendError(n, conditionMessage(e))
           if (.is.callback(error)) {
@@ -56,7 +56,7 @@ datashield.sessions <- function(conns, async=TRUE, success=NULL, error=NULL, err
     }
     # not async (blocking calls)
     for (n in names(fconns)) {
-      if(!async[[n]]) {
+      if(!asyncs[[n]]) {
         tryCatch({
           .tickProgress(pb, tokens = list(what = paste0("Session ", fconns[[n]]@name)))
           sessions[[n]] <- dsSession(fconns[[n]], async=FALSE)
@@ -80,14 +80,13 @@ datashield.sessions <- function(conns, async=TRUE, success=NULL, error=NULL, err
             tryCatch({
               msg <- paste0(fconns[[n]]@name, ": ", dsStateMessage(sessions[[n]]))
               messages <- append(messages, msg)
-              if(async[[n]]) {
+              if(asyncs[[n]]) {
                 completed[[n]] <- dsIsReady(sessions[[n]])
                 if (completed[[n]]) {
-                  .tickProgress(pb, tokens = list(what = paste0(fconns[[n]]@name, ": ", msg)))
+                  .tickProgress(pb, tokens = list(what = msg))
                 }
               } else {
                 completed[[n]] <- TRUE
-                .tickProgress(pb, tokens = list(what = paste0(fconns[[n]]@name, ": ", msg)))
               }
               if (completed[[n]] && .is.callback(success)) {
                 success(n)
@@ -117,7 +116,7 @@ datashield.sessions <- function(conns, async=TRUE, success=NULL, error=NULL, err
   } else if (!is.null(dsIsAsync(conns)$session)) {
     tryCatch({
       if (!dsHasSession(conns)) {
-        dsSession(conns, async = FALSE)
+        dsSession(conns, async=FALSE)
       }
       if (.is.callback(success)) {
         success(conns@name)
