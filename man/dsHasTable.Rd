@@ -11,6 +11,9 @@ dsHasTable(conn, table)
 
 \item{table}{the table fully qualified name}
 }
+\value{
+A logical indicating if the table exists.
+}
 \description{
 Check if a remote table exists in the data repository. Returns a logical indicating the existence of a
 remote table accessible through this connection.
@@ -33,6 +36,7 @@ Other DSConnection generics:
 \code{\link{dsDisconnect}()},
 \code{\link{dsGetInfo}()},
 \code{\link{dsHasResource}()},
+\code{\link{dsHasSession}()},
 \code{\link{dsIsAsync}()},
 \code{\link{dsKeepAlive}()},
 \code{\link{dsListMethods}()},
@@ -45,6 +49,7 @@ Other DSConnection generics:
 \code{\link{dsRestoreWorkspace}()},
 \code{\link{dsRmSymbol}()},
 \code{\link{dsRmWorkspace}()},
-\code{\link{dsSaveWorkspace}()}
+\code{\link{dsSaveWorkspace}()},
+\code{\link{dsSession}()}
 }
 \concept{DSConnection generics}

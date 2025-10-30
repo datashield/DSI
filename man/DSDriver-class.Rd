@@ -13,7 +13,8 @@ connections.
 Other DS classes: 
 \code{\link{DSConnection-class}},
 \code{\link{DSObject-class}},
-\code{\link{DSResult-class}}
+\code{\link{DSResult-class}},
+\code{\link{DSSession-class}}
 
 Other DSDriver generics: 
 \code{\link{dsConnect}()},

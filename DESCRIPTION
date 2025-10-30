@@ -36,7 +36,7 @@ License: LGPL (>= 2.1)
 URL: https://github.com/datashield/DSI/,
   https://datashield.github.io/DSI/, https://datashield.org/
 BugReports: https://github.com/datashield/DSI/issues
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Encoding: UTF-8
 Collate: 
     'DSObject.R'
@@ -45,6 +45,7 @@ Collate:
     'DSI-package.R'
     'DSLoginBuilder.R'
     'DSResult.R'
+    'DSSession.R'
     'datashield.aggregate.R'
     'datashield.assign.R'
     'datashield.connections.R'
@@ -53,6 +54,7 @@ Collate:
     'datashield.list.R'
     'datashield.login.R'
     'datashield.logout.R'
+    'datashield.sessions.R'
     'datashield.status.R'
     'datashield.symbol.R'
     'datashield.workspace.R'

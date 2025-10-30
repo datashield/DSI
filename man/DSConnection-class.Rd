@@ -27,7 +27,8 @@ dsDisconnect(con)
 Other DS classes: 
 \code{\link{DSDriver-class}},
 \code{\link{DSObject-class}},
-\code{\link{DSResult-class}}
+\code{\link{DSResult-class}},
+\code{\link{DSSession-class}}
 
 Other DSConnection generics: 
 \code{\link{dsAggregate}()},
@@ -37,6 +38,7 @@ Other DSConnection generics:
 \code{\link{dsDisconnect}()},
 \code{\link{dsGetInfo}()},
 \code{\link{dsHasResource}()},
+\code{\link{dsHasSession}()},
 \code{\link{dsHasTable}()},
 \code{\link{dsIsAsync}()},
 \code{\link{dsKeepAlive}()},
@@ -50,7 +52,8 @@ Other DSConnection generics:
 \code{\link{dsRestoreWorkspace}()},
 \code{\link{dsRmSymbol}()},
 \code{\link{dsRmWorkspace}()},
-\code{\link{dsSaveWorkspace}()}
+\code{\link{dsSaveWorkspace}()},
+\code{\link{dsSession}()}
 }
 \concept{DS classes}
 \concept{DSConnection generics}

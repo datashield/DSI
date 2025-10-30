@@ -11,6 +11,9 @@ dsHasResource(conn, resource)
 
 \item{resource}{the resource fully qualified name}
 }
+\value{
+A logical indicating if the resource exists.
+}
 \description{
 Check if a remote resource reference exists in the data repository. Returns a logical indicating the existence of a
 remote resource accessible through this connection.
@@ -32,6 +35,7 @@ Other DSConnection generics:
 \code{\link{dsAssignTable}()},
 \code{\link{dsDisconnect}()},
 \code{\link{dsGetInfo}()},
+\code{\link{dsHasSession}()},
 \code{\link{dsHasTable}()},
 \code{\link{dsIsAsync}()},
 \code{\link{dsKeepAlive}()},
@@ -45,6 +49,7 @@ Other DSConnection generics:
 \code{\link{dsRestoreWorkspace}()},
 \code{\link{dsRmSymbol}()},
 \code{\link{dsRmWorkspace}()},
-\code{\link{dsSaveWorkspace}()}
+\code{\link{dsSaveWorkspace}()},
+\code{\link{dsSession}()}
 }
 \concept{DSConnection generics}

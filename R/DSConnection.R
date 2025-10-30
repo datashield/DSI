@@ -29,7 +29,6 @@ setClass("DSConnection", representation(name = "character"), contains = c("DSObj
 #' accessible through this connection.
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
-#'
 #' @return A character vector of table names.
 #' 
 #' @family DSConnection generics
@@ -53,6 +52,7 @@ setGeneric("dsListTables",
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param table the table fully qualified name
+#' @return A logical indicating if the table exists.
 #'
 #' @family DSConnection generics
 #' @examples
@@ -73,6 +73,7 @@ setGeneric("dsHasTable",
 #' accessible through this connection.
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
+#' @return A character vector of resource names.
 #'
 #' @family DSConnection generics
 #' @examples
@@ -94,6 +95,7 @@ setGeneric("dsListResources",
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param resource the resource fully qualified name
+#' @return A logical indicating if the resource exists.
 #'
 #' @family DSConnection generics
 #' @examples
@@ -107,6 +109,52 @@ setGeneric("dsListResources",
 setGeneric("dsHasResource",
            def = function(conn, resource) standardGeneric("dsHasResource"),
            valueClass = "logical")
+
+#' Check remote R session exists
+#'
+#' Check if a remote R session exists (not necessarily running and ready to accept 
+#' R commands submissions).
+#'
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
+#' @return A logical indicating if a remote R session exists accessible through this connection.
+#'
+#' @family DSConnection generics
+#' @examples
+#' \dontrun{
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
+#' dsHasSession(con)
+#' dsDisconnect(con)
+#' }
+#' @export
+setGeneric("dsHasSession",
+           def = function(conn) standardGeneric("dsHasSession"),
+           valueClass = "logical")
+
+#' Create a remote R session
+#' 
+#' Create a remote R session if none exists. If a remote R session already exists,
+#' it will be reused. Returns a logical indicating if a remote R session exists
+#' accessible through this connection.
+#' 
+#' @param conn An object that inherits from \code{\link{DSConnection-class}}.
+#' @param async Whether the result of the call should be retrieved asynchronously. When TRUE (default) 
+#' the calls are parallelized over the connections, when the connection supports 
+#' that feature, with an extra overhead of requests.
+#' @return An object of class \code{\link{DSSession-class}} representing the remote R session.
+#' 
+#' @family DSConnection generics
+#' @examples
+#' \dontrun{
+#' con <- dsConnect(DSOpal::Opal(), "server1",
+#'   username = "dsuser", password = "password", url = "https://opal-demo.obiba.org")
+#' dsSession(con, async=TRUE)
+#' dsDisconnect(con)
+#' }
+#' @export
+setGeneric("dsSession",
+           def = function(conn, async=TRUE) standardGeneric("dsSession"),
+           valueClass = "DSSession")
 
 #' Assign a data table
 #'
@@ -126,7 +174,8 @@ setGeneric("dsHasResource",
 #'   will be the data frame row names. When specified this column can be used to perform joins between data frames.
 #' @param async Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
 #'   the connections, when the connection supports that feature, with an extra overhead of requests.
-#'
+#' @return An object of class \code{\link{DSResult-class}} representing the result of the assignment operation.
+#' 
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
@@ -150,7 +199,8 @@ setGeneric("dsAssignTable",
 #' @param resource Fully qualified name of a resource reference in the data repository.
 #' @param async Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
 #'   the connections, when the connection supports that feature, with an extra overhead of requests.
-#'
+#' @return An object of class \code{\link{DSResult-class}} representing the result of the assignment operation.
+#' 
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
@@ -174,7 +224,8 @@ setGeneric("dsAssignResource",
 #' @param expr A R expression with allowed assign functions calls.
 #' @param async Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
 #'   the connections, when the connection supports that feature, with an extra overhead of requests.
-#'
+#' @return An object of class \code{\link{DSResult-class}} representing the result of the assignment operation.
+#' 
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
@@ -197,7 +248,8 @@ setGeneric("dsAssignExpr",
 #' @param expr Expression to evaluate.
 #' @param async Whether the result of the call should be retrieved asynchronously. When TRUE (default) the calls are parallelized over
 #'   the connections, when the connection supports that feature, with an extra overhead of requests.
-#'
+#' @return An object of class \code{\link{DSResult-class}} representing the result of the aggregation operation.
+#' 
 #' @family DSConnection generics
 #' @examples
 #' \dontrun{
@@ -217,6 +269,7 @@ setGeneric("dsAggregate",
 #' After assignments have been performed, some symbols live in the DataSHIELD R session on the server side.
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
+#' @return A character vector of symbol names.
 #'
 #' @family DSConnection generics
 #' @examples
@@ -257,8 +310,8 @@ setGeneric("dsRmSymbol",
 #' Get the list of DataSHIELD profiles that have been configured on the remote data repository.
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
-#'
-#' @return A list containing the "available" character vector of profile names and the "current" profile (in case a default one was assigned).
+#' @return A list containing the "available" character vector of profile names and 
+#' the "current" profile (in case a default one was assigned).
 #'
 #' @family DSConnection generics
 #' @examples
@@ -279,7 +332,6 @@ setGeneric("dsListProfiles",
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
 #' @param type Type of the method: "aggregate" (default) or "assign".
-#'
 #' @return A data.frame with columns: name, type ('aggregate' or 'assign'), class ('function' or 'script'), value, package, version.
 #'
 #' @family DSConnection generics
@@ -300,7 +352,6 @@ setGeneric("dsListMethods",
 #' Get the list of DataSHIELD packages with their version, that have been configured on the remote data repository.
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
-#'
 #' @return A data.frame with columns: name, version.
 #'
 #' @family DSConnection generics
@@ -322,7 +373,6 @@ setGeneric("dsListPackages",
 #' Get the list of DataSHIELD workspaces, that have been saved on the remote data repository.
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
-#'
 #' @return A data.frame with columns: name, lastAccessDate, size.
 #'
 #' @family DSConnection generics
@@ -407,10 +457,11 @@ setGeneric("dsRmWorkspace",
 #' When a \code{\link{DSResult-class}} object is returned on aggregation or assignment operation,
 #' the raw result can be accessed asynchronously, allowing parallelization of DataSHIELD calls
 #' over multpile servers. The returned named list of logicals will specify if asynchronicity is supported for:
-#' aggregation operation ('aggregate'), table assignment operation ('assignTable'),
+#' session operation ('session'), aggregation operation ('aggregate'), table assignment operation ('assignTable'),
 #' resource assignment operation ('assignResource') and expression assignment operation ('assignExpr').
 #'
 #' @param conn An object that inherits from \code{\link{DSConnection-class}}.
+#' @return A named list of logicals indicating if asynchronicity is supported for session, aggregation and assignment operations.
 #'
 #' @family DSConnection generics
 #' @examples

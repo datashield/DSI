@@ -6,6 +6,7 @@
 #'
 #' @export
 datashield.symbols <- function(conns) {
+  datashield.sessions(conns)
   if (is.list(conns)) {
     lapply(conns, FUN=datashield.symbols)
   } else {
